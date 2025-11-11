@@ -22,7 +22,7 @@ function createWindow () {
 
   mainWindow.loadURL(
     url.format({
-      pathname: path.join(__dirname, `/dist/angular-electron-template/browser/index.html`),
+      pathname: path.join(__dirname, `/dist/stokea2/browser/index.html`),
       protocol: "file:",
       slashes: true
     })

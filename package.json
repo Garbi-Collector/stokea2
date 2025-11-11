@@ -1,16 +1,16 @@
 {
-  "name": "ejemplo",
+  "name": "stokea2",
   "main": "main.js",
   "version": "1.0",
   "author": "garbi.dev",
-  "description": "ejemplo de descripcion",
+  "description": "app gestora de stock y ventas",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:angular-electron-template": "node dist/angular-electron-template/server/server.mjs",
+    "serve:ssr:stokea2": "node dist/stokea2/server/server.mjs",
     "electron": "ng build --base-href ./ && electron .",
     "dist": "ng build --base-href ./ && electron-builder"
   },
@@ -50,14 +50,14 @@
     "typescript": "~5.4.2"
   },
   "build": {
-    "appId": "garbi.ejemplo",
-    "productName": "ejemplo",
+    "appId": "garbi.stokea2",
+    "productName": "stokea2",
     "mac": {
       "category": "public.app-category.developer-tools"
     },
     "files": [
       "**/*",
-      "dist/ejemplo/browser/**"
+      "dist/stokea2/browser/**"
     ]
   }
 }
