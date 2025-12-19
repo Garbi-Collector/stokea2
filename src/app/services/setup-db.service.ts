@@ -47,4 +47,4 @@ export class SetupDBService {
   }
 }
 
-//#docker run -d --name mysql-memento -p 3306:3306 -v mysql-memento-data:/var/lib/mysql -e MYSQL_DATABASE=mementoDB -e MYSQL_USER=memento -e MYSQL_PASSWORD=memento -e MYSQL_ROOT_PASSWORD=rootpass123 mysql:8
+//#docker run -d --name mysql-stokeados -p 3306:3306 -v mysql-stokeados-data:/var/lib/mysql -e MYSQL_DATABASE=stokeadosDB -e MYSQL_USER=stokeados -e MYSQL_PASSWORD=stokeados -e MYSQL_ROOT_PASSWORD=rootpass123 mysql:8
