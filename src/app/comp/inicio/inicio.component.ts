@@ -10,7 +10,7 @@ import { Component } from '@angular/core';
 /**
  * pantalla para mostrar el inicio de la app
  * mostrara cosas como:
- * 
+ *
  */
 export class InicioComponent {
 
