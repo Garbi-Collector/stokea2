@@ -1,0 +1,10 @@
+{
+  "routes": [
+    "/",
+    "/configuracion",
+    "/historial",
+    "/inicio",
+    "/stock",
+    "/venta"
+  ]
+}
