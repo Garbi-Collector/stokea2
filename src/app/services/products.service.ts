@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class ProductService {
+@Injectable({ providedIn: 'root' })
+export class ProductsService {
 
   getAll() {
     return window.api.products.getAll();
+  }
+
+  getById(id: number) {
+    return window.api.products.getById(id);
   }
 
   create(product: any) {

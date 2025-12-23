@@ -9,6 +9,7 @@
   },
   "files": [
     "src/main.ts",
+    "src/app/types/electron-api.d.ts",
     "src/main.server.ts",
     "server.ts"
   ],
