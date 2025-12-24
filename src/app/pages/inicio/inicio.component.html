@@ -1,1 +1,24 @@
-<p>inicio works!</p>
+<div class="inicio-container">
+  @if (!hasVisited){
+    <div class="message-box first-visit">
+      <p>
+        👋 Es tu primera vez
+      </p>
+      <small>Se ha abierto un modal de bienvenida</small>
+    </div>
+  }
+
+  @if (hasVisited){
+    <div class="message-box">
+      <p>
+        👀 Ya estuviste aquí
+      </p>
+      <button class="info-btn" (click)="abrirModalInfo()">
+        Ver información
+      </button>
+    </div>
+  }
+</div>
+
+<!-- Componente modal -->
+<app-modal></app-modal>

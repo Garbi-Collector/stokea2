@@ -1,0 +1,36 @@
+<div *ngIf="modalConfig"
+     class="modal-backdrop"
+     (click)="onBackdropClick($event)"
+     (mousemove)="onMouseMove($event)"
+     (mouseup)="onMouseUp()"
+     (mouseleave)="onMouseUp()">
+
+  <div class="modal-container"
+       [ngStyle]="getModalStyle()"
+       (click)="$event.stopPropagation()">
+
+    <!-- Barra superior para arrastrar -->
+    <div class="modal-header"
+         (mousedown)="onMouseDown($event)">
+      <h3 class="modal-title">{{ modalConfig.title }}</h3>
+
+      <button *ngIf="modalConfig.closable !== false"
+              class="modal-close-btn"
+              (click)="closeModal()"
+              (mousedown)="$event.stopPropagation()">
+        ✕
+      </button>
+    </div>
+
+    <!-- Contenido del modal -->
+    <div class="modal-body">
+      <!-- Contenedor para componente dinámico -->
+      <ng-container #dynamicContent></ng-container>
+
+      <!-- Contenido estático alternativo -->
+      <div *ngIf="!modalConfig.component && modalConfig.content"
+           [innerHTML]="modalConfig.content">
+      </div>
+    </div>
+  </div>
+</div>
