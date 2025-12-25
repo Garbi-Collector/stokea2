@@ -1,7 +1,7 @@
 {
   "name": "stokea2",
   "main": "main.js",
-  "version": "1.0",
+  "version": "1.0.0",
   "author": "garbi.dev",
   "description": "app gestora de stock y ventas",
   "scripts": {
