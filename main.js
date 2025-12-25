@@ -3,7 +3,7 @@ const url = require('url');
 const path = require('path');
 
 // Inicializa DB
-require('./database');
+require('./database.js');
 
 // Registra IPCs
 require('./ipc/product.ipc')();
