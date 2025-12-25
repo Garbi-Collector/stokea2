@@ -12,7 +12,8 @@
     "test": "ng test",
     "serve:ssr:stokea2": "node dist/stokea2/server/server.mjs",
     "electron": "ng build --base-href ./ && electron .",
-    "dist": "ng build --base-href ./ && electron-builder"
+    "dist": "ng build --base-href ./ && electron-builder",
+    "deploy:gh": "ng build --output-path dist/stokea2 --base-href \"https://garbi-collector.github.io/stokea2/\" && npx angular-cli-ghpages --dir=dist/stokea2/browser"
   },
   "private": true,
   "dependencies": {
