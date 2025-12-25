@@ -1,0 +1,26 @@
+<div class="title-bar">
+  <div class="drag-region">
+    STOKEA2
+  </div>
+
+  <div class="window-controls">
+    <button (click)="minimize()" title="Minimizar">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12">
+        <line x1="0" y1="6" x2="12" y2="6" stroke-linecap="round"/>
+      </svg>
+    </button>
+
+    <button (click)="maximize()" title="Maximizar">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12">
+        <rect x="1.5" y="1.5" width="9" height="9" rx="1" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+
+    <button class="close" (click)="close()" title="Cerrar">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12">
+        <line x1="2" y1="2" x2="10" y2="10" stroke-linecap="round"/>
+        <line x1="10" y1="2" x2="2" y2="10" stroke-linecap="round"/>
+      </svg>
+    </button>
+  </div>
+</div>
