@@ -22,4 +22,9 @@ export class ProductsService {
   delete(id: number) {
     return window.api.products.delete(id);
   }
+
+  count(): Promise<number> {
+    return window.api.products.count();
+  }
+
 }

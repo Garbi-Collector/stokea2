@@ -62,5 +62,18 @@ module.exports = {
         }
       );
     });
+  },
+
+  count() {
+    return new Promise((resolve, reject) => {
+      db.get(
+        'SELECT COUNT(*) AS total FROM products',
+        [],
+        (err, row) => {
+          err ? reject(err) : resolve(row.total);
+        }
+      );
+    });
   }
+
 };

@@ -1,41 +1,76 @@
+import { Product } from '../models/product.model';
+import { Stock } from '../models/stock.model';
+import { Sale } from '../models/sale.model';
+import { SaleItem } from '../models/sale-item.model';
+import { CashSession } from '../models/cash-session.model';
+import { CashMovement } from '../models/cash-movement.model';
+
 export {};
 
 declare global {
   interface Window {
     api: {
 
+      /* =======================
+         PRODUCTS
+      ======================= */
       products: {
-        getAll(): Promise<any[]>;
-        getById(id: number): Promise<any>;
-        create(product: any): Promise<{ id: number }>;
-        update(id: number, product: any): Promise<{ changes: number }>;
+        getAll(): Promise<Product[]>;
+        getById(id: number): Promise<Product | null>;
+        create(product: Product): Promise<{ id: number }>;
+        update(id: number, product: Product): Promise<{ changes: number }>;
         delete(id: number): Promise<{ deleted: number }>;
+        count(): Promise<number>;
       };
 
+      /* =======================
+         STOCK
+      ======================= */
       stock: {
-        getAll(): Promise<any[]>;
-        getByProduct(productId: number): Promise<any>;
-        create(stock: any): Promise<{ id: number }>;
-        update(id: number, stock: any): Promise<{ changes: number }>;
+        getAll(): Promise<Stock[]>;
+        getByProduct(productId: number): Promise<Stock | null>;
+        create(stock: Stock): Promise<{ id: number }>;
+        update(id: number, stock: Stock): Promise<{ changes: number }>;
       };
 
+      /* =======================
+         CASH SESSION
+      ======================= */
       cashSession: {
         open(startAmount: number): Promise<{ id: number }>;
-        getOpen(): Promise<any>;
+        getOpen(): Promise<CashSession | null>;
         close(id: number, amount: number): Promise<{ closed: number }>;
       };
 
+      /* =======================
+         CASH MOVEMENTS
+      ======================= */
       cashMovements: {
-        create(movement: any): Promise<{ id: number }>;
-        getBySession(sessionId: number): Promise<any[]>;
+        create(movement: CashMovement): Promise<{ id: number }>;
+        getBySession(sessionId: number): Promise<CashMovement[]>;
       };
 
+      /* =======================
+         SALES
+      ======================= */
       sales: {
-        create(sale: any): Promise<{ id: number }>;
+        create(sale: Sale): Promise<{ id: number }>;
       };
 
+      /* =======================
+         SALE ITEMS
+      ======================= */
       saleItems: {
-        create(item: any): Promise<{ id: number }>;
+        create(item: SaleItem): Promise<{ id: number }>;
+      };
+
+      /* =======================
+         WINDOW CONTROLS
+      ======================= */
+      windowControls: {
+        minimize(): void;
+        maximize(): void;
+        close(): void;
       };
     };
   }
