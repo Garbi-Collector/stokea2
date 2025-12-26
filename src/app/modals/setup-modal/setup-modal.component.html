@@ -1,0 +1,53 @@
+<div class="inicio-content">
+  <div class="welcome-icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+      <circle cx="12" cy="7" r="4"/>
+    </svg>
+  </div>
+
+  <h2>¡Bienvenido a STOKEA2!</h2>
+  <p class="subtitle">Por favor, ingresa tu nombre para comenzar</p>
+
+  <div class="form-section">
+    <div class="input-wrapper">
+      <label for="userName">Tu nombre</label>
+      <input
+        type="text"
+        id="userName"
+        [(ngModel)]="userName"
+        (input)="validateName()"
+        (keyup.enter)="aceptar()"
+        placeholder="Ingresa tu nombre..."
+        [class.error]="showError"
+        maxlength="50"
+        autofocus
+      />
+
+      <div class="input-feedback">
+            <span *ngIf="!userName" class="hint">
+              Mínimo 4 caracteres
+            </span>
+        <span *ngIf="userName && userName.length < 4" class="error-text">
+              ⚠ El nombre debe tener al menos 4 caracteres
+            </span>
+        <span *ngIf="userName && userName.length >= 4" class="success-text">
+              ✓ Nombre válido
+            </span>
+      </div>
+    </div>
+
+    <div class="char-counter" [class.warning]="userName.length < 4">
+      {{ userName.length }} / 4 caracteres mínimos
+    </div>
+  </div>
+
+  <div class="actions">
+    <button
+      class="btn btn-primary"
+      (click)="aceptar()"
+      [disabled]="!isValidName()">
+      Comenzar
+    </button>
+  </div>
+</div>

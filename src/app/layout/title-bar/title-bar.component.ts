@@ -1,17 +1,5 @@
 import { Component } from '@angular/core';
 
-declare global {
-  interface Window {
-    api: {
-      windowControls: {
-        minimize: () => void;
-        maximize: () => void;
-        close: () => void;
-      };
-    };
-  }
-}
-
 @Component({
   selector: 'app-title-bar',
   standalone: true,

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import {ModalConfig} from "../models/modalconfig";
+import { ModalConfig } from "../../models/modalconfig";
 
 @Injectable({
   providedIn: 'root'
@@ -8,8 +8,6 @@ import {ModalConfig} from "../models/modalconfig";
 export class ModalService {
 
   private modalSubject = new BehaviorSubject<ModalConfig | null>(null);
-
-  // Observable público (solo lectura)
   modal$ = this.modalSubject.asObservable();
 
   constructor() {}
@@ -20,6 +18,7 @@ export class ModalService {
   open(config: ModalConfig): void {
     this.modalSubject.next({
       closable: true,
+      closeOnBackdrop: true, // Por defecto se puede cerrar tocando el fondo
       ...config
     });
   }

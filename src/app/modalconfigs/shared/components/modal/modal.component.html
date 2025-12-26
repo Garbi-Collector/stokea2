@@ -1,20 +1,23 @@
 <div *ngIf="modalConfig"
      class="modal-backdrop"
+     [class.no-close-backdrop]="modalConfig.closeOnBackdrop === false"
      (click)="onBackdropClick($event)"
      (mousemove)="onMouseMove($event)"
      (mouseup)="onMouseUp()"
      (mouseleave)="onMouseUp()">
 
-  <div class="modal-container"
+  <div #modalContainer
+       class="modal-container"
        [ngStyle]="getModalStyle()"
        (click)="$event.stopPropagation()">
 
-    <!-- Barra superior para arrastrar -->
+    <!-- Barra superior para arrastrar (SIEMPRE visible) -->
     <div class="modal-header"
          (mousedown)="onMouseDown($event)">
       <h3 class="modal-title">{{ modalConfig.title }}</h3>
 
-      <button *ngIf="modalConfig.closable !== false"
+      <!-- Botón de cerrar: solo visible si closable Y closeOnBackdrop son true -->
+      <button *ngIf="shouldShowCloseButton()"
               class="modal-close-btn"
               (click)="closeModal()"
               (mousedown)="$event.stopPropagation()">

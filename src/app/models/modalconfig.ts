@@ -2,10 +2,11 @@ import { Type } from '@angular/core';
 
 export interface ModalConfig {
   title: string;
-  component?: Type<any>; // Componente dinámico a cargar
-  content?: string; // Contenido alternativo si no hay componente
-  closable?: boolean;
-  data?: any; // Datos para pasar al componente
-  width?: string; // Ancho del modal (ej: '600px', '80%')
-  height?: string; // Alto del modal
+  component?: Type<any>;
+  content?: string;
+  closable?: boolean; // Controla si se puede cerrar con el botón X
+  closeOnBackdrop?: boolean; // NUEVO: Controla si se puede cerrar tocando el fondo
+  data?: any;
+  width?: string;
+  height?: string;
 }
