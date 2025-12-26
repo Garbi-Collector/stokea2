@@ -1,23 +1,82 @@
 <div class="inicio-container">
-  @if (!hasVisited){
-    <div class="message-box first-visit">
-      <p>
-        Es tu primera vez
-      </p>
-      <small>Se ha abierto un modal de bienvenida</small>
+  <!-- Pantalla cuando NO ha visitado (hasVisited = false) -->
+  @if (!hasVisited) {
+    <div class="first-visit-screen">
+      <div class="welcome-message">
+        <div class="icon-container">
+          <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+        </div>
+        <h2>¡Bienvenido!</h2>
+        <p>Es tu primera vez aquí</p>
+        <small>Se ha abierto un modal de configuración inicial para comenzar.</small>
+      </div>
 
       <!-- Componente modal -->
       <app-modal></app-modal>
     </div>
   }
 
-  @if (hasVisited){
-    <div class="message-box">
-      <p>
-        👀 Ya estuviste aquí
-      </p>
+  <!-- Pantalla cuando YA ha visitado (hasVisited = true) -->
+  @if (hasVisited) {
+    <div class="dashboard-screen">
+      <!-- Saludo personalizado -->
+      <div class="greeting-header">
+        <h1>{{ getGreeting() }}, {{ name || 'Usuario' }}!</h1>
+      </div>
 
+      <!-- Tarjeta de caja -->
+      <div class="cash-card">
+        <div class="cash-header">
+          <div class="cash-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="1" x2="12" y2="23"></line>
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+            </svg>
+            <span>Efectivo en Caja</span>
+          </div>
+          <button class="toggle-visibility-btn" (click)="toggleCashVisibility()">
+            @if (isCashVisible) {
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            } @else {
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                <line x1="1" y1="1" x2="23" y2="23"></line>
+              </svg>
+            }
+          </button>
+        </div>
+
+        <div class="cash-amount">
+          @if (isCashVisible) {
+            <span class="amount">$ {{ cashAmount | number:'1.2-2' }}</span>
+          } @else {
+            <span class="amount-hidden">••••••</span>
+          }
+        </div>
+
+        <div class="cash-actions">
+          <button class="action-btn ingreso-btn" (click)="handleIngreso()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <polyline points="19 12 12 19 5 12"></polyline>
+            </svg>
+            Ingreso
+          </button>
+          <button class="action-btn egreso-btn" (click)="handleEgreso()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="19" x2="12" y2="5"></line>
+              <polyline points="5 12 12 5 19 12"></polyline>
+            </svg>
+            Egreso
+          </button>
+        </div>
+      </div>
     </div>
   }
 </div>
-
