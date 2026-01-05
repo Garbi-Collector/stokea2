@@ -1,0 +1,93 @@
+<div class="modal-content">
+
+  <!-- PASO 1: Confirmación -->
+  <div *ngIf="currentStep === 1" class="step-content">
+    <div class="warning-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+        <line x1="12" y1="9" x2="12" y2="13"/>
+        <line x1="12" y1="17" x2="12.01" y2="17"/>
+      </svg>
+    </div>
+
+    <h2>¿Eliminar producto?</h2>
+
+    <div class="product-info" *ngIf="product">
+      <div class="product-detail">
+        <span class="label">Producto:</span>
+        <span class="value">{{ product.name }}</span>
+      </div>
+      <div class="product-detail" *ngIf="product.description">
+        <span class="label">Descripción:</span>
+        <span class="value">{{ product.description }}</span>
+      </div>
+    </div>
+
+    <div class="warning-message">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      <p>Esta acción eliminará <strong>{{ totalStock }} unidad{{ totalStock !== 1 ? 'es' : '' }}</strong> de stock asociadas a este producto.</p>
+    </div>
+
+    <p class="confirmation-text">¿Estás seguro de querer eliminar este producto?</p>
+
+    <div *ngIf="error" class="error-message">
+      {{ error }}
+    </div>
+
+    <div class="actions">
+      <button
+        class="btn btn-secondary"
+        (click)="cerrar()"
+        [disabled]="isDeleting">
+        Cancelar
+      </button>
+      <button
+        class="btn btn-danger"
+        (click)="eliminar()"
+        [disabled]="isDeleting">
+        <span *ngIf="!isDeleting">Eliminar producto</span>
+        <span *ngIf="isDeleting">Eliminando...</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- PASO 2: Confirmación de eliminación -->
+  <div *ngIf="currentStep === 2" class="step-content">
+    <div class="success-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+    </div>
+
+    <h2>¡Producto eliminado!</h2>
+
+    <div class="success-info">
+      <div class="success-detail">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        <p>Se eliminó el producto: <strong>{{ deletedProductName }}</strong></p>
+      </div>
+
+      <div class="success-detail">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        <p>Se eliminaron <strong>{{ deletedStockCount }} unidad{{ deletedStockCount !== 1 ? 'es' : '' }}</strong> del inventario</p>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button
+        class="btn btn-primary"
+        (click)="cerrar()">
+        Aceptar
+      </button>
+    </div>
+  </div>
+
+</div>
