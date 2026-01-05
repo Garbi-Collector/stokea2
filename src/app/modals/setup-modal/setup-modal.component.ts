@@ -50,6 +50,7 @@ export class SetupModalComponent {
     // guardar que no es la primera vez del usuario
     this.storageService.markAsVisited()
 
+    // recargar la pagina
 
     // Cerrar el modal
     this.modalService.close();

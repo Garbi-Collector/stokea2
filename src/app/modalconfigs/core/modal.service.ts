@@ -10,6 +10,11 @@ export class ModalService {
   private modalSubject = new BehaviorSubject<ModalConfig | null>(null);
   modal$ = this.modalSubject.asObservable();
 
+
+  private closeSubject = new BehaviorSubject<boolean>(false);
+  close$ = this.closeSubject.asObservable();
+
+
   constructor() {}
 
   /**
@@ -26,7 +31,8 @@ export class ModalService {
   /**
    * Cierra el modal actual
    */
-  close(): void {
+  close(success: boolean = false): void {
+    this.closeSubject.next(success);
     this.modalSubject.next(null);
   }
 
@@ -36,4 +42,6 @@ export class ModalService {
   isOpen(): boolean {
     return this.modalSubject.value !== null;
   }
+
+
 }

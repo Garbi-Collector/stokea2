@@ -1,4 +1,14 @@
-import { Component, OnInit, OnDestroy, ViewChild, ViewContainerRef, ComponentRef, AfterViewInit, ElementRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ViewChild,
+  ViewContainerRef,
+  ComponentRef,
+  AfterViewInit,
+  ElementRef,
+  AfterViewChecked
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { ModalConfig } from "../../../../models/modalconfig";
@@ -11,8 +21,11 @@ import { ModalService } from "../../../core/modal.service";
   templateUrl: './modal.component.html',
   styleUrl: './modal.component.css'
 })
-export class ModalComponent implements OnInit, AfterViewInit, OnDestroy {
-  @ViewChild('dynamicContent', { read: ViewContainerRef }) dynamicContent!: ViewContainerRef;
+export class ModalComponent implements OnInit, AfterViewInit, OnDestroy, AfterViewChecked{
+  @ViewChild('dynamicContent', {
+    read: ViewContainerRef,
+    static: false
+  })  dynamicContent!: ViewContainerRef;
   @ViewChild('modalContainer') modalContainer!: ElementRef<HTMLDivElement>;
 
   modalConfig: ModalConfig | null = null;
@@ -50,6 +63,17 @@ export class ModalComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+  ngAfterViewChecked(): void {
+    if (
+      this.modalConfig &&
+      this.modalConfig.component &&
+      this.dynamicContent &&
+      !this.componentRef
+    ) {
+      this.loadDynamicComponent(this.modalConfig);
+    }
+  }
+
   ngAfterViewInit(): void {
     if (this.pendingConfig && this.pendingConfig.component) {
       setTimeout(() => {
@@ -68,6 +92,7 @@ export class ModalComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!config.component || !this.dynamicContent) {
       return;
     }
+
 
     this.clearDynamicComponent();
 
