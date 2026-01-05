@@ -1,1 +1,160 @@
-<p>stock works!</p>
+<div class="stock-container">
+  <div class="header-section">
+    <div>
+      <h1 class="page-title">Gestión de Stock</h1>
+      <p class="page-subtitle">Administra y controla tu inventario de productos</p>
+    </div>
+
+    <div class="header-actions">
+      <button class="create-button" (click)="abrirModalCreateProduct()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        Crear Producto
+      </button>
+      <!-- Modal global -->
+      <app-modal></app-modal>
+
+
+      <button class="refresh-button" (click)="refreshData()" [disabled]="isLoading">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" [class.spinning]="isLoading">
+          <polyline points="23 4 23 10 17 10"></polyline>
+          <polyline points="1 20 1 14 7 14"></polyline>
+          <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+        </svg>
+        Actualizar
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-container">
+    <div class="spinner"></div>
+    <p>Cargando productos...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error && !isLoading" class="error-container">
+    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="12" y1="8" x2="12" y2="12"></line>
+      <line x1="12" y1="16" x2="12.01" y2="16"></line>
+    </svg>
+    <p>{{ error }}</p>
+    <button class="retry-button" (click)="refreshData()">Reintentar</button>
+  </div>
+
+  <!-- Main Content -->
+  <div *ngIf="!isLoading && !error">
+    <div class="filters-section">
+      <div class="search-box">
+        <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.35-4.35"></path>
+        </svg>
+        <input
+          #searchInput
+          type="text"
+          [(ngModel)]="searchTerm"
+          (ngModelChange)="onSearchChange()"
+          placeholder="Buscar por nombre o código..."
+          class="search-input"
+        />
+        <span *ngIf="searchTerm" class="clear-search" (click)="searchTerm = ''; onSearchChange()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </span>
+      </div>
+
+      <div class="filter-controls">
+        <div class="select-wrapper">
+          <label class="select-label">Ordenar por:</label>
+          <select [(ngModel)]="sortBy" (ngModelChange)="onSortByChange()" class="sort-select">
+            <option value="nombre">Nombre</option>
+            <option value="precio">Precio</option>
+            <option value="cantidad">Cantidad</option>
+            <option value="fecha">Fecha de creación</option>
+          </select>
+        </div>
+
+        <button class="sort-button" (click)="toggleSortOrder()" [title]="sortOrder === 'asc' ? 'Ascendente' : 'Descendente'">
+          <svg *ngIf="sortOrder === 'asc'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M12 5v14M19 12l-7 7-7-7"/>
+          </svg>
+          <svg *ngIf="sortOrder === 'desc'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M12 19V5M5 12l7-7 7 7"/>
+          </svg>
+          <span class="sort-label">{{ sortOrder === 'asc' ? 'Ascendente' : 'Descendente' }}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="productosFiltrados.length === 0 && !isLoading" class="empty-state">
+      <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <circle cx="11" cy="11" r="8"></circle>
+        <path d="m21 21-4.35-4.35"></path>
+      </svg>
+      <h3>No se encontraron productos</h3>
+      <p *ngIf="searchTerm">Intenta con otros términos de búsqueda</p>
+      <p *ngIf="!searchTerm">No hay productos registrados en el sistema</p>
+    </div>
+
+    <!-- Table -->
+    <div *ngIf="productosFiltrados.length > 0" class="table-wrapper">
+      <table class="products-table">
+        <thead>
+        <tr>
+          <th>Cantidad</th>
+          <th>Nombre</th>
+          <th>Descripción</th>
+          <th>Marca</th>
+          <th>Código</th>
+          <th>Precio Mayorista</th>
+          <th>Precio Minorista</th>
+          <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let producto of productosFiltrados" class="table-row">
+          <td>
+              <span
+                class="quantity-badge"
+                [class.low-stock]="producto.minAlert && producto.cantidad < producto.minAlert"
+                [class.no-stock]="producto.cantidad === 0">
+                {{ producto.cantidad }}
+              </span>
+          </td>
+          <td class="product-name">{{ producto.nombre }}</td>
+          <td class="product-description">{{ producto.descripcion || '-' }}</td>
+          <td>
+            <span class="brand-tag" *ngIf="producto.marca">{{ producto.marca }}</span>
+            <span *ngIf="!producto.marca" class="text-muted">-</span>
+          </td>
+          <td class="product-code">{{ producto.codigo }}</td>
+          <td class="price-cell">${{ producto.precioMayorista.toLocaleString('es-AR') }}</td>
+          <td class="price-cell">${{ producto.precioMinorista.toLocaleString('es-AR') }}</td>
+          <td>
+            <button class="edit-button" (click)="editarProducto(producto)">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+              </svg>
+              Editar
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="productosFiltrados.length > 0" class="table-footer">
+      <p class="results-info">
+        Mostrando {{ productosFiltrados.length }} de {{ productos.length }} productos
+      </p>
+    </div>
+  </div>
+</div>
