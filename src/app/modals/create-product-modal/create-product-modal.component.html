@@ -1,0 +1,193 @@
+<div class="product-content">
+  <div class="product-icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M20 7h-9"/>
+      <path d="M14 17H5"/>
+      <circle cx="17" cy="17" r="3"/>
+      <circle cx="7" cy="7" r="3"/>
+    </svg>
+  </div>
+
+  <h2>Registrar Nuevo Producto</h2>
+  <p class="subtitle">Completa la información del producto y su stock inicial</p>
+
+  <div class="form-section">
+    <!-- Nombre -->
+    <div class="input-wrapper">
+      <label for="name">Nombre del producto *</label>
+      <input
+        type="text"
+        id="name"
+        [(ngModel)]="form.name"
+        (input)="validateField('name')"
+        placeholder="Ej: Coca Cola 2.5L"
+        [class.error]="showErrors['name']"
+        maxlength="100"
+      />
+      <div class="input-feedback">
+        <span *ngIf="!form.name" class="hint">Mínimo 3 caracteres</span>
+        <span *ngIf="form.name && form.name.length < 3" class="error-text">
+          ⚠ El nombre debe tener al menos 3 caracteres
+        </span>
+        <span *ngIf="form.name && form.name.length >= 3" class="success-text">
+          ✓ Nombre válido
+        </span>
+      </div>
+    </div>
+
+    <!-- Descripción -->
+    <div class="input-wrapper">
+      <label for="description">Descripción</label>
+      <textarea
+        id="description"
+        [(ngModel)]="form.description"
+        placeholder="Detalles adicionales del producto..."
+        rows="2"
+        maxlength="500"
+      ></textarea>
+    </div>
+
+    <!-- Marca y Código -->
+    <div class="row-inputs">
+      <div class="input-wrapper">
+        <label for="brand">Marca</label>
+        <input
+          type="text"
+          id="brand"
+          [(ngModel)]="form.brand"
+          placeholder="Ej: Coca Cola"
+          maxlength="50"
+        />
+      </div>
+
+      <div class="input-wrapper">
+        <label for="code">Código *</label>
+        <input
+          type="text"
+          id="code"
+          [(ngModel)]="form.code"
+          (input)="validateField('code')"
+          placeholder="Ej: CC25L001"
+          [class.error]="showErrors['code']"
+          maxlength="50"
+        />
+        <div class="input-feedback">
+          <span *ngIf="showErrors['code']" class="error-text">
+            ⚠ El código es obligatorio
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Precio de Compra y Porcentaje -->
+    <div class="row-inputs">
+      <div class="input-wrapper">
+        <label for="wholesale_price">Precio de Compra *</label>
+        <input
+          type="number"
+          id="wholesale_price"
+          [(ngModel)]="form.wholesale_price"
+          (input)="onWholesalePriceChange()"
+          placeholder="0.00"
+          [class.error]="showErrors['wholesale_price']"
+          min="0"
+          step="0.01"
+        />
+        <div class="input-feedback">
+          <span *ngIf="showErrors['wholesale_price']" class="error-text">
+            ⚠ Ingresa un precio válido
+          </span>
+        </div>
+      </div>
+
+      <div class="input-wrapper">
+        <label for="profit_percentage">% Ganancia *</label>
+        <input
+          type="number"
+          id="profit_percentage"
+          [(ngModel)]="form.profit_percentage"
+          (input)="onProfitPercentageChange()"
+          placeholder="0"
+          [class.error]="showErrors['profit_percentage']"
+          min="0"
+          step="0.1"
+        />
+        <div class="input-feedback">
+          <span *ngIf="showErrors['profit_percentage']" class="error-text">
+            ⚠ Ingresa un porcentaje válido
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Precio de Venta Editable -->
+    <div class="input-wrapper" *ngIf="form.wholesale_price && form.profit_percentage !== null">
+      <label for="sale_price">Precio de Venta Minorista *</label>
+      <input
+        type="number"
+        id="sale_price"
+        [(ngModel)]="editableSalePrice"
+        (input)="onSalePriceChange()"
+        placeholder="0.00"
+        min="0"
+        step="0.01"
+        class="price-input"
+      />
+      <div class="input-feedback">
+        <span class="hint">Edita este valor para ajustar automáticamente el % de ganancia</span>
+      </div>
+    </div>
+
+    <!-- Stock Inicial y Alerta -->
+    <div class="row-inputs">
+      <div class="input-wrapper">
+        <label for="quantity">Cantidad Inicial *</label>
+        <input
+          type="number"
+          id="quantity"
+          [(ngModel)]="form.quantity"
+          (input)="validateField('quantity')"
+          placeholder="0"
+          [class.error]="showErrors['quantity']"
+          min="0"
+          step="1"
+        />
+        <div class="input-feedback">
+          <span *ngIf="showErrors['quantity']" class="error-text">
+            ⚠ Ingresa una cantidad válida
+          </span>
+        </div>
+      </div>
+
+      <div class="input-wrapper">
+        <label for="min_alert">Stock Mínimo (Alerta)</label>
+        <input
+          type="number"
+          id="min_alert"
+          [(ngModel)]="form.min_alert"
+          placeholder="0"
+          min="0"
+          step="1"
+        />
+        <div class="input-feedback">
+          <span class="hint">Se te avisará al llegar a este nivel</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button
+      class="btn btn-secondary"
+      (click)="cancelar()"
+      [disabled]="isSubmitting">
+      Cancelar
+    </button>
+    <button
+      class="btn btn-primary"
+      (click)="guardar()"
+      [disabled]="!isValidForm() || isSubmitting">
+      {{ isSubmitting ? 'Guardando...' : 'Guardar Producto' }}
+    </button>
+  </div>
+</div>
