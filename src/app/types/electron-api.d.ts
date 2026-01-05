@@ -31,6 +31,7 @@ declare global {
         getByProduct(productId: number): Promise<Stock | null>;
         create(stock: Stock): Promise<{ id: number }>;
         update(id: number, stock: Stock): Promise<{ changes: number }>;
+        deleteByProduct(productId: number): Promise<{ deleted: number }>;
       };
 
       /* =======================

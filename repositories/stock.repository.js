@@ -39,5 +39,18 @@ module.exports = {
         }
       )
     );
+  },
+  deleteByProduct(productId) {
+    return new Promise((res, rej) =>
+      db.run(
+        'DELETE FROM stock WHERE product_id = ?',
+        [productId],
+        function (e) {
+          e ? rej(e) : res({ deleted: this.changes });
+        }
+      )
+    );
   }
+
+
 };

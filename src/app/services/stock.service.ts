@@ -18,4 +18,8 @@ export class StockService {
   update(id: number, stock: any) {
     return window.api.stock.update(id, stock);
   }
+  deleteByProduct(productId: number) {
+    return window.api.stock.deleteByProduct(productId);
+  }
+
 }

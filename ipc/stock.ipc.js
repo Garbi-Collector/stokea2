@@ -17,4 +17,8 @@ module.exports = () => {
     repo.update(data.id, data.stock)
   );
 
+  ipcMain.handle('stock:deleteByProduct', (_, productId) =>
+    repo.deleteByProduct(productId)
+  );
+
 };
