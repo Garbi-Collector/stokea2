@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { StorageService } from '../../services/storage.service';
+import { UserService } from '../../services/user.service';
 import { ModalService } from "../../modalconfigs/core/modal.service";
 import { ModalComponent } from "../../modalconfigs/shared/components/modal/modal.component";
 import { SetupModalComponent } from "../../modals/setup-modal/setup-modal.component";
@@ -25,19 +25,19 @@ export class InicioComponent implements OnInit {
   isCashVisible: boolean = true;
 
   constructor(
-    private storageService: StorageService,
+    private storageService: UserService,
     private modalService: ModalService,
     private productService: ProductsService
   ) {}
 
   async ngOnInit(): Promise<void> {
-    this.hasVisited = this.storageService.hasVisited();
+    this.hasVisited = await this.storageService.hasVisited();
 
     if (!this.hasVisited) {
       this.abrirModalSetUp();
     }
 
-    this.name = this.storageService.getUserName();
+    this.name = await this.storageService.getUserName();
     this.totalProducts = await this.totalProductsCount();
     this.hasProduct = this.totalProducts > 0;
 

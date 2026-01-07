@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {NgIf} from "@angular/common";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {ModalService} from "../../modalconfigs/core/modal.service";
-import {StorageService} from "../../services/storage.service";
+import {UserService} from "../../services/user.service";
 
 @Component({
   selector: 'app-setup-modal',
@@ -21,7 +21,7 @@ export class SetupModalComponent {
 
   constructor(
     private modalService: ModalService,
-    private storageService: StorageService
+    private storageService: UserService
   ) {}
 
   ngOnInit(): void {

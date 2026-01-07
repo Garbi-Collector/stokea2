@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { StorageService } from '../../services/storage.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-configuracion',
@@ -11,7 +11,7 @@ import { StorageService } from '../../services/storage.service';
 })
 export class ConfiguracionComponent {
 
-  constructor(private storageService: StorageService) {}
+  constructor(private storageService: UserService) {}
 
   resetFirstVisit(): void {
     this.storageService.clearVisited();
