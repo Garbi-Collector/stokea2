@@ -83,6 +83,15 @@ db.serialize(() => {
       )
   `);
 
+  db.run(`
+    CREATE TABLE IF NOT EXISTS user_config (
+                                             id INTEGER PRIMARY KEY CHECK (id = 1),
+      name TEXT NOT NULL,
+      is_first_time INTEGER NOT NULL DEFAULT 1,
+      created_at TEXT DEFAULT CURRENT_TIMESTAMP
+      )
+`);
+
 });
 
 module.exports = db;

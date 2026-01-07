@@ -12,6 +12,7 @@ require('./ipc/cash-session.ipc')();
 require('./ipc/cash-movement.ipc')();
 require('./ipc/sale.ipc')();
 require('./ipc/sale-item.ipc')();
+require('./ipc/user.ipc')();
 
 let mainWindow;
 

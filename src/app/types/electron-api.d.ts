@@ -66,6 +66,17 @@ declare global {
       };
 
       /* =======================
+         USER CONFIG
+      ======================= */
+      user: {
+        get(): Promise<User | null>;
+        init(name?: string): Promise<{ created: number }>;
+        updateName(name: string): Promise<{ changes: number }>;
+        markVisited(): Promise<{ changes: number }>;
+        resetFirstVisit(): Promise<{ changes: number }>;
+      };
+
+      /* =======================
          WINDOW CONTROLS
       ======================= */
       windowControls: {

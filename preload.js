@@ -67,6 +67,18 @@ contextBridge.exposeInMainWorld('api', {
       ipcRenderer.invoke('sale-items:create', item),
   },
 
+    /* =======================
+     USER CONFIG
+  ======================= */
+  user: {
+    get: () => ipcRenderer.invoke('user:get'),
+    init: (name) => ipcRenderer.invoke('user:init', name),
+    updateName: (name) => ipcRenderer.invoke('user:updateName', name),
+    markVisited: () => ipcRenderer.invoke('user:markVisited'),
+    resetFirstVisit: () => ipcRenderer.invoke('user:resetFirstVisit'),
+  },
+
+
   /* =======================
      WINDOW CONTROLS 👈
   ======================= */
