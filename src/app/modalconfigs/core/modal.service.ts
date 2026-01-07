@@ -33,7 +33,10 @@ export class ModalService {
    */
   close(success: boolean = false): void {
     this.closeSubject.next(success);
-    this.modalSubject.next(null);
+    // Pequeño delay antes de limpiar para permitir animaciones
+    setTimeout(() => {
+      this.modalSubject.next(null);
+    }, 100);
   }
 
   /**

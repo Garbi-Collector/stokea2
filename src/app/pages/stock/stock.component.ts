@@ -11,6 +11,7 @@ import {ProductWithStock} from "../../models/ProductWithStock";
 import {ModalService} from "../../modalconfigs/core/modal.service";
 import {CreateProductModalComponent} from "../../modals/create-product-modal/create-product-modal.component";
 import {ModalComponent} from "../../modalconfigs/shared/components/modal/modal.component";
+import {EliminateProductModalComponent} from "../../modals/eliminate-product-modal/eliminate-product-modal.component";
 
 
 @Component({
@@ -41,6 +42,13 @@ export class StockComponent implements OnInit, AfterViewInit{
 
   async ngOnInit() {
     await this.loadProductsWithStock();
+
+    // Suscribirse a los cierres del modal
+    this.modalService.close$.subscribe(success => {
+      if (success) {
+        this.refreshData();
+      }
+    });
   }
 
   async loadProductsWithStock() {
@@ -173,18 +181,35 @@ export class StockComponent implements OnInit, AfterViewInit{
       },
       width: '550px',
       closable: true,
-      closeOnBackdrop: true
+      closeOnBackdrop: false
     });
   }
 
   editarProducto(producto: ProductWithStock) {
-    console.log('Editar producto:', producto);
-    // Aquí irá la lógica de edición
+    this.modalService.open({
+      title: 'Editar Producto',
+      component: CreateProductModalComponent,
+      data: {
+        producto: producto, // Pasamos el producto completo
+        isEdit: true // Flag para indicar que es edición
+      },
+      width: '550px',
+      closable: true,
+      closeOnBackdrop: false
+    });
   }
 
   eliminarProducto(producto: ProductWithStock) {
-    console.log('Editar producto:', producto);
-    // Aquí irá la lógica de edición
+    this.modalService.open({
+      title: 'Eliminar Producto',
+      component: EliminateProductModalComponent,
+      data: {
+        productId: producto.id
+      },
+      width: '500px',
+      closable: true,
+      closeOnBackdrop: false
+    });
   }
 
   ngAfterViewInit(): void {
@@ -193,6 +218,5 @@ export class StockComponent implements OnInit, AfterViewInit{
       this.searchInput?.nativeElement.focus();
     });
   }
-
 
 }

@@ -8,7 +8,7 @@
     </svg>
   </div>
 
-  <h2>Registrar Nuevo Producto</h2>
+  <h2>{{ isEditMode ? 'Editar Producto' : 'Registrar Nuevo Producto' }}</h2>
   <p class="subtitle">Completa la información del producto y su stock inicial</p>
 
   <div class="form-section">
@@ -187,7 +187,7 @@
       class="btn btn-primary"
       (click)="guardar()"
       [disabled]="!isValidForm() || isSubmitting">
-      {{ isSubmitting ? 'Guardando...' : 'Guardar Producto' }}
+      {{ isSubmitting ? 'Guardando...' : (isEditMode ? 'Actualizar Producto' : 'Guardar Producto') }}
     </button>
   </div>
 </div>

@@ -93,17 +93,16 @@ export class ModalComponent implements OnInit, AfterViewInit, OnDestroy, AfterVi
       return;
     }
 
-
     this.clearDynamicComponent();
 
     try {
       this.componentRef = this.dynamicContent.createComponent(config.component);
 
       if (config.data && this.componentRef.instance) {
-        Object.keys(config.data).forEach(key => {
-          this.componentRef!.instance[key] = config.data[key];
-        });
+        // CAMBIO: Asignar todo el objeto data como una propiedad
+        this.componentRef.instance.data = config.data;
 
+        // Forzar la detección de cambios
         if (this.componentRef.changeDetectorRef) {
           this.componentRef.changeDetectorRef.detectChanges();
         }

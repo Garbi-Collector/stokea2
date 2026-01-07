@@ -3,6 +3,9 @@ import { CommonModule } from '@angular/common';
 import { ModalService } from '../../modalconfigs/core/modal.service';
 import { StockService } from '../../services/stock.service';
 import { ProductsService } from '../../services/products.service';
+import {Product} from "../../models/product";
+import {Stock} from "../../models/stock";
+
 
 @Component({
   selector: 'app-eliminate-product-modal',
@@ -12,16 +15,21 @@ import { ProductsService } from '../../services/products.service';
   styleUrl: './eliminate-product-modal.component.css'
 })
 export class EliminateProductModalComponent implements OnInit {
+  // CAMBIO: Recibir el objeto data completo
+  @Input() data: any;
 
-  @Input() productId!: number;
+  // Propiedad para el productId extraído de data
+  productId!: number;
+
+
 
   currentStep: 1 | 2 = 1;
   isDeleting = false;
   error: string | null = null;
 
   // Datos del producto
-  product: any = null;
-  stockItems: any[] = [];
+  product!: Product;
+  stock!: Stock;
   totalStock = 0;
 
   // Resultado de la eliminación
@@ -35,19 +43,29 @@ export class EliminateProductModalComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
+    if (!this.data?.productId) {
+      this.error = 'No se proporcionó un ID de producto válido';
+      return;
+    }
+
+    this.productId = this.data.productId;
     await this.loadProductData();
   }
+
 
   async loadProductData() {
     try {
       this.product = await this.productsService.getById(this.productId);
-      this.stockItems = await this.stockService.getByProduct(this.productId);
-      this.totalStock = this.stockItems.length;
+      this.stock = await this.stockService.getByProduct(this.productId);
+
+      this.totalStock = this.stock?.quantity ?? 0;
+
     } catch (e) {
       console.error(e);
       this.error = 'Error al cargar los datos del producto';
     }
   }
+
 
   cerrar(): void {
     this.modalService.close();
