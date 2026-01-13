@@ -1,103 +1,63 @@
 .inicio-container {
   min-height: 100vh;
-  width: 100%;
-}
-
-/* ===== PANTALLA PRIMERA VISITA ===== */
-.first-visit-screen {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
   padding: 2rem;
+  position: relative;
 }
 
-.welcome-message {
-  text-align: center;
-  background: white;
-  padding: 3rem 2.5rem;
-  border-radius: 20px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
-  max-width: 500px;
-  animation: fadeInUp 0.6s ease-out;
+/* Dashboard para usuarios que ya visitaron */
+.dashboard-screen {
+  max-width: 1200px;
+  margin: 0 auto;
+  animation: fadeIn 0.6s ease-in-out;
 }
 
-.icon-container {
-  width: 100px;
-  height: 100px;
-  margin: 0 auto 1.5rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.welcome-message h2 {
-  font-size: 2rem;
+/* Sección de saludo */
+.greeting-header {
+  margin-bottom: 2rem;
+}
+
+.greeting-header h1 {
+  font-size: 2.5rem;
   font-weight: 700;
   color: #1a1a2e;
-  margin-bottom: 0.75rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-.welcome-message p {
-  font-size: 1.1rem;
-  color: #4a5568;
-  margin-bottom: 0.5rem;
-  font-weight: 500;
-}
-
-.welcome-message small {
-  color: #718096;
-  font-size: 0.9rem;
-}
-
-/* ===== PANTALLA DASHBOARD ===== */
-.dashboard-screen {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem 1rem;
-  animation: fadeInUp 0.6s ease-out;
-}
-
-.greeting-header {
-  margin-bottom: 2.5rem;
-  padding: 0 0.5rem;
-}
-
-.greeting-header h1 {
-  font-size: 2.2rem;
-  font-weight: 700;
-  color: #1a1a2e;
-  letter-spacing: -0.5px;
-}
-
-/* ===== GRID DEL DASHBOARD ===== */
-.dashboard-grid {
+/* Grid de tarjetas */
+.cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
   gap: 2rem;
-  max-width: 1000px;
+  margin-bottom: 2rem;
 }
 
-/* ===== TARJETA DE CAJA ===== */
+/* Tarjeta de Caja */
 .cash-card {
-  background: white;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
   border-radius: 20px;
   padding: 2rem;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid rgba(102, 126, 234, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .cash-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 15px 50px rgba(102, 126, 234, 0.15);
 }
 
 .cash-header {
@@ -111,9 +71,9 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  color: #4a5568;
-  font-weight: 600;
   font-size: 1rem;
+  font-weight: 600;
+  color: #495057;
 }
 
 .cash-label svg {
@@ -130,8 +90,8 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: #667eea;
   transition: all 0.3s ease;
+  color: #667eea;
 }
 
 .toggle-visibility-btn:hover {
@@ -144,55 +104,28 @@
 }
 
 .cash-amount {
-  margin-bottom: 1.5rem;
-  padding: 1rem 0;
+  margin-bottom: 2rem;
 }
 
 .amount {
-  font-size: 2.5rem;
+  font-size: 3rem;
   font-weight: 800;
-  color: #1a1a2e;
-  letter-spacing: -1px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: block;
 }
 
 .amount-hidden {
-  font-size: 2.5rem;
+  font-size: 3rem;
   font-weight: 800;
-  color: #cbd5e0;
-  letter-spacing: 4px;
+  color: #adb5bd;
+  display: block;
+  letter-spacing: 0.5rem;
 }
 
-/* ===== INFO DE SESIÓN ===== */
-.session-info {
-  background: rgba(102, 126, 234, 0.05);
-  border-radius: 12px;
-  padding: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-.session-detail {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.5rem 0;
-}
-
-.session-detail:not(:last-child) {
-  border-bottom: 1px solid rgba(102, 126, 234, 0.1);
-}
-
-.session-label {
-  font-size: 0.9rem;
-  color: #718096;
-  font-weight: 500;
-}
-
-.session-value {
-  font-size: 0.9rem;
-  color: #1a1a2e;
-  font-weight: 600;
-}
-
+/* Botones de acciones */
 .cash-actions {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -200,77 +133,124 @@
 }
 
 .action-btn {
-  padding: 1rem 1.5rem;
+  padding: 1rem;
   border: none;
   border-radius: 12px;
-  font-size: 1rem;
   font-weight: 600;
+  font-size: 1rem;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
 }
 
-.action-btn:active {
-  transform: scale(0.97);
+.action-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.action-btn:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.action-btn svg {
+  position: relative;
+  z-index: 1;
 }
 
 .ingreso-btn {
   background: linear-gradient(135deg, #10b981 0%, #059669 100%);
   color: white;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
 }
 
 .ingreso-btn:hover {
-  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
   transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
 }
 
 .egreso-btn {
   background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
   color: white;
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
 }
 
 .egreso-btn:hover {
-  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
   transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
 }
 
-/* ===== TARJETA DE CALENDARIO ===== */
+.action-btn:active {
+  transform: translateY(0);
+}
+
+/* CALENDARIO */
 .calendar-card {
-  background: white;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
   border-radius: 20px;
   padding: 2rem;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid rgba(102, 126, 234, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .calendar-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 15px 50px rgba(102, 126, 234, 0.15);
 }
 
 .calendar-header {
+  margin-bottom: 1.5rem;
+}
+
+.calendar-title {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  margin-bottom: 1.5rem;
-  color: #4a5568;
-  font-weight: 600;
-  font-size: 1rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  text-transform: capitalize;
 }
 
-.calendar-header svg {
+.calendar-title svg {
   color: #667eea;
+}
+
+.calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.weekday-header {
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #667eea;
+  text-transform: uppercase;
+  padding: 0.5rem 0;
+  letter-spacing: 0.5px;
 }
 
 .calendar-grid {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(7, 1fr);
   gap: 0.5rem;
-  margin-bottom: 1.5rem;
 }
 
 .calendar-day {
@@ -278,141 +258,194 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 8px;
-  font-size: 0.85rem;
-  font-weight: 600;
+  border-radius: 12px;
+  background: rgba(102, 126, 234, 0.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
-  transition: all 0.2s ease;
   position: relative;
+  overflow: hidden;
+}
+
+.calendar-day::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.calendar-day:hover::before {
+  opacity: 1;
 }
 
 .calendar-day:hover {
-  transform: scale(1.1);
-  z-index: 10;
-}
-
-.calendar-day.empty {
-  background: #f7fafc;
-  color: #cbd5e0;
-  border: 2px solid #e2e8f0;
-}
-
-.calendar-day.closed {
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-  color: white;
-  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
-}
-
-.calendar-day.closed:hover {
-  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.5);
-}
-
-.calendar-day.open {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  color: white;
-  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
-  animation: pulse 2s infinite;
-}
-
-.calendar-day.open:hover {
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.5);
+  transform: scale(1.08);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
 }
 
 .day-number {
-  font-size: 0.85rem;
+  position: relative;
+  z-index: 1;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #495057;
+  transition: all 0.3s ease;
 }
 
-/* ===== LEYENDA DEL CALENDARIO ===== */
-.calendar-legend {
-  display: flex;
-  justify-content: space-around;
-  padding-top: 1rem;
-  border-top: 1px solid #e2e8f0;
+.calendar-day:hover .day-number {
+  color: #667eea;
+  transform: scale(1.1);
 }
 
-.legend-item {
+/* Días de otros meses (deshabilitados visualmente) */
+.calendar-day.other-month {
+  opacity: 0.3;
+  pointer-events: none;
+  background: rgba(102, 126, 234, 0.02);
+}
+
+.calendar-day.other-month .day-number {
+  color: #adb5bd;
+}
+
+/* Día actual con degradado */
+.calendar-day.today {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  transform: scale(1.05);
+  animation: pulseToday 2s ease-in-out infinite;
+}
+
+.calendar-day.today::before {
+  display: none;
+}
+
+.calendar-day.today .day-number {
+  color: white;
+  font-weight: 800;
+  font-size: 1.1rem;
+}
+
+.calendar-day.today:hover {
+  transform: scale(1.12);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+}
+
+@keyframes pulseToday {
+  0%, 100% {
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  }
+  50% {
+    box-shadow: 0 8px 30px rgba(102, 126, 234, 0.6);
+  }
+}
+
+/* Vista de primera visita */
+.first-visit-screen {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.85rem;
-  color: #718096;
+  justify-content: center;
+  min-height: 60vh;
+  position: relative;
+  z-index: 1;
 }
 
-.legend-color {
-  width: 16px;
-  height: 16px;
-  border-radius: 4px;
+.welcome-message {
+  text-align: center;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 3rem;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(102, 126, 234, 0.2);
+  max-width: 500px;
+  animation: fadeInScale 0.6s ease-out;
 }
 
-.legend-color.empty {
-  background: #f7fafc;
-  border: 2px solid #e2e8f0;
-}
-
-.legend-color.closed {
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-}
-
-.legend-color.open {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-}
-
-/* ===== ANIMACIONES ===== */
-@keyframes fadeInUp {
+@keyframes fadeInScale {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: scale(0.9);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: scale(1);
   }
 }
 
-@keyframes pulse {
-  0%, 100% {
-    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
-  }
-  50% {
-    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.6);
-  }
+.icon-container {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
 }
 
-/* ===== RESPONSIVE ===== */
+.icon-container svg {
+  color: white;
+}
+
+.welcome-message h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 0.75rem;
+}
+
+.welcome-message p {
+  font-size: 1.1rem;
+  color: #495057;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.welcome-message small {
+  font-size: 0.95rem;
+  color: #6c757d;
+  display: block;
+}
+
+/* Responsive */
 @media (max-width: 768px) {
   .greeting-header h1 {
-    font-size: 1.75rem;
+    font-size: 2rem;
   }
 
-  .dashboard-grid {
+  .cards-grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
 
-  .cash-card,
-  .calendar-card {
+  .cash-card, .calendar-card {
     padding: 1.5rem;
   }
 
-  .amount,
-  .amount-hidden {
-    font-size: 2rem;
+  .amount, .amount-hidden {
+    font-size: 2.5rem;
   }
 
   .cash-actions {
     grid-template-columns: 1fr;
   }
 
-  .action-btn {
-    padding: 1.25rem;
+  .welcome-message {
+    padding: 2rem;
+    margin: 1rem;
   }
 
   .calendar-grid {
-    grid-template-columns: repeat(5, 1fr);
+    gap: 0.4rem;
   }
 
-  .calendar-legend {
-    flex-direction: column;
-    gap: 0.5rem;
+  .calendar-day {
+    border-radius: 10px;
+  }
+
+  .day-number {
+    font-size: 0.85rem;
   }
 }
