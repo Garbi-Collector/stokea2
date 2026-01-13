@@ -37,9 +37,14 @@ contextBridge.exposeInMainWorld('api', {
       ipcRenderer.invoke('cash-session:open', startAmount),
     getOpen: () =>
       ipcRenderer.invoke('cash-session:getOpen'),
+    getAll: () =>
+      ipcRenderer.invoke('cash-session:getAll'),
     close: (id, amount) =>
       ipcRenderer.invoke('cash-session:close', { id, amount }),
+    closeAll: (amount) =>
+      ipcRenderer.invoke('cash-session:closeAll', amount),
   },
+
 
   /* =======================
      CASH MOVEMENTS

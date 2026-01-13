@@ -36,5 +36,29 @@ module.exports = {
         }
       )
     );
+  },
+  // repositories/cash-session.repository.js
+
+  getAll() {
+    return new Promise((res, rej) =>
+      db.all(
+        'SELECT * FROM cash_session ORDER BY created_at DESC',
+        [],
+        (e, rows) => e ? rej(e) : res(rows)
+      )
+    );
+  },
+  closeAll(amount) {
+    return new Promise((res, rej) =>
+      db.run(
+        `UPDATE cash_session
+       SET current_amount = ?, closed_at = CURRENT_TIMESTAMP
+       WHERE closed_at IS NULL`,
+        [amount],
+        function (e) {
+          e ? rej(e) : res({ closed: this.changes });
+        }
+      )
+    );
   }
 };

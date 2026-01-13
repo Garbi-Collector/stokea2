@@ -40,7 +40,9 @@ declare global {
       cashSession: {
         open(startAmount: number): Promise<{ id: number }>;
         getOpen(): Promise<CashSession | null>;
+        getAll(): Promise<CashSession[]>;
         close(id: number, amount: number): Promise<{ closed: number }>;
+        closeAll(amount: number): Promise<{ closed: number }>;
       };
 
       /* =======================

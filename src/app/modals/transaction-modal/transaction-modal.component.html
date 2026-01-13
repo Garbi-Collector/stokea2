@@ -1,0 +1,123 @@
+<div class="transaction-content">
+  <div class="transaction-icon" [class.egreso-icon]="transactionType === 'egreso'">
+    <!-- Icono de ingreso (flecha hacia arriba) -->
+    <svg *ngIf="transactionType === 'ingreso'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <line x1="12" y1="19" x2="12" y2="5"/>
+      <polyline points="5 12 12 5 19 12"/>
+    </svg>
+
+    <!-- Icono de egreso (flecha hacia abajo) -->
+    <svg *ngIf="transactionType === 'egreso'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <line x1="12" y1="5" x2="12" y2="19"/>
+      <polyline points="19 12 12 19 5 12"/>
+    </svg>
+  </div>
+
+  <h2>{{ title }}</h2>
+  <p class="subtitle">{{ subtitle }}</p>
+
+  <div class="form-section">
+    <!-- Monto -->
+    <div class="input-wrapper">
+      <label for="amount">Monto *</label>
+      <input
+        type="number"
+        id="amount"
+        [(ngModel)]="form.amount"
+        (input)="validateField('amount')"
+        placeholder="0.00"
+        [class.error]="showErrors['amount']"
+        min="0"
+        step="0.01"
+      />
+      <div class="input-feedback">
+        <span *ngIf="!form.amount" class="hint">Ingresa el monto de la transacción</span>
+        <span *ngIf="form.amount && form.amount <= 0" class="error-text">
+          ⚠ El monto debe ser mayor a 0
+        </span>
+        <span *ngIf="form.amount && form.amount > 0" class="success-text">
+          ✓ Monto válido
+        </span>
+      </div>
+    </div>
+
+    <!-- Categoría -->
+    <div class="input-wrapper">
+      <label for="category">Categoría *</label>
+      <select
+        id="category"
+        [(ngModel)]="form.category"
+        (change)="validateField('category')"
+        [class.error]="showErrors['category']"
+        class="select-input"
+      >
+        <option value="">Selecciona una categoría</option>
+        <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+      </select>
+      <div class="input-feedback">
+        <span *ngIf="showErrors['category']" class="error-text">
+          ⚠ Debes seleccionar una categoría
+        </span>
+        <span *ngIf="form.category" class="success-text">
+          ✓ Categoría seleccionada
+        </span>
+      </div>
+    </div>
+
+    <!-- Fecha -->
+    <div class="input-wrapper">
+      <label for="date">Fecha *</label>
+      <input
+        type="date"
+        id="date"
+        [(ngModel)]="form.date"
+        (change)="validateField('date')"
+        [class.error]="showErrors['date']"
+      />
+      <div class="input-feedback">
+        <span *ngIf="showErrors['date']" class="error-text">
+          ⚠ La fecha es obligatoria
+        </span>
+      </div>
+    </div>
+
+    <!-- Descripción -->
+    <div class="input-wrapper">
+      <label for="description">Descripción (opcional)</label>
+      <textarea
+        id="description"
+        [(ngModel)]="form.description"
+        placeholder="Detalles adicionales de la transacción..."
+        rows="3"
+        maxlength="500"
+      ></textarea>
+      <div class="input-feedback">
+        <span class="hint">Agrega detalles que te ayuden a recordar esta transacción</span>
+      </div>
+    </div>
+
+    <!-- Vista previa del monto -->
+    <div class="price-display" *ngIf="form.amount && form.amount > 0">
+      <div class="price-label">{{ transactionType === 'ingreso' ? 'Ingresarás' : 'Gastarás' }}</div>
+      <div class="price-value" [class.egreso-value]="transactionType === 'egreso'">
+        {{ transactionType === 'ingreso' ? '+' : '-' }} ${{ form.amount | number:'1.2-2' }}
+      </div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button
+      class="btn btn-secondary"
+      (click)="cancelar()"
+      [disabled]="isSubmitting">
+      Cancelar
+    </button>
+    <button
+      class="btn btn-primary"
+      [class.btn-egreso]="transactionType === 'egreso'"
+      (click)="guardar()"
+      [disabled]="!isValidForm() || isSubmitting">
+      {{ isSubmitting ? 'Guardando...' : 'Registrar ' + (transactionType === 'ingreso' ? 'Ingreso' : 'Egreso') }}
+    </button>
+  </div>
+</div>
