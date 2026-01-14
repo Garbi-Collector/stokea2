@@ -16,6 +16,11 @@
   <h2>{{ title }}</h2>
   <p class="subtitle">{{ subtitle }}</p>
 
+  <!-- Mensaje de error global -->
+  <div *ngIf="errorMessage" style="background: rgba(232, 17, 35, 0.1); border: 1px solid rgba(232, 17, 35, 0.3); border-radius: 8px; padding: 0.875rem; margin-bottom: 1.5rem;">
+    <span class="error-text" style="font-size: 0.9rem;">⚠ {{ errorMessage }}</span>
+  </div>
+
   <div class="form-section">
     <!-- Monto -->
     <div class="input-wrapper">
@@ -37,46 +42,6 @@
         </span>
         <span *ngIf="form.amount && form.amount > 0" class="success-text">
           ✓ Monto válido
-        </span>
-      </div>
-    </div>
-
-    <!-- Categoría -->
-    <div class="input-wrapper">
-      <label for="category">Categoría *</label>
-      <select
-        id="category"
-        [(ngModel)]="form.category"
-        (change)="validateField('category')"
-        [class.error]="showErrors['category']"
-        class="select-input"
-      >
-        <option value="">Selecciona una categoría</option>
-        <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
-      </select>
-      <div class="input-feedback">
-        <span *ngIf="showErrors['category']" class="error-text">
-          ⚠ Debes seleccionar una categoría
-        </span>
-        <span *ngIf="form.category" class="success-text">
-          ✓ Categoría seleccionada
-        </span>
-      </div>
-    </div>
-
-    <!-- Fecha -->
-    <div class="input-wrapper">
-      <label for="date">Fecha *</label>
-      <input
-        type="date"
-        id="date"
-        [(ngModel)]="form.date"
-        (change)="validateField('date')"
-        [class.error]="showErrors['date']"
-      />
-      <div class="input-feedback">
-        <span *ngIf="showErrors['date']" class="error-text">
-          ⚠ La fecha es obligatoria
         </span>
       </div>
     </div>

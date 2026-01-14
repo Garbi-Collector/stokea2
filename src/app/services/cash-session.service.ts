@@ -29,6 +29,10 @@ export class CashSessionService {
     return window.api.cashSession.closeAll(amount);
   }
 
+  updateCurrentAmount(sessionId: number, delta: number) {
+    return window.api.cashSession.updateCurrentAmount(sessionId, delta);
+  }
+
   /**
    * Crea una nueva sesión siguiendo la lógica de negocio
    */

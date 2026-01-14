@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ModalService } from "../../modalconfigs/core/modal.service";
+import { CashMovementsService } from '../../services/cash-movements.service';
+import { CashSessionService } from '../../services/cash-session.service';
+import { CashMovement, CashMovementType } from '../../models/cash-movement';
 
 export type TransactionType = 'ingreso' | 'egreso';
 
@@ -18,40 +21,21 @@ export class TransactionModalComponent implements OnInit {
 
   form = {
     amount: null as number | null,
-    category: '',
-    description: '',
-    date: ''
+    description: ''
   };
 
   showErrors: { [key: string]: boolean } = {
-    amount: false,
-    category: false,
-    date: false
+    amount: false
   };
 
   isSubmitting: boolean = false;
+  errorMessage: string = '';
 
-  // Categorías predefinidas
-  ingresoCategories = [
-    'Ventas',
-    'Inversión',
-    'Préstamo recibido',
-    'Devolución',
-    'Otro'
-  ];
-
-  egresoCategories = [
-    'Compra de mercancía',
-    'Alquiler',
-    'Servicios',
-    'Salarios',
-    'Préstamo pagado',
-    'Mantenimiento',
-    'Transporte',
-    'Otro'
-  ];
-
-  constructor(private modalService: ModalService) {}
+  constructor(
+    private modalService: ModalService,
+    private cashMovementsService: CashMovementsService,
+    private cashSessionService: CashSessionService
+  ) {}
 
   ngOnInit(): void {
     // Obtener datos del modal (tipo de transacción)
@@ -59,16 +43,6 @@ export class TransactionModalComponent implements OnInit {
     if (modalData?.type) {
       this.transactionType = modalData.type;
     }
-
-    // Establecer fecha actual por defecto
-    const today = new Date();
-    this.form.date = today.toISOString().split('T')[0];
-  }
-
-  get categories(): string[] {
-    return this.transactionType === 'ingreso'
-      ? this.ingresoCategories
-      : this.egresoCategories;
   }
 
   get title(): string {
@@ -88,55 +62,59 @@ export class TransactionModalComponent implements OnInit {
       case 'amount':
         this.showErrors['amount'] = !this.form.amount || this.form.amount <= 0;
         break;
-      case 'category':
-        this.showErrors['category'] = !this.form.category || this.form.category.trim() === '';
-        break;
-      case 'date':
-        this.showErrors['date'] = !this.form.date;
-        break;
     }
   }
 
   isValidForm(): boolean {
     return !!(
       this.form.amount &&
-      this.form.amount > 0 &&
-      this.form.category &&
-      this.form.category.trim() !== '' &&
-      this.form.date
+      this.form.amount > 0
     );
   }
 
   async guardar(): Promise<void> {
-    // Validar todos los campos
+    // Validar campos
     this.validateField('amount');
-    this.validateField('category');
-    this.validateField('date');
 
     if (!this.isValidForm()) {
       return;
     }
 
     this.isSubmitting = true;
+    this.errorMessage = '';
 
     try {
-      // TODO: Aquí irá la lógica para guardar la transacción
-      // await this.transactionService.create({
-      //   ...this.form,
-      //   type: this.transactionType
-      // });
+      // 1. Obtener la sesión abierta
+      const openSession = await this.cashSessionService.getOpen();
 
-      console.log('Transacción registrada:', {
-        type: this.transactionType,
-        ...this.form
-      });
+      if (!openSession || !openSession.id) {
+        throw new Error('No hay una sesión de caja abierta. Por favor, abre una sesión primero.');
+      }
 
-      // Simular delay de guardado
-      await new Promise(resolve => setTimeout(resolve, 500));
+      // 2. Determinar el tipo de movimiento
+      const movementType: CashMovementType = this.transactionType === 'ingreso' ? 'IN' : 'OUT';
 
+      // 3. Crear el movimiento
+      const movement: CashMovement = {
+        cash_session_id: openSession.id,
+        type: movementType,
+        amount: this.form.amount!,
+        description: this.form.description || undefined
+      };
+
+      await this.cashMovementsService.create(movement);
+
+      // 4. Actualizar el current_amount de la sesión
+      const delta = movementType === 'IN' ? this.form.amount! : -this.form.amount!;
+      await this.cashSessionService.updateCurrentAmount(openSession.id, delta);
+
+      console.log('Movimiento registrado exitosamente:', movement);
+
+      // Cerrar modal con éxito
       this.modalService.close(true);
-    } catch (error) {
-      console.error('Error al guardar transacción:', error);
+    } catch (error: any) {
+      console.error('Error al guardar movimiento:', error);
+      this.errorMessage = error.message || 'Error al registrar el movimiento. Intenta nuevamente.';
     } finally {
       this.isSubmitting = false;
     }
