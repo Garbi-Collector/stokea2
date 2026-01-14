@@ -23,5 +23,5 @@ module.exports = {
         (e, r) => e ? rej(e) : res(r)
       )
     );
-  }
+  },
 };

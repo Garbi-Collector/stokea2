@@ -43,6 +43,11 @@ contextBridge.exposeInMainWorld('api', {
       ipcRenderer.invoke('cash-session:close', { id, amount }),
     closeAll: (amount) =>
       ipcRenderer.invoke('cash-session:closeAll', amount),
+    updateCurrentAmount: (sessionId, delta) =>
+      ipcRenderer.invoke(
+        'cash-session:updateCurrentAmount',
+        { sessionId, delta }
+      ),
   },
 
 
@@ -54,6 +59,8 @@ contextBridge.exposeInMainWorld('api', {
       ipcRenderer.invoke('cash-movements:create', movement),
     getBySession: (sessionId) =>
       ipcRenderer.invoke('cash-movements:getBySession', sessionId),
+    updateCurrentAmount: (sessionId, delta) =>
+      ipcRenderer.invoke('cash-session:updateCurrentAmount', sessionId, delta),
   },
 
   /* =======================

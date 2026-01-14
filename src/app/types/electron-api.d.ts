@@ -43,6 +43,10 @@ declare global {
         getAll(): Promise<CashSession[]>;
         close(id: number, amount: number): Promise<{ closed: number }>;
         closeAll(amount: number): Promise<{ closed: number }>;
+        updateCurrentAmount(
+          sessionId: number,
+          delta: number
+        ): Promise<{ updated: number }>;
       };
 
       /* =======================

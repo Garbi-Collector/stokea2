@@ -60,5 +60,19 @@ module.exports = {
         }
       )
     );
+  },
+
+  updateCurrentAmount(sessionId, delta) {
+    return new Promise((res, rej) =>
+      db.run(
+        `UPDATE cash_session
+       SET current_amount = current_amount + ?
+       WHERE id = ? AND closed_at IS NULL`,
+        [delta, sessionId],
+        function (e) {
+          e ? rej(e) : res({ updated: this.changes });
+        }
+      )
+    );
   }
 };

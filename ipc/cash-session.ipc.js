@@ -22,4 +22,11 @@ module.exports = () => {
   ipcMain.handle('cash-session:closeAll', (_, amount) => {
     return repo.closeAll(amount);
   });
+
+  ipcMain.handle(
+    'cash-session:updateCurrentAmount',
+    (_, { sessionId, delta }) => {
+      return repo.updateCurrentAmount(sessionId, delta);
+    }
+  );
 };

@@ -4,6 +4,7 @@ import { UserService } from '../../services/user.service';
 import { ModalService } from "../../modalconfigs/core/modal.service";
 import { ModalComponent } from "../../modalconfigs/shared/components/modal/modal.component";
 import { SetupModalComponent } from "../../modals/setup-modal/setup-modal.component";
+import { TransactionModalComponent } from "../../modals/transaction-modal/transaction-modal.component";
 import { ProductsService } from "../../services/products.service";
 import { CalendarService } from "../../services/calendar.service";
 import { CalendarDay } from "../../models/CalendarDay";
@@ -202,11 +203,45 @@ export class InicioComponent implements OnInit {
   }
 
   handleIngreso(): void {
-    console.log('Registrar ingreso');
+    this.modalService.open({
+      title: 'Registrar Ingreso',
+      component: TransactionModalComponent,
+      data: { type: 'ingreso' },
+      width: '500px',
+      closable: true,
+      closeOnBackdrop: true
+    });
+
+    // Suscribirse al cierre del modal para actualizar datos
+    const closeSub = this.modalService.close$.subscribe((success) => {
+      if (success) {
+        // Recargar el monto de la caja o actualizar datos necesarios
+        this.loadCashAmount();
+      }
+      closeSub.unsubscribe();
+    });
   }
 
   handleEgreso(): void {
-    console.log('Registrar egreso');
+    this.modalService.open({
+      title: 'Registrar Egreso',
+      component: TransactionModalComponent,
+      data: {
+        type: 'egreso'
+      },
+      width: '500px',
+      closable: true,
+      closeOnBackdrop: true
+    });
+
+    // Suscribirse al cierre del modal para actualizar datos
+    const closeSub = this.modalService.close$.subscribe((success) => {
+      if (success) {
+        // Recargar el monto de la caja o actualizar datos necesarios
+        this.loadCashAmount();
+      }
+      closeSub.unsubscribe();
+    });
   }
 
   abrirModalSetUp(): void {
@@ -221,6 +256,14 @@ export class InicioComponent implements OnInit {
       closable: true,
       closeOnBackdrop: false
     });
+    /*// Suscribirse al cierre del modal para actualizar datos
+    const closeSub = this.modalService.close$.subscribe((success) => {
+      if (success) {
+        // Recargar el monto de la caja o actualizar datos necesarios
+        this.loadCashAmount();
+      }
+      closeSub.unsubscribe();
+    });*/
   }
 
   getGreeting(): string {
