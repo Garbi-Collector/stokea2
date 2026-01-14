@@ -28,6 +28,7 @@
 
       <div class="cards-grid">
         <!-- Tarjeta de caja -->
+        <!-- Tarjeta de caja con montos del día y acumulado -->
         <div class="cash-card">
           <div class="cash-header">
             <div class="cash-label">
@@ -51,13 +52,40 @@
               }
             </button>
           </div>
-          <div class="cash-amount">
-            @if (isCashVisible) {
-              <span class="amount">$ {{ cashAmount | number:'1.2-2' }}</span>
-            } @else {
-              <span class="amount-hidden">••••••</span>
-            }
+
+          <!-- Monto del día -->
+          <div class="cash-amount-section">
+            <div class="amount-label">Recaudado hoy</div>
+            <div class="cash-amount">
+              @if (isCashVisible) {
+                <span class="amount">$ {{ cashAmount | number:'1.2-2' }}</span>
+              } @else {
+                <span class="amount-hidden">••••••</span>
+              }
+            </div>
           </div>
+
+          <!-- Divisor visual -->
+          <div class="cash-divider"></div>
+
+          <!-- Monto acumulado -->
+          <div class="cash-amount-section accumulated">
+            <div class="amount-label accumulated-label">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                <polyline points="17 6 23 6 23 12"></polyline>
+              </svg>
+              Total acumulado
+            </div>
+            <div class="cash-amount accumulated-amount">
+              @if (isCashVisible) {
+                <span class="amount-accumulated">$ {{ totalCashAmount | number:'1.2-2' }}</span>
+              } @else {
+                <span class="amount-hidden-small">••••••</span>
+              }
+            </div>
+          </div>
+
           <div class="cash-actions">
             <button class="action-btn ingreso-btn" (click)="handleIngreso()">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -99,9 +127,7 @@
           <div class="calendar-grid">
             @for (day of calendarDays; track day.date) {
               <div
-                class="calendar-day"
-                [class.today]="isToday(day)"
-                [class.other-month]="!day.isCurrentMonth"
+                [ngClass]="getDayClasses(day)"
                 [attr.data-day]="day.dayNumber">
                 <span class="day-number">{{ day.dayNumber }}</span>
               </div>

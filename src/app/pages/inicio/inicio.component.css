@@ -449,3 +449,230 @@
     font-size: 0.85rem;
   }
 }
+/* Estados del calendario según sesiones de caja */
+
+/* Día pasado SIN sesión - GRIS */
+.calendar-day.status-past-no-session {
+  background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+}
+
+.calendar-day.status-past-no-session .day-number {
+  color: #6c757d;
+}
+
+.calendar-day.status-past-no-session:hover {
+  background: linear-gradient(135deg, #dee2e6 0%, #ced4da 100%);
+  transform: scale(1.05);
+}
+
+/* Día pasado con sesión BAJA (< 3000) - AMARILLO */
+.calendar-day.status-past-low {
+  background: linear-gradient(135deg, #ffd60a 0%, #ffc300 100%);
+  box-shadow: 0 4px 12px rgba(255, 214, 10, 0.3);
+}
+
+.calendar-day.status-past-low .day-number {
+  color: #212529;
+  font-weight: 700;
+}
+
+.calendar-day.status-past-low:hover {
+  background: linear-gradient(135deg, #ffc300 0%, #ffb700 100%);
+  transform: scale(1.08);
+  box-shadow: 0 6px 18px rgba(255, 214, 10, 0.4);
+}
+
+/* Día pasado con sesión ALTA (>= 3000) - VERDE */
+.calendar-day.status-past-high {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.calendar-day.status-past-high .day-number {
+  color: white;
+  font-weight: 700;
+}
+
+.calendar-day.status-past-high:hover {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  transform: scale(1.08);
+  box-shadow: 0 6px 18px rgba(16, 185, 129, 0.4);
+}
+
+/* Día de HOY - mantiene el estilo original morado */
+.calendar-day.status-today {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  transform: scale(1.05);
+  animation: pulseToday 2s ease-in-out infinite;
+}
+
+.calendar-day.status-today::before {
+  display: none;
+}
+
+.calendar-day.status-today .day-number {
+  color: white;
+  font-weight: 800;
+  font-size: 1.1rem;
+}
+
+.calendar-day.status-today:hover {
+  transform: scale(1.12);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+}
+
+/* Días FUTUROS - BLANCO */
+.calendar-day.status-future {
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  border: 1px solid rgba(102, 126, 234, 0.15);
+}
+
+.calendar-day.status-future .day-number {
+  color: #495057;
+}
+
+.calendar-day.status-future:hover {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-color: rgba(102, 126, 234, 0.25);
+  transform: scale(1.05);
+}
+
+/* Animación para el día de hoy */
+@keyframes pulseToday {
+  0%, 100% {
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  }
+  50% {
+    box-shadow: 0 8px 30px rgba(102, 126, 234, 0.6);
+  }
+}
+
+/* Asegurar que los días de otros meses no tengan colores de estado */
+.calendar-day.other-month {
+  opacity: 0.3;
+  pointer-events: none;
+  background: rgba(102, 126, 234, 0.02) !important;
+  box-shadow: none !important;
+}
+
+.calendar-day.other-month .day-number {
+  color: #adb5bd !important;
+}
+
+/* Tooltip opcional para mostrar información de la sesión */
+.calendar-day[data-session-info]:hover::after {
+  content: attr(data-session-info);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  z-index: 10;
+  margin-bottom: 0.5rem;
+  pointer-events: none;
+}
+
+
+/* Secciones de montos */
+.cash-amount-section {
+  margin-bottom: 1.5rem;
+}
+
+.cash-amount-section.accumulated {
+  margin-bottom: 2rem;
+}
+
+.amount-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #6c757d;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.accumulated-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #667eea;
+}
+
+.accumulated-label svg {
+  color: #667eea;
+}
+
+/* Ajuste del monto principal */
+.cash-amount {
+  margin-bottom: 0;
+}
+
+/* Monto acumulado con estilo diferenciado */
+.accumulated-amount .amount-accumulated {
+  font-size: 2rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: block;
+}
+
+.amount-hidden-small {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #adb5bd;
+  display: block;
+  letter-spacing: 0.4rem;
+}
+
+/* Divisor visual entre montos */
+.cash-divider {
+  height: 1px;
+  background: linear-gradient(90deg,
+  transparent 0%,
+  rgba(102, 126, 234, 0.2) 20%,
+  rgba(102, 126, 234, 0.2) 80%,
+  transparent 100%
+  );
+  margin: 1.5rem 0;
+  position: relative;
+}
+
+.cash-divider::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 6px;
+  height: 6px;
+  background: #667eea;
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .amount-accumulated {
+    font-size: 1.75rem !important;
+  }
+
+  .amount-hidden-small {
+    font-size: 1.75rem !important;
+  }
+
+  .cash-amount-section {
+    margin-bottom: 1.25rem;
+  }
+
+  .cash-amount-section.accumulated {
+    margin-bottom: 1.5rem;
+  }
+}

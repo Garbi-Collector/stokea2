@@ -5,5 +5,5 @@ export interface CalendarDay {
   monthName: string;
   dayName: string;
   isCurrentMonth: boolean;
-  status?: string; // se completa después (ventas, cerrado, etc)
+  status?: 'past-no-session' | 'past-low' | 'past-high' | 'today' | 'future'; // Estados posibles
 }

@@ -25,6 +25,7 @@ export class InicioComponent implements OnInit {
 
   // Propiedades para la caja
   cashAmount: number = 0;
+  totalCashAmount: number = 0;
   isCashVisible: boolean = true;
   currentSession: CashSession | null = null;
 
@@ -34,6 +35,9 @@ export class InicioComponent implements OnInit {
   currentYear: number = 0;
   today: Date = new Date();
   weekDays: string[] = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+
+  // Umbral para ventas altas (hardcodeado)
+  readonly HIGH_SALES_THRESHOLD = 2000;
 
   constructor(
     private storageService: UserService,
@@ -57,49 +61,126 @@ export class InicioComponent implements OnInit {
 
     this.loadCashAmount();
 
-    // Inicializar calendario
-    this.initCalendar();
+    // Inicializar calendario con estados
+    await this.initCalendar();
   }
 
-  /**
-   * Inicializa la sesión de caja al entrar al componente
-   */
   async initializeCashSession(): Promise<void> {
     try {
-      // Primero verificar si ya existe una sesión abierta
       const openSession = await this.cashSessionService.getOpen();
 
       if (openSession) {
-        // Ya existe una sesión abierta
         this.currentSession = openSession;
         this.cashAmount = openSession.current_amount;
+        this.totalCashAmount = openSession.current_amount + openSession.start_amount;
       } else {
-        // No hay sesión abierta, intentar crear una nueva
         this.currentSession = await this.cashSessionService.createNewSession();
         this.cashAmount = this.currentSession.current_amount;
-
-        // Opcional: Mostrar mensaje de éxito
         console.log('Nueva sesión de caja creada:', this.currentSession);
       }
     } catch (error) {
-      // Manejar el error si no se puede crear la sesión
       console.error('Error al inicializar sesión de caja:', error);
-
-      // Opcional: Mostrar un mensaje al usuario
-      // this.mostrarMensajeError(error);
     }
   }
 
-  initCalendar(): void {
+  async initCalendar(): Promise<void> {
     this.today = this.calendarService.getToday();
     this.currentYear = this.today.getFullYear();
     const currentMonthIndex = this.today.getMonth();
     this.calendarDays = this.calendarService.getMonthDays(this.currentYear, currentMonthIndex);
     this.currentMonth = this.calendarDays[15]?.monthName || '';
+
+    // Aplicar estados a los días del calendario
+    await this.applyCalendarStates();
+  }
+
+  /**
+   * Aplica los estados (colores) a cada día del calendario basándose en las sesiones
+   */
+  async applyCalendarStates(): Promise<void> {
+    try {
+      // Obtener todas las sesiones
+      const allSessions = await this.cashSessionService.getAll();
+
+      // Normalizar la fecha de hoy para comparaciones
+      const todayNormalized = new Date(this.today);
+      todayNormalized.setHours(0, 0, 0, 0);
+
+      // Procesar cada día del calendario
+      this.calendarDays = this.calendarDays.map(day => {
+        const dayNormalized = new Date(day.date);
+        dayNormalized.setHours(0, 0, 0, 0);
+
+        // Si es el día de hoy, mantener el estado actual
+        if (dayNormalized.getTime() === todayNormalized.getTime()) {
+          return { ...day, status: 'today' };
+        }
+
+        // Si es un día futuro
+        if (dayNormalized > todayNormalized) {
+          return { ...day, status: 'future' };
+        }
+
+        // Es un día pasado - buscar si tiene sesión
+        const sessionForDay = this.findSessionForDate(allSessions, dayNormalized);
+
+        if (!sessionForDay) {
+          // Día pasado sin sesión
+          return { ...day, status: 'past-no-session' };
+        }
+
+        // Día pasado con sesión - calcular ventas
+        const sales = sessionForDay.current_amount - sessionForDay.start_amount;
+
+        if (sales >= this.HIGH_SALES_THRESHOLD) {
+          return { ...day, status: 'past-high' };
+        } else {
+          return { ...day, status: 'past-low' };
+        }
+      });
+    } catch (error) {
+      console.error('Error al aplicar estados del calendario:', error);
+    }
+  }
+
+  /**
+   * Encuentra la sesión que corresponde a una fecha específica
+   */
+  private findSessionForDate(sessions: CashSession[], targetDate: Date): CashSession | undefined {
+    return sessions.find(session => {
+      if (!session.opened_at) return false;
+
+      const sessionDate = new Date(session.opened_at);
+      sessionDate.setHours(0, 0, 0, 0);
+
+      return sessionDate.getTime() === targetDate.getTime();
+    });
   }
 
   isToday(day: CalendarDay): boolean {
     return day.date.toDateString() === this.today.toDateString();
+  }
+
+  /**
+   * Determina las clases CSS para cada día del calendario
+   */
+  getDayClasses(day: CalendarDay): string {
+    const classes: string[] = ['calendar-day'];
+
+    if (this.isToday(day)) {
+      classes.push('today');
+    }
+
+    if (!day.isCurrentMonth) {
+      classes.push('other-month');
+    }
+
+    // Agregar clase según el estado
+    if (day.status) {
+      classes.push(`status-${day.status}`);
+    }
+
+    return classes.join(' ');
   }
 
   async totalProductsCount(): Promise<number> {
@@ -107,7 +188,6 @@ export class InicioComponent implements OnInit {
   }
 
   loadCashAmount(): void {
-    // Si ya tenemos el monto de la sesión actual, no lo sobrescribimos
     if (this.currentSession) {
       this.cashAmount = this.currentSession.current_amount;
       return;
