@@ -42,7 +42,7 @@ module.exports = {
   getAll() {
     return new Promise((res, rej) =>
       db.all(
-        'SELECT * FROM cash_session ORDER BY created_at DESC',
+        'SELECT * FROM cash_session ORDER BY opened_at DESC',
         [],
         (e, rows) => e ? rej(e) : res(rows)
       )

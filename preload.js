@@ -81,6 +81,15 @@ contextBridge.exposeInMainWorld('api', {
     updateName: (name) => ipcRenderer.invoke('user:updateName', name),
     markVisited: () => ipcRenderer.invoke('user:markVisited'),
     resetFirstVisit: () => ipcRenderer.invoke('user:resetFirstVisit'),
+
+    updateSchedule: (openHour, openMinute, closeHour, closeMinute) =>
+      ipcRenderer.invoke(
+        'user:updateSchedule',
+        openHour,
+        openMinute,
+        closeHour,
+        closeMinute
+      )
   },
 
 

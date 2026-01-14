@@ -7,6 +7,8 @@ import { SetupModalComponent } from "../../modals/setup-modal/setup-modal.compon
 import { ProductsService } from "../../services/products.service";
 import { CalendarService } from "../../services/calendar.service";
 import { CalendarDay } from "../../models/CalendarDay";
+import { CashSessionService } from "../../services/cash-session.service";
+import { CashSession } from "../../models/cash-session";
 
 @Component({
   selector: 'app-inicio',
@@ -24,6 +26,7 @@ export class InicioComponent implements OnInit {
   // Propiedades para la caja
   cashAmount: number = 0;
   isCashVisible: boolean = true;
+  currentSession: CashSession | null = null;
 
   // Propiedades para el calendario
   calendarDays: CalendarDay[] = [];
@@ -36,7 +39,8 @@ export class InicioComponent implements OnInit {
     private storageService: UserService,
     private modalService: ModalService,
     private productService: ProductsService,
-    private calendarService: CalendarService
+    private calendarService: CalendarService,
+    private cashSessionService: CashSessionService
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -47,10 +51,43 @@ export class InicioComponent implements OnInit {
     this.name = await this.storageService.getUserName();
     this.totalProducts = await this.totalProductsCount();
     this.hasProduct = this.totalProducts > 0;
+
+    // Intentar crear/obtener sesión de caja
+    await this.initializeCashSession();
+
     this.loadCashAmount();
 
     // Inicializar calendario
     this.initCalendar();
+  }
+
+  /**
+   * Inicializa la sesión de caja al entrar al componente
+   */
+  async initializeCashSession(): Promise<void> {
+    try {
+      // Primero verificar si ya existe una sesión abierta
+      const openSession = await this.cashSessionService.getOpen();
+
+      if (openSession) {
+        // Ya existe una sesión abierta
+        this.currentSession = openSession;
+        this.cashAmount = openSession.current_amount;
+      } else {
+        // No hay sesión abierta, intentar crear una nueva
+        this.currentSession = await this.cashSessionService.createNewSession();
+        this.cashAmount = this.currentSession.current_amount;
+
+        // Opcional: Mostrar mensaje de éxito
+        console.log('Nueva sesión de caja creada:', this.currentSession);
+      }
+    } catch (error) {
+      // Manejar el error si no se puede crear la sesión
+      console.error('Error al inicializar sesión de caja:', error);
+
+      // Opcional: Mostrar un mensaje al usuario
+      // this.mostrarMensajeError(error);
+    }
   }
 
   initCalendar(): void {
@@ -70,6 +107,12 @@ export class InicioComponent implements OnInit {
   }
 
   loadCashAmount(): void {
+    // Si ya tenemos el monto de la sesión actual, no lo sobrescribimos
+    if (this.currentSession) {
+      this.cashAmount = this.currentSession.current_amount;
+      return;
+    }
+
     const savedAmount = localStorage.getItem('cashAmount');
     this.cashAmount = savedAmount ? parseFloat(savedAmount) : 0;
   }

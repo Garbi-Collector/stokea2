@@ -38,4 +38,16 @@ export class CalendarService {
   getToday(): Date {
     return new Date();
   }
+
+  isPreviousDay(dateIso: string): boolean {
+    const sessionDate = new Date(dateIso);
+    const today = new Date();
+
+    // Normalizar ambas fechas al inicio del día
+    sessionDate.setHours(0, 0, 0, 0);
+    today.setHours(0, 0, 0, 0);
+
+    return sessionDate < today;
+  }
+
 }

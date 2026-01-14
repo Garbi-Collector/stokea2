@@ -76,7 +76,15 @@ declare global {
         updateName(name: string): Promise<{ changes: number }>;
         markVisited(): Promise<{ changes: number }>;
         resetFirstVisit(): Promise<{ changes: number }>;
+
+        updateSchedule(
+          openHour: number,
+          openMinute: number,
+          closeHour: number,
+          closeMinute: number
+        ): Promise<{ changes: number }>;
       };
+
 
       /* =======================
          WINDOW CONTROLS

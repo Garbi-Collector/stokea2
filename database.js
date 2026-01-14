@@ -88,9 +88,14 @@ db.serialize(() => {
                                              id INTEGER PRIMARY KEY CHECK (id = 1),
       name TEXT NOT NULL,
       is_first_time INTEGER NOT NULL DEFAULT 1,
-      created_at TEXT DEFAULT CURRENT_TIMESTAMP
+
+      open_hour INTEGER NOT NULL CHECK (open_hour BETWEEN 0 AND 23),
+      open_minute INTEGER NOT NULL CHECK (open_minute BETWEEN 0 AND 59),
+
+      close_hour INTEGER NOT NULL CHECK (close_hour BETWEEN 0 AND 23),
+      close_minute INTEGER NOT NULL CHECK (close_minute BETWEEN 0 AND 59)
       )
-`);
+  `);
 
 });
 

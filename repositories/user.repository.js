@@ -12,16 +12,42 @@ module.exports = {
     );
   },
 
-  createIfNotExists(name = 'Usuario') {
+  createIfNotExists(
+    name = 'Usuario',
+    openHour = 0,
+    openMinute = 0,
+    closeHour = 23,
+    closeMinute = 59
+  ) {
     return new Promise((res, rej) =>
       db.run(
         `
-        INSERT OR IGNORE INTO user_config (id, name, is_first_time)
-        VALUES (1, ?, 1)
+          INSERT OR IGNORE INTO user_config
+      (id, name, is_first_time, open_hour, open_minute, close_hour, close_minute)
+      VALUES (1, ?, 1, ?, ?, ?, ?)
         `,
-        [name],
+        [name, openHour, openMinute, closeHour, closeMinute],
         function (e) {
           e ? rej(e) : res({ created: this.changes });
+        }
+      )
+    );
+  },
+  updateSchedule(openHour, openMinute, closeHour, closeMinute) {
+    return new Promise((res, rej) =>
+      db.run(
+        `
+      UPDATE user_config
+      SET
+        open_hour = ?,
+        open_minute = ?,
+        close_hour = ?,
+        close_minute = ?
+      WHERE id = 1
+      `,
+        [openHour, openMinute, closeHour, closeMinute],
+        function (e) {
+          e ? rej(e) : res({ changes: this.changes });
         }
       )
     );

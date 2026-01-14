@@ -23,4 +23,10 @@ module.exports = () => {
     repo.resetFirstVisit()
   );
 
+  ipcMain.handle(
+    'user:updateSchedule',
+    (_, openHour, openMinute, closeHour, closeMinute) =>
+      repo.updateSchedule(openHour, openMinute, closeHour, closeMinute)
+  );
+
 };
