@@ -9,6 +9,7 @@ contextBridge.exposeInMainWorld('api', {
     getAll: () => ipcRenderer.invoke('products:getAll'),
     getById: (id) => ipcRenderer.invoke('products:getById', id),
     create: (product) => ipcRenderer.invoke('products:create', product),
+    createMany: (products) => ipcRenderer.invoke('products:createMany', products),
     update: (id, product) =>
       ipcRenderer.invoke('products:update', { id, product }),
     delete: (id) => ipcRenderer.invoke('products:delete', id),

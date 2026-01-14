@@ -74,6 +74,44 @@ module.exports = {
         }
       );
     });
+  },
+
+  createMany(products) {
+    return new Promise((resolve, reject) => {
+      db.serialize(() => {
+        db.run('BEGIN TRANSACTION');
+
+        const stmt = db.prepare(
+          `INSERT INTO products
+           (name, description, brand, code, wholesale_price, profit_percentage, sale_price)
+           VALUES (?, ?, ?, ?, ?, ?, ?)`
+        );
+
+        try {
+          for (const p of products) {
+            stmt.run([
+              p.name,
+              p.description,
+              p.brand,
+              p.code,
+              p.wholesale_price,
+              p.profit_percentage,
+              p.sale_price
+            ]);
+          }
+
+          stmt.finalize();
+          db.run('COMMIT');
+          resolve({ inserted: products.length });
+
+        } catch (err) {
+          db.run('ROLLBACK');
+          reject(err);
+        }
+      });
+    });
   }
+
+
 
 };

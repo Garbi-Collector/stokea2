@@ -32,6 +32,7 @@
     "rxjs": "~7.8.0",
     "sqlite3": "^5.1.7",
     "tslib": "^2.3.0",
+    "xlsx": "^0.18.5",
     "zone.js": "~0.14.3"
   },
   "devDependencies": {
@@ -41,6 +42,7 @@
     "@types/express": "^4.17.17",
     "@types/jasmine": "~5.1.0",
     "@types/node": "^18.18.0",
+    "@types/xlsx": "^0.0.36",
     "angular-cli-ghpages": "^2.0.3",
     "baseline-browser-mapping": "^2.9.14",
     "electron": "^39.1.2",

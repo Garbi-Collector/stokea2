@@ -18,6 +18,7 @@ declare global {
         getAll(): Promise<Product[]>;
         getById(id: number): Promise<Product | null>;
         create(product: Product): Promise<{ id: number }>;
+        createMany(products: Product[]): Promise<{ inserted: number }>;
         update(id: number, product: Product): Promise<{ changes: number }>;
         delete(id: number): Promise<{ deleted: number }>;
         count(): Promise<number>;

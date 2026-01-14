@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import {Product} from "../models/product";
 
 @Injectable({ providedIn: 'root' })
 export class ProductsService {
@@ -13,6 +14,10 @@ export class ProductsService {
 
   create(product: any) {
     return window.api.products.create(product);
+  }
+
+  createMany(products: Product[]) {
+    return window.api.products.createMany(products);
   }
 
   update(id: number, product: any) {

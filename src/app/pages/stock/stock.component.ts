@@ -12,6 +12,7 @@ import {ModalService} from "../../modalconfigs/core/modal.service";
 import {CreateProductModalComponent} from "../../modals/create-product-modal/create-product-modal.component";
 import {ModalComponent} from "../../modalconfigs/shared/components/modal/modal.component";
 import {EliminateProductModalComponent} from "../../modals/eliminate-product-modal/eliminate-product-modal.component";
+import {ProductImportModalComponent} from "../../modals/product-import-modal/product-import-modal.component";
 
 
 @Component({
@@ -211,6 +212,17 @@ export class StockComponent implements OnInit, AfterViewInit{
       closeOnBackdrop: false
     });
   }
+
+  openImportModal(): void {
+    this.modalService.open({
+      title: 'Importar Productos',
+      component: ProductImportModalComponent,
+      width: '600px',
+      closable: true,
+      closeOnBackdrop: true
+    });
+  }
+
 
   ngAfterViewInit(): void {
     // Pequeño delay por si el render depende del loading

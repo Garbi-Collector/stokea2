@@ -1,0 +1,154 @@
+<!-- product-import-modal.component.html -->
+<div class="import-content">
+  <!-- Header -->
+  <div class="welcome-icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+      <polyline points="14 2 14 8 20 8"/>
+      <line x1="12" y1="18" x2="12" y2="12"/>
+      <line x1="9" y1="15" x2="15" y2="15"/>
+    </svg>
+  </div>
+
+  <h2>Importar Productos desde Excel</h2>
+  <p class="subtitle">Descarga la plantilla, complétala y súbela para importar productos masivamente</p>
+
+  <!-- Template Download Section -->
+  <div class="template-section" *ngIf="!selectedFile && !showResults">
+    <button class="btn btn-secondary" (click)="downloadTemplate()">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="7 10 12 15 17 10"/>
+        <line x1="12" y1="15" x2="12" y2="3"/>
+      </svg>
+      Descargar Plantilla
+    </button>
+    <p class="template-hint">Descarga la plantilla con el formato correcto</p>
+  </div>
+
+  <!-- File Upload Section -->
+  <div class="upload-section" *ngIf="!selectedFile && !showResults">
+    <div
+      class="dropzone"
+      [class.dragging]="isDragging"
+      (dragover)="onDragOver($event)"
+      (dragleave)="onDragLeave($event)"
+      (drop)="onDrop($event)"
+      (click)="fileInput.click()">
+
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="17 8 12 3 7 8"/>
+        <line x1="12" y1="3" x2="12" y2="15"/>
+      </svg>
+
+      <p class="dropzone-text">
+        <strong>Haz clic para seleccionar</strong> o arrastra el archivo aquí
+      </p>
+      <p class="dropzone-hint">Archivos Excel (.xlsx, .xls)</p>
+
+      <input
+        #fileInput
+        type="file"
+        accept=".xlsx,.xls"
+        (change)="onFileSelected($event)"
+        style="display: none;">
+    </div>
+  </div>
+
+  <!-- Selected File Display -->
+  <div class="file-selected" *ngIf="selectedFile && !showResults">
+    <div class="file-info">
+      <div class="file-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+        </svg>
+      </div>
+      <div class="file-details">
+        <p class="file-name">{{ selectedFile.name }}</p>
+        <p class="file-size">{{ getFileSize() }}</p>
+      </div>
+      <button class="btn-remove" (click)="removeFile()" [disabled]="isProcessing">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+
+    <button
+      class="btn btn-primary full-width"
+      (click)="processFile()"
+      [disabled]="isProcessing">
+      <span *ngIf="!isProcessing">Procesar Archivo</span>
+      <span *ngIf="isProcessing">Procesando...</span>
+    </button>
+  </div>
+
+  <!-- Results Section -->
+  <div class="results-section" *ngIf="showResults && importResult">
+    <!-- Success Summary -->
+    <div class="result-summary" [class.has-errors]="hasErrors()">
+      <div class="summary-item success">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        <div>
+          <p class="summary-number">{{ importResult.validRows }}</p>
+          <p class="summary-label">Productos válidos</p>
+        </div>
+      </div>
+
+      <div class="summary-item error" *ngIf="importResult.invalidRows > 0">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="12"/>
+          <line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        <div>
+          <p class="summary-number">{{ importResult.invalidRows }}</p>
+          <p class="summary-label">Productos con errores</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Error Details -->
+    <div class="error-details" *ngIf="hasErrors()">
+      <h3>Errores encontrados</h3>
+      <div class="error-list">
+        <div class="error-item" *ngFor="let error of importResult.errors">
+          <span class="error-row">Fila {{ error.row }}</span>
+          <span class="error-message">{{ error.message }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Success Message -->
+    <div class="success-message" *ngIf="!hasErrors()">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+        <polyline points="22 4 12 14.01 9 11.01"/>
+      </svg>
+      <p>¡Todos los productos son válidos y están listos para importar!</p>
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="actions">
+    <button
+      class="btn btn-secondary"
+      (click)="cancel()"
+      [disabled]="isProcessing">
+      Cancelar
+    </button>
+
+    <button
+      *ngIf="showResults && importResult && importResult.validRows > 0"
+      class="btn btn-primary"
+      (click)="confirmImport()"
+      [disabled]="isProcessing">
+      Importar {{ importResult.validRows }} Producto(s)
+    </button>
+  </div>
+</div>
