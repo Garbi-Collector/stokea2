@@ -20,7 +20,15 @@ import {ProductImportModalComponent} from "../../modals/product-import-modal/pro
   standalone: true,
   imports: [CommonModule, FormsModule, ModalComponent],
   templateUrl: './stock.component.html',
-  styleUrl: './stock.component.css'
+  styleUrls: [
+    './stock.component.css',
+    './../../style/badges.css',
+    './../../style/buttons.css',
+    './../../style/colors.css',
+    './../../style/forms.css',
+    './../../style/tables.css',
+    './../../style/typography.css'
+  ]
 })
 export class StockComponent implements OnInit, AfterViewInit{
   @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
