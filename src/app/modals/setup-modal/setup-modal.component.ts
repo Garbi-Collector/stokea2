@@ -13,7 +13,17 @@ import {UserService} from "../../services/user.service";
     FormsModule
   ],
   templateUrl: './setup-modal.component.html',
-  styleUrl: './setup-modal.component.css'
+  styleUrls: [
+    './setup-modal.component.css',
+    './../../style/animations.css',
+    './../../style/badges.css',
+    './../../style/buttons.css',
+    './../../style/cards.css',
+    './../../style/colors.css',
+    './../../style/forms.css',
+    './../../style/tables.css',
+    './../../style/typography.css',
+  ]
 })
 export class SetupModalComponent {
   userName: string = '';

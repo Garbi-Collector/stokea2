@@ -117,3 +117,80 @@
 .error-message svg {
   flex-shrink: 0;
 }
+/* Agregar después de los estilos existentes */
+
+/* Inputs para fondos oscuros/modales */
+.input-dark,
+input[data-theme="dark"] {
+  background: rgba(102, 126, 234, 0.08);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: #fff;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.input-dark::placeholder,
+input[data-theme="dark"]::placeholder {
+  color: rgba(184, 185, 212, 0.5);
+}
+
+.input-dark:focus,
+input[data-theme="dark"]:focus {
+  background: rgba(102, 126, 234, 0.12);
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* Estado de error en inputs */
+input.error {
+  border-color: #ff6b6b;
+  animation: shake 0.4s ease;
+}
+
+/* Labels para temas oscuros */
+.label-dark,
+label[data-theme="dark"] {
+  color: #b8b9d4;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  padding-left: 2px;
+}
+
+/* Feedback de inputs */
+.input-feedback {
+  min-height: 1.5rem;
+  padding: 0.25rem 0.25rem 0;
+  font-size: 0.8rem;
+}
+
+.input-feedback .hint {
+  color: rgba(184, 185, 212, 0.7);
+}
+
+.input-feedback .error-text {
+  color: #ff6b6b;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.input-feedback .success-text {
+  color: #51cf66;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Contador de caracteres */
+.char-counter {
+  text-align: right;
+  font-size: 0.75rem;
+  color: #b8b9d4;
+  margin-top: 0.25rem;
+  transition: color 0.2s ease;
+}
+
+.char-counter.warning {
+  color: #ffa94d;
+}

@@ -50,4 +50,19 @@
   --shadow-warning: 0 4px 12px rgba(255, 214, 10, 0.3);
   --shadow-card: 0 10px 40px rgba(0, 0, 0, 0.08);
   --shadow-card-hover: 0 15px 50px rgba(102, 126, 234, 0.15);
+
+  /* Colores para fondos oscuros/modales */
+  --color-text-light-theme: #b8b9d4;
+  --color-input-bg-dark: rgba(102, 126, 234, 0.08);
+  --color-input-bg-dark-focus: rgba(102, 126, 234, 0.12);
+  --color-input-border-dark: rgba(255, 255, 255, 0.1);
+  --color-placeholder-dark: rgba(184, 185, 212, 0.5);
+
+  /* Estados de validación */
+  --color-error: #ff6b6b;
+  --color-success-text: #51cf66;
+  --color-warning-text: #ffa94d;
+
+  /* Sombras para inputs oscuros */
+  --shadow-input-focus-dark: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
