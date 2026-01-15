@@ -25,4 +25,29 @@
 
 .text-muted {
   color: var(--color-text-light);
+
+  /* Nuevos gradientes */
+  --gradient-dark: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  --gradient-light-bg: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  --gradient-success: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  --gradient-success-hover: linear-gradient(135deg, #059669 0%, #047857 100%);
+  --gradient-danger: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  --gradient-warning: linear-gradient(135deg, #ffd60a 0%, #ffc300 100%);
+  --gradient-warning-hover: linear-gradient(135deg, #ffc300 0%, #ffb700 100%);
+  --gradient-gray: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+  --gradient-gray-hover: linear-gradient(135deg, #dee2e6 0%, #ced4da 100%);
+
+  /* Nuevos colores */
+  --color-success-light: #10b981;
+  --color-success-dark: #059669;
+  --color-warning: #ffd60a;
+  --color-dark: #1a1a2e;
+
+  /* Nuevas sombras */
+  --shadow-success: 0 4px 15px rgba(16, 185, 129, 0.3);
+  --shadow-success-hover: 0 6px 20px rgba(16, 185, 129, 0.4);
+  --shadow-danger-strong: 0 6px 20px rgba(239, 68, 68, 0.4);
+  --shadow-warning: 0 4px 12px rgba(255, 214, 10, 0.3);
+  --shadow-card: 0 10px 40px rgba(0, 0, 0, 0.08);
+  --shadow-card-hover: 0 15px 50px rgba(102, 126, 234, 0.15);
 }

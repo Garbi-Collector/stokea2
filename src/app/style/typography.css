@@ -59,3 +59,81 @@
   font-weight: 600;
   margin: 0;
 }
+/* Agregar al archivo existente */
+
+/* Títulos con gradiente oscuro */
+.title-gradient-dark {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Labels de montos */
+.amount-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #6c757d;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Montos grandes con gradiente */
+.amount-display {
+  font-size: 3rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: block;
+}
+
+.amount-display.success {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.amount-display.large {
+  font-size: 3rem;
+}
+
+.amount-display.medium {
+  font-size: 2rem;
+}
+
+/* Montos ocultos */
+.amount-hidden {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #adb5bd;
+  display: block;
+  letter-spacing: 0.5rem;
+}
+
+.amount-hidden.small {
+  font-size: 2rem;
+  letter-spacing: 0.4rem;
+}
+
+/* Responsive para montos */
+@media (max-width: 768px) {
+  .amount-display {
+    font-size: 2.5rem;
+  }
+
+  .amount-display.medium {
+    font-size: 1.75rem;
+  }
+
+  .amount-hidden {
+    font-size: 2.5rem;
+  }
+
+  .amount-hidden.small {
+    font-size: 1.75rem;
+  }
+}

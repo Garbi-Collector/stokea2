@@ -75,3 +75,45 @@
     min-width: 100%;
   }
 }
+/* Agregar al final de forms.css */
+
+/* Input con código (monospace) */
+.code-input {
+  font-family: 'Courier New', monospace;
+  font-weight: 600;
+  font-size: 1.1rem;
+  padding-right: 3rem;
+}
+
+/* Input icon - ícono dentro del input */
+.input-icon {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.input-icon.spinning {
+  color: #667eea;
+  animation: spin 1s linear infinite;
+}
+
+.input-icon.success {
+  color: #28a745;
+}
+
+/* Mensaje de error para forms */
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  color: #dc3545;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.error-message svg {
+  flex-shrink: 0;
+}
