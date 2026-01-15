@@ -7,6 +7,8 @@ export interface ProductExcelRow {
   wholesale_price: number;
   profit_percentage: number;
   sale_price: number;
+  stock?: number; // Nueva propiedad
+  min_alert?: number; // Nueva propiedad
 }
 
 export interface ExcelImportResult {

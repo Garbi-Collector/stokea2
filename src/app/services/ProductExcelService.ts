@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 import * as XLSX from 'xlsx';
 import { ProductExcelRow, ExcelImportResult, ExcelValidationError } from '../models/product-excel.model';
-import {Product} from "../models/product";
+import { Product } from "../models/product";
 
 @Injectable({ providedIn: 'root' })
 export class ProductExcelService {
@@ -15,7 +15,9 @@ export class ProductExcelService {
     code: 'Código',
     wholesale_price: 'Precio Mayorista',
     profit_percentage: 'Porcentaje Ganancia',
-    sale_price: 'Precio Venta'
+    sale_price: 'Precio Venta',
+    stock: 'Stock', // Nueva columna
+    min_alert: 'Stock Mínimo' // Nueva columna
   };
 
   /**
@@ -30,7 +32,9 @@ export class ProductExcelService {
         [this.EXCEL_COLUMNS.code]: 'PROD001',
         [this.EXCEL_COLUMNS.wholesale_price]: 100,
         [this.EXCEL_COLUMNS.profit_percentage]: 30,
-        [this.EXCEL_COLUMNS.sale_price]: 130
+        [this.EXCEL_COLUMNS.sale_price]: 130,
+        [this.EXCEL_COLUMNS.stock]: 50,
+        [this.EXCEL_COLUMNS.min_alert]: 10
       }
     ]);
 
@@ -243,6 +247,62 @@ export class ProductExcelService {
       });
     }
 
+    // Validar stock (opcional pero debe ser numérico si existe)
+    if (row[this.EXCEL_COLUMNS.stock] !== undefined &&
+      row[this.EXCEL_COLUMNS.stock] !== null &&
+      row[this.EXCEL_COLUMNS.stock] !== '') {
+      if (!this.isValidNumber(row[this.EXCEL_COLUMNS.stock])) {
+        errors.push({
+          row: rowNumber,
+          field: 'stock',
+          message: 'El stock debe ser un número válido',
+          data: row
+        });
+      } else if (Number(row[this.EXCEL_COLUMNS.stock]) < 0) {
+        errors.push({
+          row: rowNumber,
+          field: 'stock',
+          message: 'El stock no puede ser negativo',
+          data: row
+        });
+      } else if (!Number.isInteger(Number(row[this.EXCEL_COLUMNS.stock]))) {
+        errors.push({
+          row: rowNumber,
+          field: 'stock',
+          message: 'El stock debe ser un número entero',
+          data: row
+        });
+      }
+    }
+
+    // Validar stock mínimo (opcional pero debe ser numérico si existe)
+    if (row[this.EXCEL_COLUMNS.min_alert] !== undefined &&
+      row[this.EXCEL_COLUMNS.min_alert] !== null &&
+      row[this.EXCEL_COLUMNS.min_alert] !== '') {
+      if (!this.isValidNumber(row[this.EXCEL_COLUMNS.min_alert])) {
+        errors.push({
+          row: rowNumber,
+          field: 'min_alert',
+          message: 'El stock mínimo debe ser un número válido',
+          data: row
+        });
+      } else if (Number(row[this.EXCEL_COLUMNS.min_alert]) < 0) {
+        errors.push({
+          row: rowNumber,
+          field: 'min_alert',
+          message: 'El stock mínimo no puede ser negativo',
+          data: row
+        });
+      } else if (!Number.isInteger(Number(row[this.EXCEL_COLUMNS.min_alert]))) {
+        errors.push({
+          row: rowNumber,
+          field: 'min_alert',
+          message: 'El stock mínimo debe ser un número entero',
+          data: row
+        });
+      }
+    }
+
     return errors;
   }
 
@@ -260,7 +320,7 @@ export class ProductExcelService {
    * Mapea una fila del Excel a un objeto ProductExcelRow
    */
   private mapRowToProduct(row: any): ProductExcelRow {
-    return {
+    const product: ProductExcelRow = {
       name: String(row[this.EXCEL_COLUMNS.name]).trim(),
       description: row[this.EXCEL_COLUMNS.description]
         ? String(row[this.EXCEL_COLUMNS.description]).trim()
@@ -273,6 +333,18 @@ export class ProductExcelService {
       profit_percentage: Number(row[this.EXCEL_COLUMNS.profit_percentage]),
       sale_price: Number(row[this.EXCEL_COLUMNS.sale_price])
     };
+
+    // Agregar stock si existe
+    if (this.isValidNumber(row[this.EXCEL_COLUMNS.stock])) {
+      product.stock = Math.floor(Number(row[this.EXCEL_COLUMNS.stock]));
+    }
+
+    // Agregar stock mínimo si existe
+    if (this.isValidNumber(row[this.EXCEL_COLUMNS.min_alert])) {
+      product.min_alert = Math.floor(Number(row[this.EXCEL_COLUMNS.min_alert]));
+    }
+
+    return product;
   }
 
   /**

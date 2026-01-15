@@ -4,8 +4,10 @@ import { CommonModule } from '@angular/common';
 import { ModalService } from '../../modalconfigs/core/modal.service';
 import { ExcelImportResult, ExcelValidationError } from '../../models/product-excel.model';
 import { ProductExcelService } from "../../services/ProductExcelService";
-import { ProductsService } from "../../services/products.service"; // Importar el servicio
+import { ProductsService } from "../../services/products.service";
+import { StockService } from "../../services/stock.service"; // Importar StockService
 import { Product } from "../../models/product";
+import { Stock } from "../../models/stock"; // Importar el modelo Stock
 
 @Component({
   selector: 'app-product-import-modal',
@@ -20,12 +22,13 @@ export class ProductImportModalComponent {
   isProcessing: boolean = false;
   importResult: ExcelImportResult | null = null;
   showResults: boolean = false;
-  isSaving: boolean = false; // Nueva propiedad para el estado de guardado
+  isSaving: boolean = false;
 
   constructor(
     private modalService: ModalService,
     private excelService: ProductExcelService,
-    private productsService: ProductsService // Inyectar el servicio
+    private productsService: ProductsService,
+    private stockService: StockService // Inyectar StockService
   ) {}
 
   downloadTemplate(): void {
@@ -116,6 +119,42 @@ export class ProductImportModalComponent {
       await this.productsService.createMany(productsToSave as Product[]);
 
       console.log(`${productsToSave.length} productos importados exitosamente`);
+
+      // Obtener todos los productos recién creados por sus códigos
+      // (asumiendo que los códigos son únicos)
+      const allProducts = await this.productsService.getAll();
+
+      // Crear un mapa de código -> producto para búsqueda rápida
+      const productsByCode = new Map(
+        allProducts.map((p: Product) => [p.code, p])
+      );
+
+      // Crear registros de stock para los productos que tienen información de stock
+      const stockPromises = this.importResult.validProducts
+        .map((excelProduct) => {
+          // Solo crear stock si se proporcionó cantidad de stock
+          if (excelProduct.stock !== undefined && excelProduct.stock !== null) {
+            const product = productsByCode.get(excelProduct.code);
+
+            if (product && product.id) {
+              const stockData: Omit<Stock, 'id'> = {
+                product_id: product.id,
+                quantity: excelProduct.stock,
+                min_alert: excelProduct.min_alert
+              };
+
+              return this.stockService.create(stockData);
+            }
+          }
+          return null;
+        })
+        .filter(promise => promise !== null);
+
+      // Esperar a que se creen todos los registros de stock
+      if (stockPromises.length > 0) {
+        await Promise.all(stockPromises);
+        console.log(`${stockPromises.length} registros de stock creados exitosamente`);
+      }
 
       // Cerrar el modal con éxito
       this.modalService.close(true);
