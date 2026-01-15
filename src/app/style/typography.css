@@ -1,0 +1,61 @@
+.page-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.page-subtitle {
+  color: #6c757d;
+  font-size: 1rem;
+}
+
+.product-name {
+  font-weight: 600;
+  color: #1a1a2e;
+}
+
+.product-description {
+  color: #6c757d;
+  font-size: 0.875rem;
+  max-width: 300px;
+}
+
+.product-code {
+  font-family: 'Courier New', monospace;
+  color: #6c757d;
+  font-weight: 500;
+}
+
+.price-cell {
+  font-weight: 600;
+  color: #28a745;
+  font-size: 1rem;
+}
+
+.results-info {
+  color: #6c757d;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.select-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #495057;
+}
+
+.sort-label {
+  font-size: 0.875rem;
+}
+
+.empty-state h3 {
+  color: #495057;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+}
