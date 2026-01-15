@@ -4,25 +4,13 @@
   position: relative;
 }
 
-/* Dashboard para usuarios que ya visitaron */
+/* ========== DASHBOARD ========== */
 .dashboard-screen {
   max-width: 1200px;
   margin: 0 auto;
   animation: fadeIn 0.6s ease-in-out;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Sección de saludo */
 .greeting-header {
   margin-bottom: 2rem;
 }
@@ -37,7 +25,7 @@
   background-clip: text;
 }
 
-/* Grid de tarjetas */
+/* ========== GRID DE TARJETAS ========== */
 .cards-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
@@ -45,7 +33,7 @@
   margin-bottom: 2rem;
 }
 
-/* Tarjeta de Caja */
+/* ========== TARJETA DE CAJA ========== */
 .cash-card {
   background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
   border-radius: 20px;
@@ -80,31 +68,38 @@
   color: #667eea;
 }
 
-.toggle-visibility-btn {
-  background: rgba(102, 126, 234, 0.1);
-  border: none;
-  border-radius: 10px;
-  width: 40px;
-  height: 40px;
+/* Secciones de montos */
+.cash-amount-section {
+  margin-bottom: 1.5rem;
+}
+
+.cash-amount-section.accumulated {
+  margin-bottom: 2rem;
+}
+
+.accumulated-label {
   display: flex;
   align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
+  gap: 0.5rem;
   color: #667eea;
 }
 
-.toggle-visibility-btn:hover {
-  background: rgba(102, 126, 234, 0.2);
-  transform: scale(1.05);
-}
-
-.toggle-visibility-btn:active {
-  transform: scale(0.95);
+.accumulated-label svg {
+  color: #667eea;
 }
 
 .cash-amount {
-  margin-bottom: 2rem;
+  margin-bottom: 0;
+}
+
+.accumulated-amount .amount-accumulated {
+  font-size: 2rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: block;
 }
 
 .amount {
@@ -125,79 +120,48 @@
   letter-spacing: 0.5rem;
 }
 
-/* Botones de acciones */
+.amount-hidden-small {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #adb5bd;
+  display: block;
+  letter-spacing: 0.4rem;
+}
+
+/* Divisor de caja */
+.cash-divider {
+  height: 1px;
+  background: linear-gradient(90deg,
+  transparent 0%,
+  rgba(102, 126, 234, 0.2) 20%,
+  rgba(102, 126, 234, 0.2) 80%,
+  transparent 100%
+  );
+  margin: 1.5rem 0;
+  position: relative;
+}
+
+.cash-divider::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 6px;
+  height: 6px;
+  background: #667eea;
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* Acciones de caja */
 .cash-actions {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
 }
 
-.action-btn {
-  padding: 1rem;
-  border: none;
-  border-radius: 12px;
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
-}
-
-.action-btn::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.3);
-  transform: translate(-50%, -50%);
-  transition: width 0.6s, height 0.6s;
-}
-
-.action-btn:hover::before {
-  width: 300px;
-  height: 300px;
-}
-
-.action-btn svg {
-  position: relative;
-  z-index: 1;
-}
-
-.ingreso-btn {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  color: white;
-  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
-}
-
-.ingreso-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
-}
-
-.egreso-btn {
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-  color: white;
-  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
-}
-
-.egreso-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
-}
-
-.action-btn:active {
-  transform: translateY(0);
-}
-
-/* CALENDARIO */
+/* ========== CALENDARIO ========== */
 .calendar-card {
   background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
   border-radius: 20px;
@@ -253,6 +217,7 @@
   gap: 0.5rem;
 }
 
+/* Día base del calendario */
 .calendar-day {
   aspect-ratio: 1;
   display: flex;
@@ -298,50 +263,128 @@
   transform: scale(1.1);
 }
 
-/* Días de otros meses (deshabilitados visualmente) */
+/* Estados del calendario - Días de otros meses */
 .calendar-day.other-month {
   opacity: 0.3;
   pointer-events: none;
-  background: rgba(102, 126, 234, 0.02);
+  background: rgba(102, 126, 234, 0.02) !important;
+  box-shadow: none !important;
 }
 
 .calendar-day.other-month .day-number {
-  color: #adb5bd;
+  color: #adb5bd !important;
 }
 
-/* Día actual con degradado */
-.calendar-day.today {
+/* Día HOY */
+.calendar-day.today,
+.calendar-day.status-today {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
   transform: scale(1.05);
   animation: pulseToday 2s ease-in-out infinite;
 }
 
-.calendar-day.today::before {
+.calendar-day.today::before,
+.calendar-day.status-today::before {
   display: none;
 }
 
-.calendar-day.today .day-number {
+.calendar-day.today .day-number,
+.calendar-day.status-today .day-number {
   color: white;
   font-weight: 800;
   font-size: 1.1rem;
 }
 
-.calendar-day.today:hover {
+.calendar-day.today:hover,
+.calendar-day.status-today:hover {
   transform: scale(1.12);
   box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
 }
 
-@keyframes pulseToday {
-  0%, 100% {
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-  }
-  50% {
-    box-shadow: 0 8px 30px rgba(102, 126, 234, 0.6);
-  }
+/* Día FUTURO */
+.calendar-day.status-future {
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  border: 1px solid rgba(102, 126, 234, 0.15);
 }
 
-/* Vista de primera visita */
+.calendar-day.status-future .day-number {
+  color: #495057;
+}
+
+.calendar-day.status-future:hover {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-color: rgba(102, 126, 234, 0.25);
+  transform: scale(1.05);
+}
+
+/* Día pasado SIN sesión */
+.calendar-day.status-past-no-session {
+  background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+}
+
+.calendar-day.status-past-no-session .day-number {
+  color: #6c757d;
+}
+
+.calendar-day.status-past-no-session:hover {
+  background: linear-gradient(135deg, #dee2e6 0%, #ced4da 100%);
+  transform: scale(1.05);
+}
+
+/* Día pasado con sesión BAJA */
+.calendar-day.status-past-low {
+  background: linear-gradient(135deg, #ffd60a 0%, #ffc300 100%);
+  box-shadow: 0 4px 12px rgba(255, 214, 10, 0.3);
+}
+
+.calendar-day.status-past-low .day-number {
+  color: #212529;
+  font-weight: 700;
+}
+
+.calendar-day.status-past-low:hover {
+  background: linear-gradient(135deg, #ffc300 0%, #ffb700 100%);
+  transform: scale(1.08);
+  box-shadow: 0 6px 18px rgba(255, 214, 10, 0.4);
+}
+
+/* Día pasado con sesión ALTA */
+.calendar-day.status-past-high {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.calendar-day.status-past-high .day-number {
+  color: white;
+  font-weight: 700;
+}
+
+.calendar-day.status-past-high:hover {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  transform: scale(1.08);
+  box-shadow: 0 6px 18px rgba(16, 185, 129, 0.4);
+}
+
+/* Tooltip del calendario */
+.calendar-day[data-session-info]:hover::after {
+  content: attr(data-session-info);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  z-index: 10;
+  margin-bottom: 0.5rem;
+  pointer-events: none;
+}
+
+/* ========== PRIMERA VISITA ========== */
 .first-visit-screen {
   display: flex;
   align-items: center;
@@ -360,33 +403,6 @@
   border: 1px solid rgba(102, 126, 234, 0.2);
   max-width: 500px;
   animation: fadeInScale 0.6s ease-out;
-}
-
-@keyframes fadeInScale {
-  from {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-.icon-container {
-  width: 80px;
-  height: 80px;
-  margin: 0 auto 1.5rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
-}
-
-.icon-container svg {
-  color: white;
 }
 
 .welcome-message h2 {
@@ -409,7 +425,7 @@
   display: block;
 }
 
-/* Responsive */
+/* ========== RESPONSIVE ========== */
 @media (max-width: 768px) {
   .greeting-header h1 {
     font-size: 2rem;
@@ -426,6 +442,22 @@
 
   .amount, .amount-hidden {
     font-size: 2.5rem;
+  }
+
+  .amount-accumulated {
+    font-size: 1.75rem !important;
+  }
+
+  .amount-hidden-small {
+    font-size: 1.75rem !important;
+  }
+
+  .cash-amount-section {
+    margin-bottom: 1.25rem;
+  }
+
+  .cash-amount-section.accumulated {
+    margin-bottom: 1.5rem;
   }
 
   .cash-actions {
@@ -447,232 +479,5 @@
 
   .day-number {
     font-size: 0.85rem;
-  }
-}
-/* Estados del calendario según sesiones de caja */
-
-/* Día pasado SIN sesión - GRIS */
-.calendar-day.status-past-no-session {
-  background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
-}
-
-.calendar-day.status-past-no-session .day-number {
-  color: #6c757d;
-}
-
-.calendar-day.status-past-no-session:hover {
-  background: linear-gradient(135deg, #dee2e6 0%, #ced4da 100%);
-  transform: scale(1.05);
-}
-
-/* Día pasado con sesión BAJA (< 3000) - AMARILLO */
-.calendar-day.status-past-low {
-  background: linear-gradient(135deg, #ffd60a 0%, #ffc300 100%);
-  box-shadow: 0 4px 12px rgba(255, 214, 10, 0.3);
-}
-
-.calendar-day.status-past-low .day-number {
-  color: #212529;
-  font-weight: 700;
-}
-
-.calendar-day.status-past-low:hover {
-  background: linear-gradient(135deg, #ffc300 0%, #ffb700 100%);
-  transform: scale(1.08);
-  box-shadow: 0 6px 18px rgba(255, 214, 10, 0.4);
-}
-
-/* Día pasado con sesión ALTA (>= 3000) - VERDE */
-.calendar-day.status-past-high {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-}
-
-.calendar-day.status-past-high .day-number {
-  color: white;
-  font-weight: 700;
-}
-
-.calendar-day.status-past-high:hover {
-  background: linear-gradient(135deg, #059669 0%, #047857 100%);
-  transform: scale(1.08);
-  box-shadow: 0 6px 18px rgba(16, 185, 129, 0.4);
-}
-
-/* Día de HOY - mantiene el estilo original morado */
-.calendar-day.status-today {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-  transform: scale(1.05);
-  animation: pulseToday 2s ease-in-out infinite;
-}
-
-.calendar-day.status-today::before {
-  display: none;
-}
-
-.calendar-day.status-today .day-number {
-  color: white;
-  font-weight: 800;
-  font-size: 1.1rem;
-}
-
-.calendar-day.status-today:hover {
-  transform: scale(1.12);
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
-}
-
-/* Días FUTUROS - BLANCO */
-.calendar-day.status-future {
-  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-  border: 1px solid rgba(102, 126, 234, 0.15);
-}
-
-.calendar-day.status-future .day-number {
-  color: #495057;
-}
-
-.calendar-day.status-future:hover {
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-  border-color: rgba(102, 126, 234, 0.25);
-  transform: scale(1.05);
-}
-
-/* Animación para el día de hoy */
-@keyframes pulseToday {
-  0%, 100% {
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-  }
-  50% {
-    box-shadow: 0 8px 30px rgba(102, 126, 234, 0.6);
-  }
-}
-
-/* Asegurar que los días de otros meses no tengan colores de estado */
-.calendar-day.other-month {
-  opacity: 0.3;
-  pointer-events: none;
-  background: rgba(102, 126, 234, 0.02) !important;
-  box-shadow: none !important;
-}
-
-.calendar-day.other-month .day-number {
-  color: #adb5bd !important;
-}
-
-/* Tooltip opcional para mostrar información de la sesión */
-.calendar-day[data-session-info]:hover::after {
-  content: attr(data-session-info);
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.9);
-  color: white;
-  padding: 0.5rem 0.75rem;
-  border-radius: 8px;
-  font-size: 0.75rem;
-  white-space: nowrap;
-  z-index: 10;
-  margin-bottom: 0.5rem;
-  pointer-events: none;
-}
-
-
-/* Secciones de montos */
-.cash-amount-section {
-  margin-bottom: 1.5rem;
-}
-
-.cash-amount-section.accumulated {
-  margin-bottom: 2rem;
-}
-
-.amount-label {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: #6c757d;
-  margin-bottom: 0.5rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.accumulated-label {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: #667eea;
-}
-
-.accumulated-label svg {
-  color: #667eea;
-}
-
-/* Ajuste del monto principal */
-.cash-amount {
-  margin-bottom: 0;
-}
-
-/* Monto acumulado con estilo diferenciado */
-.accumulated-amount .amount-accumulated {
-  font-size: 2rem;
-  font-weight: 700;
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  display: block;
-}
-
-.amount-hidden-small {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #adb5bd;
-  display: block;
-  letter-spacing: 0.4rem;
-}
-
-/* Divisor visual entre montos */
-.cash-divider {
-  height: 1px;
-  background: linear-gradient(90deg,
-  transparent 0%,
-  rgba(102, 126, 234, 0.2) 20%,
-  rgba(102, 126, 234, 0.2) 80%,
-  transparent 100%
-  );
-  margin: 1.5rem 0;
-  position: relative;
-}
-
-.cash-divider::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 6px;
-  height: 6px;
-  background: #667eea;
-  border-radius: 50%;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .amount-accumulated {
-    font-size: 1.75rem !important;
-  }
-
-  .amount-hidden-small {
-    font-size: 1.75rem !important;
-  }
-
-  .cash-amount-section {
-    margin-bottom: 1.25rem;
-  }
-
-  .cash-amount-section.accumulated {
-    margin-bottom: 1.5rem;
   }
 }

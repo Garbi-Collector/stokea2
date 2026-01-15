@@ -16,7 +16,17 @@ import { CashSession } from "../../models/cash-session";
   standalone: true,
   imports: [CommonModule, ModalComponent],
   templateUrl: './inicio.component.html',
-  styleUrl: './inicio.component.css'
+  styleUrls: [
+    './inicio.component.css',
+    './../../style/animations.css',
+    './../../style/badges.css',
+    './../../style/buttons.css',
+    './../../style/cards.css',
+    './../../style/colors.css',
+    './../../style/forms.css',
+    './../../style/tables.css',
+    './../../style/typography.css',
+  ]
 })
 export class InicioComponent implements OnInit {
   totalProducts: number = 0;
