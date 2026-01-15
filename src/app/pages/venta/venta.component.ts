@@ -18,7 +18,17 @@ interface CartItem {
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './venta.component.html',
-  styleUrl: './venta.component.css'
+  styleUrls: [
+    './venta.component.css',
+    './../../style/animations.css',
+    './../../style/badges.css',
+    './../../style/buttons.css',
+    './../../style/cards.css',
+    './../../style/colors.css',
+    './../../style/forms.css',
+    './../../style/tables.css',
+    './../../style/typography.css',
+  ]
 })
 export class VentaComponent implements OnInit, AfterViewInit {
   @ViewChild('codeInput') codeInput!: ElementRef<HTMLInputElement>;

@@ -1,9 +1,7 @@
-/* Importar fuentes */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-* {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-}
+/* ============================================
+   ESTILOS ESPECÍFICOS DEL COMPONENTE VENTA
+   ============================================ */
 
 .venta-container {
   max-width: 1600px;
@@ -15,23 +13,6 @@
   margin-bottom: 2rem;
 }
 
-.page-title {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #1a1a2e;
-  margin-bottom: 0.5rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.page-subtitle {
-  color: #6c757d;
-  font-size: 1rem;
-  margin: 0;
-}
-
 /* Grid Layout */
 .content-grid {
   display: grid;
@@ -40,7 +21,7 @@
   align-items: start;
 }
 
-/* Cards */
+/* Cards específicas de venta */
 .search-card,
 .cart-card {
   background: white;
@@ -57,89 +38,7 @@
   margin: 0 0 1.5rem 0;
 }
 
-/* Form Styles */
-.form-group {
-  margin-bottom: 1.5rem;
-}
-
-.form-label {
-  display: block;
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: #495057;
-  margin-bottom: 0.5rem;
-}
-
-.input-wrapper {
-  position: relative;
-}
-
-.form-input {
-  width: 100%;
-  padding: 0.875rem 1rem;
-  border: 2px solid #e9ecef;
-  border-radius: 12px;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-  background: white;
-  box-sizing: border-box;
-}
-
-.form-input:focus {
-  outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
-}
-
-.form-input:disabled {
-  background: #f8f9fa;
-  cursor: not-allowed;
-  opacity: 0.7;
-}
-
-.code-input {
-  font-family: 'Courier New', monospace;
-  font-weight: 600;
-  font-size: 1.1rem;
-  padding-right: 3rem;
-}
-
-.input-icon {
-  position: absolute;
-  right: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  pointer-events: none;
-}
-
-.input-icon.spinning {
-  color: #667eea;
-  animation: spin 1s linear infinite;
-}
-
-.input-icon.success {
-  color: #28a745;
-}
-
-@keyframes spin {
-  to { transform: translateY(-50%) rotate(360deg); }
-}
-
-.error-message {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
-  color: #dc3545;
-  font-size: 0.875rem;
-  font-weight: 500;
-}
-
-.error-message svg {
-  flex-shrink: 0;
-}
-
-/* Details Grid */
+/* Details Grid - layout específico de venta */
 .details-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -147,7 +46,7 @@
   margin-top: 1.5rem;
 }
 
-/* Price Display */
+/* Price Display - específico para mostrar precio de venta */
 .price-display {
   display: flex;
   align-items: baseline;
@@ -170,7 +69,7 @@
   color: #28a745;
 }
 
-/* Stock Display */
+/* Stock Display - específico para mostrar stock en venta */
 .stock-display {
   display: flex;
   align-items: center;
@@ -204,14 +103,14 @@
   font-weight: 500;
 }
 
-/* Quantity Input */
+/* Quantity Input - específico para venta */
 .quantity-input {
   text-align: center;
   font-weight: 600;
   font-size: 1.1rem;
 }
 
-/* Description Box */
+/* Description Box - específico para venta */
 .description-box {
   padding: 1rem;
   background: #f8f9fa;
@@ -221,7 +120,7 @@
   line-height: 1.6;
 }
 
-/* Add to Cart Button */
+/* Add to Cart Button - botón principal de venta */
 .add-to-cart-button {
   width: 100%;
   display: flex;
@@ -256,7 +155,7 @@
   transform: none;
 }
 
-/* Cart Panel */
+/* ========== CART PANEL ========== */
 .cart-header {
   display: flex;
   justify-content: space-between;
@@ -276,7 +175,7 @@
   font-size: 0.875rem;
 }
 
-/* Empty Cart */
+/* Empty Cart - estado vacío del carrito */
 .empty-cart {
   display: flex;
   flex-direction: column;
@@ -303,7 +202,7 @@
   font-size: 0.95rem;
 }
 
-/* Cart Items */
+/* Cart Items - lista de items del carrito */
 .cart-items {
   max-height: 500px;
   overflow-y: auto;
@@ -422,7 +321,7 @@
   transform: scale(1.1);
 }
 
-/* Cart Summary */
+/* Cart Summary - resumen del carrito */
 .cart-summary {
   padding: 1.5rem;
   background: #f8f9fa;
@@ -471,7 +370,7 @@
   color: #28a745;
 }
 
-/* Cart Actions */
+/* Cart Actions - botones de acción del carrito */
 .cart-actions {
   display: grid;
   grid-template-columns: 1fr 2fr;
@@ -522,7 +421,7 @@
   transform: translateY(0);
 }
 
-/* Responsive Design */
+/* ========== RESPONSIVE ========== */
 @media (max-width: 1200px) {
   .content-grid {
     grid-template-columns: 1fr;

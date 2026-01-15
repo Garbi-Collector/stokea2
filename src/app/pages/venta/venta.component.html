@@ -154,9 +154,8 @@
             <div class="item-info">
               <h3 class="item-name">{{ item.product.name }}</h3>
               <p class="item-code">Código: {{ item.product.code }}</p>
-              <p class="item-brand" *ngIf="item.product.brand">{{ item.product.brand }}</p>
+              <span class="item-brand" *ngIf="item.product.brand">{{ item.product.brand }}</span>
             </div>
-
             <div class="item-controls">
               <div class="quantity-control">
                 <input
@@ -169,7 +168,6 @@
                 />
                 <span class="quantity-label">× ${{ item.product.sale_price | number:'1.2-2' }}</span>
               </div>
-
               <div class="item-actions">
                 <span class="item-subtotal">${{ item.subtotal | number:'1.2-2' }}</span>
                 <button class="remove-button" (click)="removeFromCart(i)">
