@@ -1,15 +1,23 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ProductsService } from '../../services/products.service';
 import { StockService } from '../../services/stock.service';
+import { CashSessionService } from '../../services/cash-session.service';
+import { SalesService } from '../../services/sales.service';
+import { SaleItemsService } from '../../services/sale-items.service';
 import { Product } from '../../models/product';
 import { Stock } from '../../models/stock';
+import { CashSession } from '../../models/cash-session';
+
+interface ProductWithStock extends Product {
+  stock?: Stock;
+  availableQuantity: number;
+}
 
 interface CartItem {
-  product: Product;
+  product: ProductWithStock;
   quantity: number;
-  stock: number;
   subtotal: number;
 }
 
@@ -30,201 +38,267 @@ interface CartItem {
     './../../style/typography.css',
   ]
 })
-export class VentaComponent implements OnInit, AfterViewInit {
-  @ViewChild('codeInput') codeInput!: ElementRef<HTMLInputElement>;
+export class VentaComponent implements OnInit {
+  // Productos y búsqueda
+  products: ProductWithStock[] = [];
+  filteredProducts: ProductWithStock[] = [];
+  searchTerm: string = '';
+  isLoading: boolean = true;
 
-  // Form fields
-  productCode: string = '';
-  productName: string = '';
-  brand: string = '';
-  salePrice: number = 0;
-  stockQuantity: number = 0;
-  description: string = '';
-  quantityToAdd: number = 1;
+  // Carrito (estático - se mantiene mientras la app esté abierta)
+  static cart: CartItem[] = [];
 
-  // Cart
-  cart: CartItem[] = [];
-  total: number = 0;
+  // Cash session actual
+  currentSession: CashSession | null = null;
 
-  // UI states
-  isLoading: boolean = false;
-  productNotFound: boolean = false;
-  currentProduct: Product | null = null;
-  currentStock: Stock | null = null;
+  // Estados
+  isProcessingSale: boolean = false;
+  errorMessage: string = '';
+  successMessage: string = '';
 
   constructor(
     private productsService: ProductsService,
-    private stockService: StockService
+    private stockService: StockService,
+    private cashSessionService: CashSessionService,
+    private salesService: SalesService,
+    private saleItemsService: SaleItemsService
   ) {}
 
-  ngOnInit(): void {
-    // Initialization logic here if needed
+  async ngOnInit() {
+    await this.loadData();
   }
 
-  ngAfterViewInit(): void {
-    // Auto-focus on code input when component loads
-    setTimeout(() => {
-      this.codeInput?.nativeElement.focus();
-    }, 100);
-  }
-
-  async onCodeChange(): Promise<void> {
-    if (!this.productCode.trim()) {
-      this.clearProductFields();
-      return;
-    }
-
-    // Search product by code
-    await this.searchProductByCode(this.productCode);
-  }
-
-  async onNameChange(): Promise<void> {
-    if (!this.productName.trim()) {
-      return;
-    }
-
-    // Search product by name (implement search logic)
-    // For now, this is a placeholder
-  }
-
-  async searchProductByCode(code: string): Promise<void> {
+  async loadData() {
     try {
       this.isLoading = true;
-      this.productNotFound = false;
+      this.errorMessage = '';
 
-      const products: Product[] = await this.productsService.getAll();
-      const product = products.find(p => p.code === code);
+      // Cargar sesión de caja actual
+      await this.loadCashSession();
 
-      if (product) {
-        await this.loadProduct(product);
-      } else {
-        this.productNotFound = true;
-        this.clearProductFields();
-      }
+      // Cargar productos y stock
+      const [products, stocks] = await Promise.all([
+        this.productsService.getAll(),
+        this.stockService.getAll()
+      ]);
+
+      // Combinar productos con su stock
+      this.products = products.map(product => {
+        const stock = stocks.find(s => s.product_id === product.id);
+        return {
+          ...product,
+          stock,
+          availableQuantity: stock?.quantity || 0
+        };
+      });
+
+      this.filteredProducts = [...this.products];
     } catch (error) {
-      console.error('Error searching product:', error);
+      console.error('Error al cargar datos:', error);
+      this.errorMessage = 'Error al cargar los productos. Intenta nuevamente.';
     } finally {
       this.isLoading = false;
     }
   }
 
-  async loadProduct(product: Product): Promise<void> {
-    this.currentProduct = product;
-    this.productName = product.name;
-    this.brand = product.brand || '';
-    this.salePrice = product.sale_price;
-    this.description = product.description || '';
-    this.productNotFound = false;
+  async loadCashSession() {
+    try {
+      const openSession = await this.cashSessionService.getOpen();
 
-    // Load stock
-    if (product.id) {
-      try {
-        const stock: Stock = await this.stockService.getByProduct(product.id);
-        this.currentStock = stock;
-        this.stockQuantity = stock.quantity;
-      } catch (error) {
-        this.stockQuantity = 0;
-        this.currentStock = null;
+      if (openSession) {
+        this.currentSession = openSession;
+      } else {
+        // Si no hay sesión abierta, intentar crear una nueva
+        this.currentSession = await this.cashSessionService.createNewSession();
       }
+    } catch (error) {
+      console.error('Error con la sesión de caja:', error);
+      this.errorMessage = 'Error: No hay sesión de caja disponible. Por favor, abre una sesión primero.';
     }
   }
 
-  clearProductFields(): void {
-    this.currentProduct = null;
-    this.currentStock = null;
-    this.productName = '';
-    this.brand = '';
-    this.salePrice = 0;
-    this.stockQuantity = 0;
-    this.description = '';
-    this.productNotFound = false;
+  // Búsqueda de productos
+  onSearch() {
+    const term = this.searchTerm.toLowerCase().trim();
+
+    if (!term) {
+      this.filteredProducts = [...this.products];
+      return;
+    }
+
+    this.filteredProducts = this.products.filter(product =>
+      product.name.toLowerCase().includes(term) ||
+      product.code.toLowerCase().includes(term) ||
+      (product.brand && product.brand.toLowerCase().includes(term)) ||
+      (product.description && product.description.toLowerCase().includes(term))
+    );
   }
 
-  addToCart(): void {
-    if (!this.currentProduct || this.quantityToAdd <= 0) {
+  clearSearch() {
+    this.searchTerm = '';
+    this.onSearch();
+  }
+
+  // Gestión del carrito
+  get cart(): CartItem[] {
+    return VentaComponent.cart;
+  }
+
+  get cartTotal(): number {
+    return this.cart.reduce((total, item) => total + item.subtotal, 0);
+  }
+
+  get cartItemCount(): number {
+    return this.cart.reduce((count, item) => count + item.quantity, 0);
+  }
+
+  addToCart(product: ProductWithStock, quantityToAdd: number = 1) {
+    // Validaciones
+    if (!product.stock || product.availableQuantity <= 0) {
+      this.showError('Producto sin stock disponible');
       return;
     }
 
-    if (this.quantityToAdd > this.stockQuantity) {
-      alert('La cantidad solicitada excede el stock disponible');
-      return;
-    }
-
-    // Check if product already in cart
-    const existingItem = this.cart.find(item => item.product.id === this.currentProduct?.id);
+    // Buscar si el producto ya está en el carrito
+    const existingItem = this.cart.find(item => item.product.id === product.id);
 
     if (existingItem) {
-      const newQuantity = existingItem.quantity + this.quantityToAdd;
-      if (newQuantity > this.stockQuantity) {
-        alert('La cantidad total excede el stock disponible');
+      // Validar que no se exceda el stock disponible
+      const newQuantity = existingItem.quantity + quantityToAdd;
+
+      if (newQuantity > product.availableQuantity) {
+        this.showError(`Stock insuficiente. Disponible: ${product.availableQuantity}`);
         return;
       }
+
+      // Actualizar cantidad y subtotal
       existingItem.quantity = newQuantity;
-      existingItem.subtotal = existingItem.quantity * existingItem.product.sale_price;
+      existingItem.subtotal = existingItem.quantity * product.sale_price;
+      this.showSuccess(`Cantidad actualizada: ${existingItem.quantity}`);
     } else {
-      this.cart.push({
-        product: this.currentProduct,
-        quantity: this.quantityToAdd,
-        stock: this.stockQuantity,
-        subtotal: this.quantityToAdd * this.currentProduct.sale_price
-      });
-    }
-
-    this.calculateTotal();
-    this.resetForm();
-  }
-
-  removeFromCart(index: number): void {
-    this.cart.splice(index, 1);
-    this.calculateTotal();
-  }
-
-  updateCartItemQuantity(item: CartItem): void {
-    if (item.quantity <= 0) {
-      return;
-    }
-    if (item.quantity > item.stock) {
-      alert('La cantidad excede el stock disponible');
-      item.quantity = item.stock;
-    }
-    item.subtotal = item.quantity * item.product.sale_price;
-    this.calculateTotal();
-  }
-
-  calculateTotal(): void {
-    this.total = this.cart.reduce((sum, item) => sum + item.subtotal, 0);
-  }
-
-  resetForm(): void {
-    this.productCode = '';
-    this.quantityToAdd = 1;
-    this.clearProductFields();
-    this.codeInput?.nativeElement.focus();
-  }
-
-  completeSale(): void {
-    if (this.cart.length === 0) {
-      alert('El carrito está vacío');
-      return;
-    }
-
-    // Logic to complete sale will be implemented here
-    console.log('Completing sale:', this.cart);
-    alert('Venta completada (funcionalidad pendiente)');
-
-    // Clear cart after sale
-    this.cart = [];
-    this.total = 0;
-    this.resetForm();
-  }
-
-  cancelSale(): void {
-    if (this.cart.length > 0) {
-      if (confirm('¿Desea cancelar la venta? Se perderán todos los items del carrito.')) {
-        this.cart = [];
-        this.total = 0;
-        this.resetForm();
+      // Validar cantidad inicial
+      if (quantityToAdd > product.availableQuantity) {
+        this.showError(`Stock insuficiente. Disponible: ${product.availableQuantity}`);
+        return;
       }
+
+      // Agregar nuevo item al carrito
+      this.cart.push({
+        product,
+        quantity: quantityToAdd,
+        subtotal: quantityToAdd * product.sale_price
+      });
+      this.showSuccess('Producto agregado al carrito');
     }
+  }
+
+  removeFromCart(index: number) {
+    const item = this.cart[index];
+    this.cart.splice(index, 1);
+    this.showSuccess(`${item.product.name} eliminado del carrito`);
+  }
+
+  updateCartItemQuantity(index: number, newQuantity: number) {
+    const item = this.cart[index];
+
+    if (newQuantity <= 0) {
+      this.removeFromCart(index);
+      return;
+    }
+
+    if (newQuantity > item.product.availableQuantity) {
+      this.showError(`Stock insuficiente. Disponible: ${item.product.availableQuantity}`);
+      return;
+    }
+
+    item.quantity = newQuantity;
+    item.subtotal = item.quantity * item.product.sale_price;
+  }
+
+  clearCart() {
+    VentaComponent.cart = [];
+    this.showSuccess('Carrito vaciado');
+  }
+
+  // Procesar venta
+  async processSale() {
+    if (this.cart.length === 0) {
+      this.showError('El carrito está vacío');
+      return;
+    }
+
+    if (!this.currentSession) {
+      this.showError('No hay sesión de caja activa');
+      return;
+    }
+
+    if (this.isProcessingSale) {
+      return;
+    }
+
+    this.isProcessingSale = true;
+    this.errorMessage = '';
+
+    try {
+      // 1. Crear la venta
+      const sale = await this.salesService.create({
+        cash_session_id: this.currentSession.id,
+        total: this.cartTotal
+      });
+
+      // 2. Crear los items de venta y actualizar stock
+      for (const cartItem of this.cart) {
+        // Crear sale item
+        await this.saleItemsService.create({
+          sale_id: sale.id,
+          product_id: cartItem.product.id,
+          quantity: cartItem.quantity,
+          unit_price: cartItem.product.sale_price,
+          subtotal: cartItem.subtotal
+        });
+
+        // Actualizar stock
+        if (cartItem.product.stock) {
+          const newQuantity = cartItem.product.stock.quantity - cartItem.quantity;
+          await this.stockService.update(cartItem.product.stock.id!, {
+            quantity: newQuantity
+          });
+        }
+      }
+
+      // 3. Actualizar el monto de la sesión de caja
+      await this.cashSessionService.updateCurrentAmount(
+        this.currentSession.id!,
+        this.cartTotal
+      );
+
+      // 4. Limpiar carrito y recargar datos
+      this.clearCart();
+      await this.loadData();
+
+      this.showSuccess(`Venta procesada exitosamente. Total: $${this.cartTotal.toFixed(2)}`);
+    } catch (error) {
+      console.error('Error al procesar la venta:', error);
+      this.showError('Error al procesar la venta. Intenta nuevamente.');
+    } finally {
+      this.isProcessingSale = false;
+    }
+  }
+
+  // Utilidades
+  getStockBadgeClass(quantity: number): string {
+    if (quantity === 0) return 'no-stock';
+    if (quantity <= 10) return 'low-stock';
+    return '';
+  }
+
+  showError(message: string) {
+    this.errorMessage = message;
+    setTimeout(() => this.errorMessage = '', 4000);
+  }
+
+  showSuccess(message: string) {
+    this.successMessage = message;
+    setTimeout(() => this.successMessage = '', 3000);
   }
 }
