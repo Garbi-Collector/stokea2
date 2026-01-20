@@ -9,5 +9,6 @@ module.exports = () => {
   ipcMain.handle('products:update', (_, d) => repo.update(d.id, d.product));
   ipcMain.handle('products:delete', (_, id) => repo.delete(id));
   ipcMain.handle('products:count', () => repo.count());
+  ipcMain.handle('products:getAllWithStock',() => repo.getAllWithStock());
 
 };

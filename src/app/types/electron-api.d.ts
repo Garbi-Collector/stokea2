@@ -16,6 +16,7 @@ declare global {
       ======================= */
       products: {
         getAll(): Promise<Product[]>;
+        getAllWithStock(): Promise<(Product & { quantity: number })[]>;
         getById(id: number): Promise<Product | null>;
         create(product: Product): Promise<{ id: number }>;
         createMany(products: Product[]): Promise<{ inserted: number }>;

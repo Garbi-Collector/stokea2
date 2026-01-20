@@ -7,6 +7,7 @@ contextBridge.exposeInMainWorld('api', {
   ======================= */
   products: {
     getAll: () => ipcRenderer.invoke('products:getAll'),
+    getAllWithStock: () => ipcRenderer.invoke('products:getAllWithStock'),
     getById: (id) => ipcRenderer.invoke('products:getById', id),
     create: (product) => ipcRenderer.invoke('products:create', product),
     createMany: (products) => ipcRenderer.invoke('products:createMany', products),

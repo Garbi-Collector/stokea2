@@ -7,6 +7,9 @@ export class ProductsService {
   getAll() {
     return window.api.products.getAll();
   }
+  getAllWithStock() {
+    return window.api.products.getAllWithStock();
+  }
 
   getById(id: number) {
     return window.api.products.getById(id);
