@@ -177,8 +177,9 @@
               <input
                 type="number"
                 class="quantity-input"
-                [value]="item.quantity"
-                (change)="updateCartItemQuantity(i, +$any($event.target).value)"
+                [ngModel]="item.quantity"
+                (ngModelChange)="updateCartItemQuantity(i, +$event)"
+                (input)="validateQuantityInput($event, item.product.availableQuantity)"
                 min="1"
                 [max]="item.product.availableQuantity"
               />

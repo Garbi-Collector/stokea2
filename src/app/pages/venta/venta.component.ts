@@ -201,18 +201,41 @@ export class VentaComponent implements OnInit {
   updateCartItemQuantity(index: number, newQuantity: number) {
     const item = this.cart[index];
 
+    // Si la cantidad es 0 o negativa, eliminar del carrito
     if (newQuantity <= 0) {
       this.removeFromCart(index);
       return;
     }
 
+    // Si excede el stock, ajustar al máximo disponible
     if (newQuantity > item.product.availableQuantity) {
-      this.showError(`Stock insuficiente. Disponible: ${item.product.availableQuantity}`);
+      this.showError(`Stock insuficiente. Ajustado a máximo disponible: ${item.product.availableQuantity}`);
+      item.quantity = item.product.availableQuantity;
+      item.subtotal = item.quantity * item.product.sale_price;
       return;
     }
 
+    // Actualizar normalmente
     item.quantity = newQuantity;
     item.subtotal = item.quantity * item.product.sale_price;
+  }
+
+  validateQuantityInput(event: any, maxQuantity: number): void {
+    const input = event.target;
+    const value = input.value;
+
+    // Obtener la cantidad máxima de dígitos permitidos
+    const maxDigits = maxQuantity.toString().length;
+
+    // Si el valor tiene más dígitos que el máximo permitido, truncar
+    if (value.length > maxDigits) {
+      input.value = value.slice(0, maxDigits);
+    }
+
+    // Prevenir valores negativos o cero
+    if (input.value && parseInt(input.value) <= 0) {
+      input.value = '1';
+    }
   }
 
   clearCart() {

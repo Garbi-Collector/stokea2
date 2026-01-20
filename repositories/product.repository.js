@@ -9,6 +9,25 @@ module.exports = {
     });
   },
 
+  getAllWithStock() {
+    return new Promise((resolve, reject) => {
+      db.all(
+        `
+      SELECT
+        p.*,
+        s.quantity,
+        s.min_alert
+      FROM products p
+      INNER JOIN stock s ON s.product_id = p.id
+      WHERE s.quantity > 0
+      `,
+        [],
+        (err, rows) => err ? reject(err) : resolve(rows)
+      );
+    });
+  },
+
+
   getById(id) {
     return new Promise((resolve, reject) => {
       db.get('SELECT * FROM products WHERE id = ?', [id], (err, row) =>
