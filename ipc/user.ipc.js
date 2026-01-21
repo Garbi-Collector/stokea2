@@ -15,6 +15,10 @@ module.exports = () => {
     repo.updateName(name)
   );
 
+  ipcMain.handle('user:updateMoneyGoal', (_, moneyGoal) =>
+    repo.updateMoneyGoal(moneyGoal)
+  );
+
   ipcMain.handle('user:markVisited', () =>
     repo.markVisited()
   );

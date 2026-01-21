@@ -104,5 +104,14 @@ export class UserService {
     };
   }
 
+  updateMoneyGoal(moneyGoal: number) {
+    return window.api.user.updateMoneyGoal(moneyGoal);
+  }
+
+
+  async getMoneyGoal(): Promise<number> {
+    const user = await this.getUser();
+    return user?.money_goal ?? 1000;
+  }
 
 }

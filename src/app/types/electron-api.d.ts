@@ -80,6 +80,7 @@ declare global {
         get(): Promise<User | null>;
         init(name?: string): Promise<{ created: number }>;
         updateName(name: string): Promise<{ changes: number }>;
+        updateMoneyGoal(moneyGoal: number): Promise<{ changes: number }>;
         markVisited(): Promise<{ changes: number }>;
         resetFirstVisit(): Promise<{ changes: number }>;
 

@@ -86,6 +86,7 @@ db.serialize(() => {
   db.run(`
     CREATE TABLE IF NOT EXISTS user_config (
                                              id INTEGER PRIMARY KEY CHECK (id = 1),
+
       name TEXT NOT NULL,
       is_first_time INTEGER NOT NULL DEFAULT 1,
 
@@ -93,9 +94,12 @@ db.serialize(() => {
       open_minute INTEGER NOT NULL CHECK (open_minute BETWEEN 0 AND 59),
 
       close_hour INTEGER NOT NULL CHECK (close_hour BETWEEN 0 AND 23),
-      close_minute INTEGER NOT NULL CHECK (close_minute BETWEEN 0 AND 59)
+      close_minute INTEGER NOT NULL CHECK (close_minute BETWEEN 0 AND 59),
+
+      money_goal REAL NOT NULL DEFAULT 1000 CHECK (money_goal > 0)
       )
   `);
+
 
 });
 

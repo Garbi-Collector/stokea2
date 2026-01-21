@@ -88,6 +88,7 @@ contextBridge.exposeInMainWorld('api', {
     get: () => ipcRenderer.invoke('user:get'),
     init: (name) => ipcRenderer.invoke('user:init', name),
     updateName: (name) => ipcRenderer.invoke('user:updateName', name),
+    updateMoneyGoal: (moneyGoal) => ipcRenderer.invoke('user:updateMoneyGoal', moneyGoal),
     markVisited: () => ipcRenderer.invoke('user:markVisited'),
     resetFirstVisit: () => ipcRenderer.invoke('user:resetFirstVisit'),
 

@@ -65,6 +65,29 @@ module.exports = {
     );
   },
 
+  updateMoneyGoal(moneyGoal) {
+    return new Promise((res, rej) => {
+
+      // validación defensiva (opcional pero recomendada)
+      if (typeof moneyGoal !== 'number' || moneyGoal <= 0) {
+        return rej(new Error('money_goal debe ser un número mayor a 0'));
+      }
+
+      db.run(
+        `
+      UPDATE user_config
+      SET money_goal = ?
+      WHERE id = 1
+      `,
+        [moneyGoal],
+        function (e) {
+          e ? rej(e) : res({ changes: this.changes });
+        }
+      );
+    });
+  },
+
+
   markVisited() {
     return new Promise((res, rej) =>
       db.run(

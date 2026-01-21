@@ -1,5 +1,6 @@
 export interface User {
-  id: 1;
+  id: number;
+
   name: string;
   is_first_time: boolean;
 
@@ -7,6 +8,8 @@ export interface User {
   open_minute: number;
   close_hour: number;
   close_minute: number;
+
+  money_goal: number;
 
   created_at?: string;
 }
