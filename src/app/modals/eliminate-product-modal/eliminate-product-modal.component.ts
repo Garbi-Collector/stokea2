@@ -28,7 +28,7 @@ export class EliminateProductModalComponent implements OnInit {
   error: string | null = null;
 
   // Datos del producto
-  product!: Product;
+  product!: Product | null;
   stock!: Stock;
   totalStock = 0;
 
