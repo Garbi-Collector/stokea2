@@ -1,0 +1,14 @@
+[
+  {
+    "name": "cash_session",
+    "seq": 1
+  },
+  {
+    "name": "products",
+    "seq": 50
+  },
+  {
+    "name": "stock",
+    "seq": 50
+  }
+]
