@@ -1,34 +1,51 @@
 import { Injectable } from '@angular/core';
-import {User} from "../models/user";
+import { BehaviorSubject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { User } from "../models/user";
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-
   private initialized = false;
+  private mockData$ = new BehaviorSubject<User | null>(null);
+  private mockInitialized = false;
 
-  /* =======================
-     INIT (interno)
-  ======================= */
+  constructor(private http: HttpClient) {}
+
+  private hasBackend(): boolean {
+    return !!(window as any).api?.user;
+  }
+
+  private initMock() {
+    if (this.mockInitialized) return;
+    this.http.get<User>('assets/mock/user_config.json').subscribe(data => {
+      this.mockData$.next(data);
+      this.mockInitialized = true;
+    });
+  }
 
   private async ensureInit(): Promise<void> {
-    if (this.initialized) return;
-    await window.api.user.init('Usuario');
-    this.initialized = true;
+    if (this.hasBackend()) {
+      if (this.initialized) return;
+      await window.api.user.init('Usuario');
+      this.initialized = true;
+    } else {
+      this.initMock();
+    }
   }
 
   private async getUser(): Promise<User | null> {
     await this.ensureInit();
-    const user = await window.api.user.get();
-    return user
-      ? { ...user, is_first_time: !!user.is_first_time }
-      : null;
-  }
 
-  /* =======================
-     PRIMERA VISITA
-  ======================= */
+    if (this.hasBackend()) {
+      const user = await window.api.user.get();
+      return user ? { ...user, is_first_time: !!user.is_first_time } : null;
+    }
+
+    // MOCK MODE
+    return this.mockData$.value;
+  }
 
   async hasVisited(): Promise<boolean> {
     const user = await this.getUser();
@@ -37,21 +54,44 @@ export class UserService {
 
   async markAsVisited(): Promise<void> {
     await this.ensureInit();
-    await window.api.user.markVisited();
+
+    if (this.hasBackend()) {
+      await window.api.user.markVisited();
+    } else {
+      // MOCK MODE
+      const current = this.mockData$.value;
+      if (current) {
+        this.mockData$.next({ ...current, is_first_time: false });
+      }
+    }
   }
 
   async clearVisited(): Promise<void> {
     await this.ensureInit();
-    await window.api.user.resetFirstVisit();
-  }
 
-  /* =======================
-     NOMBRE DE USUARIO
-  ======================= */
+    if (this.hasBackend()) {
+      await window.api.user.resetFirstVisit();
+    } else {
+      // MOCK MODE
+      const current = this.mockData$.value;
+      if (current) {
+        this.mockData$.next({ ...current, is_first_time: true });
+      }
+    }
+  }
 
   async setUserName(name: string): Promise<void> {
     await this.ensureInit();
-    await window.api.user.updateName(name.trim());
+
+    if (this.hasBackend()) {
+      await window.api.user.updateName(name.trim());
+    } else {
+      // MOCK MODE
+      const current = this.mockData$.value;
+      if (current) {
+        this.mockData$.next({ ...current, name: name.trim() });
+      }
+    }
   }
 
   async getUserName(): Promise<string | null> {
@@ -65,13 +105,11 @@ export class UserService {
   }
 
   async updateUserName(newName: string): Promise<void> {
-    await this.ensureInit();
-    await window.api.user.updateName(newName.trim());
+    await this.setUserName(newName);
   }
 
   async removeUserName(): Promise<void> {
-    await this.ensureInit();
-    await window.api.user.updateName('');
+    await this.setUserName('');
   }
 
   async setSchedule(
@@ -81,37 +119,50 @@ export class UserService {
     closeMinute: number
   ): Promise<void> {
     await this.ensureInit();
-    await window.api.user.updateSchedule(
-      openHour,
-      openMinute,
-      closeHour,
-      closeMinute
-    );
+
+    if (this.hasBackend()) {
+      await window.api.user.updateSchedule(openHour, openMinute, closeHour, closeMinute);
+    } else {
+      // MOCK MODE
+      const current = this.mockData$.value;
+      if (current) {
+        this.mockData$.next({
+          ...current,
+          open_hour: openHour,
+          open_minute: openMinute,
+          close_hour: closeHour,
+          close_minute: closeMinute
+        });
+      }
+    }
   }
 
-  async getSchedule(): Promise<{
-    open: string;
-    close: string;
-  } | null> {
+  async getSchedule(): Promise<{ open: string; close: string } | null> {
     const user = await this.getUser();
     if (!user) return null;
-
     const pad = (n: number) => n.toString().padStart(2, '0');
-
     return {
       open: `${pad(user.open_hour)}:${pad(user.open_minute)}`,
       close: `${pad(user.close_hour)}:${pad(user.close_minute)}`
     };
   }
 
-  updateMoneyGoal(moneyGoal: number) {
-    return window.api.user.updateMoneyGoal(moneyGoal);
-  }
+  async updateMoneyGoal(moneyGoal: number): Promise<void> {
+    await this.ensureInit();
 
+    if (this.hasBackend()) {
+      await window.api.user.updateMoneyGoal(moneyGoal);
+    } else {
+      // MOCK MODE
+      const current = this.mockData$.value;
+      if (current) {
+        this.mockData$.next({ ...current, money_goal: moneyGoal });
+      }
+    }
+  }
 
   async getMoneyGoal(): Promise<number> {
     const user = await this.getUser();
     return user?.money_goal ?? 1000;
   }
-
 }
