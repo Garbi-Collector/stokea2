@@ -47,11 +47,10 @@ export class InicioComponent implements OnInit {
   today: Date = new Date();
   weekDays: string[] = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
 
-  // Umbral para ventas altas (hardcodeado)
-  readonly HIGH_SALES_THRESHOLD = 2000;
+  moneyGoal :number = 0;
 
   constructor(
-    private storageService: UserService,
+    private userService: UserService,
     private modalService: ModalService,
     private productService: ProductsService,
     private calendarService: CalendarService,
@@ -59,11 +58,11 @@ export class InicioComponent implements OnInit {
   ) {}
 
   async ngOnInit(): Promise<void> {
-    this.hasVisited = await this.storageService.hasVisited();
+    this.hasVisited = await this.userService.hasVisited();
     if (!this.hasVisited) {
       this.abrirModalSetUp();
     }
-    this.name = await this.storageService.getUserName();
+    this.name = await this.userService.getUserName();
     this.totalProducts = await this.totalProductsCount();
     this.hasProduct = this.totalProducts > 0;
 
@@ -71,10 +70,23 @@ export class InicioComponent implements OnInit {
     await this.initializeCashSession();
 
     this.loadCashAmount();
+    this.loadMoneyGoal();
 
     // Inicializar calendario con estados
     await this.initCalendar();
   }
+
+  async loadMoneyGoal(): Promise<void> {
+    try {
+      const moneyGoal = await this.userService.getMoneyGoal();
+      if (moneyGoal !== null && moneyGoal !== undefined) {
+        this.moneyGoal = moneyGoal;
+      }
+    } catch (error) {
+      console.error('Error cargando money goal:', error);
+    }
+  }
+
 
   async initializeCashSession(): Promise<void> {
     try {
@@ -143,7 +155,7 @@ export class InicioComponent implements OnInit {
         // Día pasado con sesión - calcular ventas
         const sales = sessionForDay.current_amount - sessionForDay.start_amount;
 
-        if (sales >= this.HIGH_SALES_THRESHOLD) {
+        if (sales >= this.moneyGoal) {
           return { ...day, status: 'past-high' };
         } else {
           return { ...day, status: 'past-low' };
