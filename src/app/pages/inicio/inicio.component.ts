@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Subject, takeUntil, filter } from 'rxjs';
 import { UserService } from '../../services/user.service';
 import { ModalService } from "../../modalconfigs/core/modal.service";
 import { ModalComponent } from "../../modalconfigs/shared/components/modal/modal.component";
@@ -10,6 +11,7 @@ import { CalendarService } from "../../services/calendar.service";
 import { CalendarDay } from "../../models/CalendarDay";
 import { CashSessionService } from "../../services/cash-session.service";
 import { CashSession } from "../../models/cash-session";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-inicio',
@@ -28,7 +30,10 @@ import { CashSession } from "../../models/cash-session";
     './../../style/typography.css',
   ]
 })
-export class InicioComponent implements OnInit {
+export class InicioComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
+  private setupModalId: string | null = null;
+
   totalProducts: number = 0;
   hasProduct: boolean = true;
   name: string | null = "";
@@ -47,33 +52,64 @@ export class InicioComponent implements OnInit {
   today: Date = new Date();
   weekDays: string[] = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
 
-  moneyGoal :number = 0;
+  moneyGoal: number = 0;
 
   constructor(
     private userService: UserService,
     private modalService: ModalService,
     private productService: ProductsService,
     private calendarService: CalendarService,
-    private cashSessionService: CashSessionService
+    private cashSessionService: CashSessionService,
+    private router: Router
   ) {}
 
   async ngOnInit(): Promise<void> {
-    this.hasVisited = await this.userService.hasVisited();
-    if (!this.hasVisited) {
-      this.abrirModalSetUp();
+    await this.inicializarComponente();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  /**
+   * MÉTODO PRINCIPAL: Inicializa/Recarga TODO el componente
+   * Este método simula un "refresh" completo sin recargar la página
+   */
+  private async inicializarComponente(): Promise<void> {
+    try {
+      // 1. Verificar si es la primera visita
+      this.hasVisited = await this.userService.hasVisited();
+
+      if (!this.hasVisited) {
+        // Si es primera visita, abrir setup y esperar
+        this.abrirModalSetUp();
+        return;
+      }
+
+      // 2. Cargar nombre de usuario
+      this.name = await this.userService.getUserName();
+
+      // 3. Cargar productos
+      this.totalProducts = await this.totalProductsCount();
+      this.hasProduct = this.totalProducts > 0;
+
+      // 4. Inicializar sesión de caja
+      await this.initializeCashSession();
+
+      // 5. Cargar montos
+      this.loadCashAmount();
+
+      // 6. Cargar objetivo de dinero
+      await this.loadMoneyGoal();
+
+      // 7. Inicializar calendario
+      await this.initCalendar();
+
+      console.log('Componente inicializado/recargado completamente');
+    } catch (error) {
+      console.error('Error al inicializar componente:', error);
     }
-    this.name = await this.userService.getUserName();
-    this.totalProducts = await this.totalProductsCount();
-    this.hasProduct = this.totalProducts > 0;
-
-    // Intentar crear/obtener sesión de caja
-    await this.initializeCashSession();
-
-    this.loadCashAmount();
-    this.loadMoneyGoal();
-
-    // Inicializar calendario con estados
-    await this.initCalendar();
   }
 
   async loadMoneyGoal(): Promise<void> {
@@ -86,7 +122,6 @@ export class InicioComponent implements OnInit {
       console.error('Error cargando money goal:', error);
     }
   }
-
 
   async initializeCashSession(): Promise<void> {
     try {
@@ -113,46 +148,33 @@ export class InicioComponent implements OnInit {
     this.calendarDays = this.calendarService.getMonthDays(this.currentYear, currentMonthIndex);
     this.currentMonth = this.calendarDays[15]?.monthName || '';
 
-    // Aplicar estados a los días del calendario
     await this.applyCalendarStates();
   }
 
-  /**
-   * Aplica los estados (colores) a cada día del calendario basándose en las sesiones
-   */
   async applyCalendarStates(): Promise<void> {
     try {
-      // Obtener todas las sesiones
       const allSessions = await this.cashSessionService.getAll();
-
-      // Normalizar la fecha de hoy para comparaciones
       const todayNormalized = new Date(this.today);
       todayNormalized.setHours(0, 0, 0, 0);
 
-      // Procesar cada día del calendario
       this.calendarDays = this.calendarDays.map(day => {
         const dayNormalized = new Date(day.date);
         dayNormalized.setHours(0, 0, 0, 0);
 
-        // Si es el día de hoy, mantener el estado actual
         if (dayNormalized.getTime() === todayNormalized.getTime()) {
           return { ...day, status: 'today' };
         }
 
-        // Si es un día futuro
         if (dayNormalized > todayNormalized) {
           return { ...day, status: 'future' };
         }
 
-        // Es un día pasado - buscar si tiene sesión
         const sessionForDay = this.findSessionForDate(allSessions, dayNormalized);
 
         if (!sessionForDay) {
-          // Día pasado sin sesión
           return { ...day, status: 'past-no-session' };
         }
 
-        // Día pasado con sesión - calcular ventas
         const sales = sessionForDay.current_amount - sessionForDay.start_amount;
 
         if (sales >= this.moneyGoal) {
@@ -166,9 +188,6 @@ export class InicioComponent implements OnInit {
     }
   }
 
-  /**
-   * Encuentra la sesión que corresponde a una fecha específica
-   */
   private findSessionForDate(sessions: CashSession[], targetDate: Date): CashSession | undefined {
     return sessions.find(session => {
       if (!session.opened_at) return false;
@@ -184,9 +203,6 @@ export class InicioComponent implements OnInit {
     return day.date.toDateString() === this.today.toDateString();
   }
 
-  /**
-   * Determina las clases CSS para cada día del calendario
-   */
   getDayClasses(day: CalendarDay): string {
     const classes: string[] = ['calendar-day'];
 
@@ -198,7 +214,6 @@ export class InicioComponent implements OnInit {
       classes.push('other-month');
     }
 
-    // Agregar clase según el estado
     if (day.status) {
       classes.push(`status-${day.status}`);
     }
@@ -234,36 +249,36 @@ export class InicioComponent implements OnInit {
       closeOnBackdrop: true
     });
 
-    // Suscribirse al cierre del modal para actualizar datos
-    const closeSub = this.modalService.close$.subscribe((success) => {
-      if (success) {
-        // Recargar el monto de la caja o actualizar datos necesarios
-        this.loadCashAmount();
-      }
-      closeSub.unsubscribe();
-    });
+    // Suscripción para recargar después de cerrar el modal
+    this.modalService.close$
+      .pipe(
+        takeUntil(this.destroy$),
+        filter(success => success === true)
+      )
+      .subscribe(async () => {
+        await this.inicializarComponente();
+      });
   }
 
   handleEgreso(): void {
     this.modalService.open({
       title: 'Registrar Egreso',
       component: TransactionModalComponent,
-      data: {
-        type: 'egreso'
-      },
+      data: { type: 'egreso' },
       width: '500px',
       closable: true,
       closeOnBackdrop: true
     });
 
-    // Suscribirse al cierre del modal para actualizar datos
-    const closeSub = this.modalService.close$.subscribe((success) => {
-      if (success) {
-        // Recargar el monto de la caja o actualizar datos necesarios
-        this.loadCashAmount();
-      }
-      closeSub.unsubscribe();
-    });
+    // Suscripción para recargar después de cerrar el modal
+    this.modalService.close$
+      .pipe(
+        takeUntil(this.destroy$),
+        filter(success => success === true)
+      )
+      .subscribe(async () => {
+        await this.inicializarComponente();
+      });
   }
 
   abrirModalSetUp(): void {
@@ -278,14 +293,6 @@ export class InicioComponent implements OnInit {
       closable: true,
       closeOnBackdrop: false
     });
-    /*// Suscribirse al cierre del modal para actualizar datos
-    const closeSub = this.modalService.close$.subscribe((success) => {
-      if (success) {
-        // Recargar el monto de la caja o actualizar datos necesarios
-        this.loadCashAmount();
-      }
-      closeSub.unsubscribe();
-    });*/
   }
 
   getGreeting(): string {
