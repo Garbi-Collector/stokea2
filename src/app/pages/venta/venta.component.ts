@@ -6,6 +6,7 @@ import { StockService } from '../../services/stock.service';
 import { CashSessionService } from '../../services/cash-session.service';
 import { SalesService } from '../../services/sales.service';
 import { SaleItemsService } from '../../services/sale-items.service';
+import { CashMovementsService } from '../../services/cash-movements.service';
 import { Product } from '../../models/product';
 import { Stock } from '../../models/stock';
 import { CashSession } from '../../models/cash-session';
@@ -61,7 +62,8 @@ export class VentaComponent implements OnInit {
     private stockService: StockService,
     private cashSessionService: CashSessionService,
     private salesService: SalesService,
-    private saleItemsService: SaleItemsService
+    private saleItemsService: SaleItemsService,
+    private cashMovementsService: CashMovementsService
   ) {}
 
   async ngOnInit() {
@@ -243,6 +245,15 @@ export class VentaComponent implements OnInit {
     this.showSuccess('Carrito vaciado');
   }
 
+  // Generar descripción del movimiento de caja
+  private generateMovementDescription(): string {
+    const lines = this.cart.map(item =>
+      `${item.product.name} x ${item.quantity} = $${item.subtotal.toFixed(2)}`
+    );
+    lines.push(`Total = $${this.cartTotal.toFixed(2)}`);
+    return lines.join(',\n');
+  }
+
   // Procesar venta
   async processSale() {
     if (this.cart.length === 0) {
@@ -289,13 +300,21 @@ export class VentaComponent implements OnInit {
         }
       }
 
-      // 3. Actualizar el monto de la sesión de caja
+      // 3. Crear movimiento de caja (INGRESO)
+      await this.cashMovementsService.create({
+        cash_session_id: this.currentSession.id,
+        type: 'IN',
+        amount: this.cartTotal,
+        description: this.generateMovementDescription()
+      });
+
+      // 4. Actualizar el current_amount de la sesión de caja
       await this.cashSessionService.updateCurrentAmount(
         this.currentSession.id!,
         this.cartTotal
       );
 
-      // 4. Limpiar carrito y recargar datos
+      // 5. Limpiar carrito y recargar datos
       this.clearCart();
       await this.loadData();
 
