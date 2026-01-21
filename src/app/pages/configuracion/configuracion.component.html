@@ -1,5 +1,203 @@
-<h2>Configuración</h2>
+<div class="config-container">
+  <div class="config-header fade-in">
+    <h1 class="page-title">Configuración</h1>
+    <p class="page-subtitle">Personaliza tu experiencia</p>
+  </div>
 
-<button (click)="resetFirstVisit()">
-  🔄 Borrar estado de primera visita
-</button>
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-state fade-in-scale">
+    <div class="icon-container">
+      <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="spinning">
+        <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
+      </svg>
+    </div>
+    <p>Cargando configuración...</p>
+  </div>
+
+  <!-- Config Form -->
+  <div *ngIf="!loading" class="config-form fade-in">
+
+    <!-- Información Personal -->
+    <div class="config-card card-base">
+      <div class="card-header">
+        <div class="header-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+        </div>
+        <h2 class="card-title">Información Personal</h2>
+      </div>
+
+      <div class="form-group">
+        <label for="name" class="label-dark">Nombre de Usuario</label>
+        <input
+          type="text"
+          id="name"
+          [(ngModel)]="config.name"
+          (input)="onNameInput($event)"
+          class="search-input"
+          placeholder="Ingresa tu nombre"
+          maxlength="13"
+          [class.error]="errorMessage && !config.name.trim()"
+        />
+        <div class="char-counter" [class.warning]="config.name.length >= 10">
+          {{ config.name.length }}/13
+        </div>
+      </div>
+    </div>
+
+    <!-- Horario de Trabajo -->
+    <div class="config-card card-base">
+      <div class="card-header">
+        <div class="header-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+        </div>
+        <h2 class="card-title">Horario de Trabajo</h2>
+      </div>
+
+      <div class="time-grid">
+        <!-- Apertura -->
+        <div class="time-section">
+          <label class="time-label">Apertura</label>
+          <div class="time-inputs">
+            <div class="time-input-group">
+              <input
+                type="text"
+                [(ngModel)]="config.openHour"
+                (input)="onHourInput($event, 'openHour')"
+                (blur)="onHourBlur('openHour')"
+                maxlength="2"
+                class="search-input time-input"
+                placeholder="HH"
+              />
+              <span class="time-separator">:</span>
+              <input
+                type="text"
+                [(ngModel)]="config.openMinute"
+                (input)="onMinuteInput($event, 'openMinute')"
+                (blur)="onMinuteBlur('openMinute')"
+                maxlength="2"
+                class="search-input time-input"
+                placeholder="MM"
+              />
+            </div>
+            <div class="time-preview">
+              {{ formatTime(config.openHour, config.openMinute) }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Cierre -->
+        <div class="time-section">
+          <label class="time-label">Cierre</label>
+          <div class="time-inputs">
+            <div class="time-input-group">
+              <input
+                type="text"
+                [(ngModel)]="config.closeHour"
+                (input)="onHourInput($event, 'closeHour')"
+                (blur)="onHourBlur('closeHour')"
+                maxlength="2"
+                class="search-input time-input"
+                placeholder="HH"
+              />
+              <span class="time-separator">:</span>
+              <input
+                type="text"
+                [(ngModel)]="config.closeMinute"
+                (input)="onMinuteInput($event, 'closeMinute')"
+                (blur)="onMinuteBlur('closeMinute')"
+                maxlength="2"
+                class="search-input time-input"
+                placeholder="MM"
+              />
+            </div>
+            <div class="time-preview">
+              {{ formatTime(config.closeHour, config.closeMinute) }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Meta de Dinero -->
+    <div class="config-card card-base">
+      <div class="card-header">
+        <div class="header-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="1" x2="12" y2="23"/>
+            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+          </svg>
+        </div>
+        <h2 class="card-title">Meta de Dinero</h2>
+      </div>
+
+      <div class="form-group">
+        <label for="moneyGoal" class="label-dark">Objetivo Diario/Mensual ($)</label>
+        <div class="money-input-wrapper">
+          <span class="currency-symbol">$</span>
+          <input
+            type="number"
+            id="moneyGoal"
+            [(ngModel)]="config.moneyGoal"
+            min="0"
+            step="100"
+            class="search-input money-input"
+            placeholder="{{this.config.moneyGoal}}}"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Mensajes de Estado -->
+    <div *ngIf="errorMessage" class="error-message scale-in">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      {{ errorMessage }}
+    </div>
+
+    <div *ngIf="saveSuccess" class="success-message scale-in">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+      Configuración guardada correctamente
+    </div>
+
+    <!-- Botones de Acción -->
+    <div class="action-buttons-grid">
+      <button
+        class="btn btn-primary"
+        [disabled]="saving"
+        (click)="saveConfig()"
+      >
+        <svg *ngIf="!saving" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+          <polyline points="17 21 17 13 7 13 7 21"/>
+          <polyline points="7 3 7 8 15 8"/>
+        </svg>
+        <svg *ngIf="saving" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="spinning">
+          <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
+        </svg>
+        {{ saving ? 'Guardando...' : 'Guardar Configuración' }}
+      </button>
+
+      <button
+        class="delete-button"
+        (click)="resetFirstVisit()"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="1 4 1 10 7 10"/>
+          <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+        </svg>
+        <span>Reiniciar Primera Visita</span>
+      </button>
+    </div>
+  </div>
+</div>
