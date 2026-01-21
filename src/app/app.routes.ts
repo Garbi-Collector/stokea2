@@ -7,6 +7,7 @@ import { VentaComponent } from './pages/venta/venta.component';
 import { StockComponent } from './pages/stock/stock.component';
 import { HistorialComponent } from './pages/historial/historial.component';
 import { ConfiguracionComponent } from './pages/configuracion/configuracion.component';
+import {LoadComponent} from "./pages/load/load.component";
 
 export const routes: Routes = [
   {
@@ -18,6 +19,7 @@ export const routes: Routes = [
       { path: 'stock', component: StockComponent },
       { path: 'historial', component: HistorialComponent },
       { path: 'configuracion', component: ConfiguracionComponent },
+      { path: 'load', component: LoadComponent },
 
       // ruta por defecto
       { path: '', redirectTo: 'inicio', pathMatch: 'full' }

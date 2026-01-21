@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../../services/user.service';
+import { Router } from '@angular/router';
 
 interface ConfigForm {
   name: string;
@@ -45,7 +46,10 @@ export class ConfiguracionComponent implements OnInit {
   saveSuccess = false;
   errorMessage = '';
 
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private router: Router
+  ) {}
 
   async ngOnInit() {
     await this.loadConfig();
@@ -186,6 +190,10 @@ export class ConfiguracionComponent implements OnInit {
       setTimeout(() => {
         this.saveSuccess = false;
       }, 3000);
+      // 🔄 Redirigir a load, que luego redirige a inicio
+      this.router.navigate(['/load'], {
+        queryParams: { target: '/inicio' }
+      });
 
     } catch (error) {
       console.error('Error guardando configuración:', error);

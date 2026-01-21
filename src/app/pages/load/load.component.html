@@ -1,11 +1,37 @@
 <div class="loading-container">
-  <!-- Capas de partículas cayendo -->
-  <div class="particles-layer particles-1"></div>
-  <div class="particles-layer particles-2"></div>
-  <div class="particles-layer particles-3"></div>
+  <!-- Filtro SVG para efecto líquido orgánico -->
+  <svg xmlns="http://www.w3.org/2000/svg" style="position: absolute; width: 0; height: 0;">
+    <defs>
+      <filter id="gooey" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="12" result="blur" />
+        <feColorMatrix in="blur" mode="matrix" values="
+          1 0 0 0 0
+          0 1 0 0 0
+          0 0 1 0 0
+          0 0 0 20 -8" result="gooey" />
+        <feComposite in="SourceGraphic" in2="gooey" operator="atop"/>
+      </filter>
+    </defs>
+  </svg>
 
-  <!-- Líquido acumulándose -->
-  <div class="liquid-fill"></div>
+
+  <!-- Líquido acumulándose con efecto orgánico caótico -->
+  <div class="liquid-fill">
+    <!-- Múltiples capas de olas superpuestas -->
+    <!--
+    <div class="wave-layer-1"></div>
+    <div class="wave-layer-2"></div>
+    <div class="wave-layer-3"></div>
+     -->
+
+    <!-- Burbujas adicionales -->
+    <div class="bubble" style="width: 15px; height: 15px; left: 20%; bottom: 10px; animation-duration: 3s;"></div>
+    <div class="bubble" style="width: 10px; height: 10px; left: 45%; bottom: 20px; animation-duration: 2.5s; animation-delay: 0.3s;"></div>
+    <div class="bubble" style="width: 20px; height: 20px; left: 70%; bottom: 5px; animation-duration: 3.5s; animation-delay: 0.6s;"></div>
+    <div class="bubble" style="width: 12px; height: 12px; left: 85%; bottom: 15px; animation-duration: 2.8s; animation-delay: 0.9s;"></div>
+    <div class="bubble" style="width: 8px; height: 8px; left: 35%; bottom: 25px; animation-duration: 2.2s; animation-delay: 0.5s;"></div>
+    <div class="bubble" style="width: 18px; height: 18px; left: 60%; bottom: 8px; animation-duration: 3.2s; animation-delay: 1s;"></div>
+  </div>
 
   <!-- Card de carga (por delante) -->
   <div class="loading-card card-base fade-in-scale">
