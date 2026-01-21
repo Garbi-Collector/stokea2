@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {NgIf} from "@angular/common";
+import { Router } from '@angular/router';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {ModalService} from "../../modalconfigs/core/modal.service";
 import {UserService} from "../../services/user.service";
@@ -30,6 +31,7 @@ export class SetupModalComponent {
   showError: boolean = false;
 
   constructor(
+    private router: Router,
     private modalService: ModalService,
     private storageService: UserService
   ) {}
@@ -52,17 +54,21 @@ export class SetupModalComponent {
       return;
     }
 
-    // Guardar el nombre en localStorage
+    // Guardar el nombre
     this.storageService.setUserName(this.userName.trim());
+
+    // Marcar que ya visitó la app
+    this.storageService.markAsVisited();
 
     console.log('Nombre guardado:', this.userName.trim());
 
-    // guardar que no es la primera vez del usuario
-    this.storageService.markAsVisited()
-
-    // recargar la pagina
-
-    // Cerrar el modal
+    // ✅ Cerrar el modal primero
     this.modalService.close();
+
+    // 🔄 Redirigir a load, que luego redirige a inicio
+    this.router.navigate(['/load'], {
+      queryParams: { target: '/inicio' }
+    });
   }
+
 }
