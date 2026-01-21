@@ -2,8 +2,141 @@
   {
     "id": 1,
     "start_amount": 0,
-    "current_amount": 0,
-    "opened_at": "2026-01-21 00:11:34",
-    "closed_at": null
+    "current_amount": 48750,
+    "opened_at": "2026-01-01 08:15:00",
+    "closed_at": "2026-01-01 23:59:00"
+  },
+  {
+    "id": 2,
+    "start_amount": 48750,
+    "current_amount": 93420,
+    "opened_at": "2026-01-02 08:20:00",
+    "closed_at": "2026-01-02 23:59:00"
+  },
+  {
+    "id": 3,
+    "start_amount": 93420,
+    "current_amount": 128650,
+    "opened_at": "2026-01-03 08:10:00",
+    "closed_at": "2026-01-03 23:59:00"
+  },
+  {
+    "id": 4,
+    "start_amount": 128650,
+    "current_amount": 151280,
+    "opened_at": "2026-01-04 08:25:00",
+    "closed_at": "2026-01-04 23:59:00"
+  },
+  {
+    "id": 5,
+    "start_amount": 151280,
+    "current_amount": 188960,
+    "opened_at": "2026-01-05 08:30:00",
+    "closed_at": "2026-01-05 23:59:00"
+  },
+  {
+    "id": 6,
+    "start_amount": 188960,
+    "current_amount": 221340,
+    "opened_at": "2026-01-06 08:18:00",
+    "closed_at": "2026-01-06 23:59:00"
+  },
+  {
+    "id": 7,
+    "start_amount": 221340,
+    "current_amount": 258720,
+    "opened_at": "2026-01-07 08:22:00",
+    "closed_at": "2026-01-07 23:59:00"
+  },
+  {
+    "id": 8,
+    "start_amount": 258720,
+    "current_amount": 293850,
+    "opened_at": "2026-01-08 08:12:00",
+    "closed_at": "2026-01-08 23:59:00"
+  },
+  {
+    "id": 9,
+    "start_amount": 293850,
+    "current_amount": 331240,
+    "opened_at": "2026-01-09 08:28:00",
+    "closed_at": "2026-01-09 23:59:00"
+  },
+  {
+    "id": 10,
+    "start_amount": 331240,
+    "current_amount": 349240,
+    "opened_at": "2026-01-10 08:16:00",
+    "closed_at": "2026-01-10 23:59:00"
+  },
+  {
+    "id": 11,
+    "start_amount": 349240,
+    "current_amount": 383570,
+    "opened_at": "2026-01-11 08:24:00",
+    "closed_at": "2026-01-11 23:59:00"
+  },
+  {
+    "id": 12,
+    "start_amount": 383570,
+    "current_amount": 421890,
+    "opened_at": "2026-01-12 08:19:00",
+    "closed_at": "2026-01-12 23:59:00"
+  },
+  {
+    "id": 13,
+    "start_amount": 421890,
+    "current_amount": 457320,
+    "opened_at": "2026-01-13 08:14:00",
+    "closed_at": "2026-01-13 23:59:00"
+  },
+  {
+    "id": 14,
+    "start_amount": 457320,
+    "current_amount": 492180,
+    "opened_at": "2026-01-14 08:26:00",
+    "closed_at": "2026-01-14 23:59:00"
+  },
+  {
+    "id": 15,
+    "start_amount": 492180,
+    "current_amount": 528450,
+    "opened_at": "2026-01-15 08:21:00",
+    "closed_at": "2026-01-15 23:59:00"
+  },
+  {
+    "id": 16,
+    "start_amount": 528450,
+    "current_amount": 563890,
+    "opened_at": "2026-01-16 08:17:00",
+    "closed_at": "2026-01-16 23:59:00"
+  },
+  {
+    "id": 17,
+    "start_amount": 563890,
+    "current_amount": 598320,
+    "opened_at": "2026-01-17 08:23:00",
+    "closed_at": "2026-01-17 23:59:00"
+  },
+  {
+    "id": 18,
+    "start_amount": 598320,
+    "current_amount": 621320,
+    "opened_at": "2026-01-18 08:11:00",
+    "closed_at": "2026-01-18 23:59:00"
+  },
+  {
+    "id": 19,
+    "start_amount": 621320,
+    "current_amount": 657840,
+    "opened_at": "2026-01-19 08:27:00",
+    "closed_at": "2026-01-19 23:59:00"
+  },
+  {
+    "id": 20,
+    "start_amount": 657840,
+    "current_amount": 692170,
+    "opened_at": "2026-01-20 08:13:00",
+    "closed_at": "2026-01-20 23:59:00"
   }
 ]

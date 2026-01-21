@@ -10,5 +10,17 @@
   {
     "name": "stock",
     "seq": 50
+  },
+  {
+    "name": "cash_movements",
+    "seq": 9
+  },
+  {
+    "name": "sales",
+    "seq": 1
+  },
+  {
+    "name": "sale_items",
+    "seq": 8
   }
 ]
