@@ -301,4 +301,36 @@ export class InicioComponent implements OnInit, OnDestroy {
     if (hour < 19) return 'Buenas tardes';
     return 'Buenas noches';
   }
+
+
+  get salesAmount(): number {
+    if (!this.currentSession) return 0;
+    return this.currentSession.current_amount - this.currentSession.start_amount;
+  }
+
+  get goalProgress(): number {
+    if (this.moneyGoal === 0) return 0;
+    return Math.min((this.salesAmount / this.moneyGoal) * 100, 100);
+  }
+
+  get goalExcess(): number {
+    if (this.salesAmount <= this.moneyGoal) return 0;
+    return this.salesAmount - this.moneyGoal;
+  }
+
+  get goalExcessPercentage(): number {
+    if (this.moneyGoal === 0 || this.goalExcess === 0) return 0;
+    return (this.goalExcess / this.moneyGoal) * 100;
+  }
+
+  get isGoalReached(): boolean {
+    return this.salesAmount >= this.moneyGoal;
+  }
+
+  get remainingToGoal(): number {
+    if (this.isGoalReached) return 0;
+    return this.moneyGoal - this.salesAmount;
+  }
+
+  protected readonly Math = Math;
 }

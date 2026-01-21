@@ -481,3 +481,314 @@
     font-size: 0.85rem;
   }
 }
+/* ========== GOAL PROGRESS CARD ========== */
+.goal-progress-card {
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(102, 126, 234, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.goal-progress-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 50px rgba(102, 126, 234, 0.15);
+}
+
+/* Header de la meta */
+.goal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.goal-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #495057;
+}
+
+.goal-title svg {
+  color: #667eea;
+}
+
+.goal-target {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.goal-target-label {
+  font-size: 0.875rem;
+  color: #6c757d;
+  font-weight: 500;
+}
+
+.goal-target-amount {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #667eea;
+}
+
+/* Contenido de la meta */
+.goal-content {
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+/* Estado de la meta */
+.goal-status {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, rgba(255, 193, 7, 0.1) 0%, rgba(255, 193, 7, 0.05) 100%);
+  border-radius: 16px;
+  border-left: 4px solid #ffc107;
+}
+
+.goal-status.achieved {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%);
+  border-left: 4px solid #10b981;
+  animation: scaleIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.status-icon {
+  flex-shrink: 0;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+  border-radius: 50%;
+  box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);
+}
+
+.status-icon svg {
+  color: white;
+}
+
+.status-icon.achieved {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+  animation: scaleIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.status-text h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0 0 0.5rem 0;
+}
+
+.status-text p {
+  font-size: 1rem;
+  color: #495057;
+  margin: 0.25rem 0;
+  line-height: 1.5;
+}
+
+.status-text p strong {
+  color: #667eea;
+  font-weight: 700;
+}
+
+.goal-status.achieved .status-text p strong {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.excess-info {
+  font-size: 0.95rem !important;
+  color: #10b981 !important;
+  font-weight: 600;
+  margin-top: 0.5rem !important;
+}
+
+/* Barra de progreso */
+.progress-bar-container {
+  position: relative;
+  width: 100%;
+  height: 40px;
+  background: rgba(102, 126, 234, 0.1);
+  border-radius: 20px;
+  overflow: visible;
+  margin-bottom: 2rem;
+}
+
+.progress-bar-container.achieved {
+  overflow: visible;
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  border-radius: 20px;
+  transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 1rem;
+  position: relative;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  animation: slideIn 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.progress-bar.achieved {
+  background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.progress-bar.excess {
+  position: absolute;
+  left: 100%;
+  top: 0;
+  background: linear-gradient(90deg, #059669 0%, #047857 100%);
+  box-shadow: 0 4px 15px rgba(5, 150, 105, 0.4);
+  animation: slideInExcess 1s cubic-bezier(0.4, 0, 0.2, 1) 0.5s forwards;
+  opacity: 0;
+}
+
+.progress-percentage {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: white;
+  white-space: nowrap;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Estadísticas de la meta */
+.goal-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(102, 126, 234, 0.1);
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.stat-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #6c757d;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a1a2e;
+}
+
+.stat-value.remaining {
+  color: #ffc107;
+}
+
+.stat-value.success {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Mensaje de logro */
+.achievement-message {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.05) 100%);
+  border-radius: 12px;
+  text-align: center;
+}
+
+.achievement-message p {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #059669;
+  margin: 0;
+}
+
+/* Animaciones específicas */
+@keyframes slideIn {
+  from {
+    width: 0;
+  }
+}
+
+@keyframes slideInExcess {
+  from {
+    width: 0;
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .goal-progress-card {
+    padding: 1.5rem;
+  }
+
+  .goal-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .goal-status {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+
+  .status-icon {
+    width: 50px;
+    height: 50px;
+  }
+
+  .status-icon svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .status-icon.achieved svg {
+    width: 32px;
+    height: 32px;
+  }
+
+  .status-text h3 {
+    font-size: 1.1rem;
+  }
+
+  .status-text p {
+    font-size: 0.95rem;
+  }
+
+  .progress-bar-container {
+    height: 35px;
+  }
+
+  .stat-value {
+    font-size: 1.25rem;
+  }
+
+  .goal-stats {
+    gap: 1rem;
+  }
+}
