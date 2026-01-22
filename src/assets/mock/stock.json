@@ -2,20 +2,20 @@
   {
     "id": 1,
     "product_id": 1,
-    "quantity": 200,
-    "min_alert": 30
+    "quantity": 198,
+    "min_alert": null
   },
   {
     "id": 2,
     "product_id": 5,
-    "quantity": 160,
-    "min_alert": 25
+    "quantity": 159,
+    "min_alert": null
   },
   {
     "id": 3,
     "product_id": 6,
-    "quantity": 140,
-    "min_alert": 25
+    "quantity": 139,
+    "min_alert": null
   },
   {
     "id": 4,
@@ -68,8 +68,8 @@
   {
     "id": 12,
     "product_id": 4,
-    "quantity": 100,
-    "min_alert": 20
+    "quantity": 99,
+    "min_alert": null
   },
   {
     "id": 13,
@@ -92,14 +92,14 @@
   {
     "id": 16,
     "product_id": 19,
-    "quantity": 20,
-    "min_alert": 5
+    "quantity": 19,
+    "min_alert": null
   },
   {
     "id": 17,
     "product_id": 20,
-    "quantity": 10,
-    "min_alert": 2
+    "quantity": 9,
+    "min_alert": null
   },
   {
     "id": 18,
@@ -188,14 +188,14 @@
   {
     "id": 32,
     "product_id": 2,
-    "quantity": 180,
-    "min_alert": 25
+    "quantity": 175,
+    "min_alert": null
   },
   {
     "id": 33,
     "product_id": 3,
-    "quantity": 120,
-    "min_alert": 20
+    "quantity": 119,
+    "min_alert": null
   },
   {
     "id": 34,
