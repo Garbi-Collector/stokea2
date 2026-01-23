@@ -117,29 +117,53 @@ export class CashSessionService {
     return Promise.resolve({ updated: 1 });
   }
 
+  /**
+   * Verifica si una fecha NO es de hoy
+   */
+  private isNotToday(dateString: string): boolean {
+    const sessionDate = new Date(dateString);
+    sessionDate.setHours(0, 0, 0, 0);
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    return sessionDate.getTime() !== today.getTime();
+  }
+
+  /**
+   * Verifica si una fecha ES de hoy
+   */
+  isToday(dateString: string): boolean {
+    return !this.isNotToday(dateString);
+  }
+
   async createNewSession(): Promise<CashSession> {
     const sessions = await this.getAll();
     let lastSession = sessions.length ? sessions[sessions.length - 1] : null;
 
+    // Si existe una sesión abierta
     if (lastSession && lastSession.closed_at === null) {
-      if (
-        lastSession.opened_at &&
-        this.calendarService.isPreviousDay(lastSession.opened_at)
-      ) {
+      // Verificar si NO es de hoy (puede ser de ayer, anteayer, etc.)
+      if (lastSession.opened_at && this.isNotToday(lastSession.opened_at)) {
+        // Cerrar la sesión automáticamente
         await this.closeCashSession(lastSession.id!, lastSession.current_amount);
+
+        // Refrescar la lista de sesiones después de cerrar
         const refreshedSessions = await this.getAll();
         lastSession = refreshedSessions.length
           ? refreshedSessions[refreshedSessions.length - 1]
           : null;
       }
 
+      // Si aún hay una sesión abierta (de hoy), lanzar error
       if (lastSession && lastSession.closed_at === null) {
         throw new Error(
-          'No se puede crear una nueva sesión: existe una sesión abierta y no se puede cerrar'
+          'No se puede crear una nueva sesión: existe una sesión abierta de hoy'
         );
       }
     }
 
+    // Crear la nueva sesión con el monto de la última sesión cerrada
     const startAmount = lastSession ? lastSession.current_amount : 0;
     const { id } = await this.openCashsession(startAmount);
 

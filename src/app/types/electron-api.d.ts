@@ -57,6 +57,8 @@ declare global {
       cashMovements: {
         create(movement: CashMovement): Promise<{ id: number }>;
         getBySession(sessionId: number): Promise<CashMovement[]>;
+        getById(id: number): Promise<CashMovement | null>;
+        update(id: number, movement: Partial<CashMovement>): Promise<{ changes: number }>;
       };
 
       /* =======================
@@ -64,6 +66,9 @@ declare global {
       ======================= */
       sales: {
         create(sale: Sale): Promise<{ id: number }>;
+        getById(id: number): Promise<Sale | null>;
+        getAll(): Promise<Sale[]>;
+        update(id: number, sale: Partial<Sale>): Promise<{ changes: number }>;
       };
 
       /* =======================
@@ -71,6 +76,9 @@ declare global {
       ======================= */
       saleItems: {
         create(item: SaleItem): Promise<{ id: number }>;
+        getById(id: number): Promise<SaleItem | null>;
+        getBySale(saleId: number): Promise<SaleItem[]>;
+        update(id: number, item: Partial<SaleItem>): Promise<{ changes: number }>;
       };
 
       /* =======================
