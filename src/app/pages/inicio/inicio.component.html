@@ -51,12 +51,12 @@
             </button>
           </div>
 
-          <!-- Monto del día -->
+          <!-- Monto del día todo -->
           <div class="cash-amount-section">
             <div class="amount-label">Recaudado hoy</div>
             <div class="cash-amount">
               @if (isCashVisible) {
-                <span class="amount">$ {{ cashAmount | number:'1.2-2' }}</span>
+                <span class="amount">$ {{ (currentAmount - startAmount) | number:'1.2-2' }}</span>
               } @else {
                 <span class="amount-hidden">••••••</span>
               }

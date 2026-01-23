@@ -40,7 +40,8 @@ export class InicioComponent implements OnInit, OnDestroy {
   hasVisited = false;
 
   // Propiedades para la caja
-  cashAmount: number = 0;
+  currentAmount: number = 0;
+  startAmount: number = 0;
   totalCashAmount: number = 0;
   isCashVisible: boolean = true;
   currentSession: CashSession | null = null;
@@ -128,12 +129,27 @@ export class InicioComponent implements OnInit, OnDestroy {
       const openSession = await this.cashSessionService.getOpen();
 
       if (openSession) {
-        this.currentSession = openSession;
-        this.cashAmount = openSession.current_amount;
-        this.totalCashAmount = openSession.current_amount + openSession.start_amount;
+        // Verificar si la sesión abierta es de hoy
+        if (openSession.opened_at && this.cashSessionService.isToday(openSession.opened_at)) {
+          // Sesión válida de hoy, usarla
+          this.currentSession = openSession;
+          this.currentAmount = openSession.current_amount;
+          this.startAmount = openSession.start_amount;
+          this.totalCashAmount = openSession.current_amount;
+        } else {
+          // Sesión antigua, cerrarla y crear una nueva
+          console.log('Sesión antigua detectada, cerrando y creando nueva...');
+          await this.cashSessionService.closeCashSession(openSession.id!, openSession.current_amount);
+          this.currentSession = await this.cashSessionService.createNewSession();
+          this.currentAmount = this.currentSession.current_amount;
+          this.totalCashAmount = this.currentSession.current_amount + this.currentSession.start_amount;
+          console.log('Nueva sesión de caja creada:', this.currentSession);
+        }
       } else {
+        // No hay sesión abierta, crear una nueva
         this.currentSession = await this.cashSessionService.createNewSession();
-        this.cashAmount = this.currentSession.current_amount;
+        this.currentAmount = this.currentSession.current_amount;
+        this.totalCashAmount = this.currentSession.current_amount + this.currentSession.start_amount;
         console.log('Nueva sesión de caja creada:', this.currentSession);
       }
     } catch (error) {
@@ -227,12 +243,12 @@ export class InicioComponent implements OnInit, OnDestroy {
 
   loadCashAmount(): void {
     if (this.currentSession) {
-      this.cashAmount = this.currentSession.current_amount;
+      this.currentAmount = this.currentSession.current_amount;
       return;
     }
 
     const savedAmount = localStorage.getItem('cashAmount');
-    this.cashAmount = savedAmount ? parseFloat(savedAmount) : 0;
+    this.currentAmount = savedAmount ? parseFloat(savedAmount) : 0;
   }
 
   toggleCashVisibility(): void {

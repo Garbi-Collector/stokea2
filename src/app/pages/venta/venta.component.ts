@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ProductsService } from '../../services/products.service';
@@ -274,13 +275,29 @@ export class VentaComponent implements OnInit {
     this.errorMessage = '';
 
     try {
-      // 1. Crear la venta
+      // 1. Crear movimiento de caja primero (INGRESO)
+      const cashMovement = await firstValueFrom(
+        this.cashMovementsService.create({
+          cash_session_id: this.currentSession.id,
+          type: 'SALE',
+          amount: this.cartTotal,
+          description: this.generateMovementDescription()
+        })
+      );
+
+
+      // Validar que se creó el movimiento
+      if (!cashMovement || !cashMovement.id) {
+        throw new Error('No se pudo crear el movimiento de caja');
+      }
+
+      // 2. Crear la venta con el ID del movimiento de caja
       const sale = await this.salesService.create({
-        cash_session_id: this.currentSession.id,
+        cash_movement_id: cashMovement.id,
         total: this.cartTotal
       });
 
-      // 2. Crear los items de venta y actualizar stock
+      // 3. Crear los items de venta y actualizar stock
       for (const cartItem of this.cart) {
         // Crear sale item
         await this.saleItemsService.create({
@@ -299,14 +316,6 @@ export class VentaComponent implements OnInit {
           });
         }
       }
-
-      // 3. Crear movimiento de caja (INGRESO)
-      await this.cashMovementsService.create({
-        cash_session_id: this.currentSession.id,
-        type: 'IN',
-        amount: this.cartTotal,
-        description: this.generateMovementDescription()
-      });
 
       // 4. Actualizar el current_amount de la sesión de caja
       await this.cashSessionService.updateCurrentAmount(
