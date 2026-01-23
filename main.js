@@ -37,6 +37,7 @@ function createWindow () {
       slashes: true
     })
   );
+  mainWindow.webContents.openDevTools({ mode: 'detach' });
 
   mainWindow.once('ready-to-show', () => mainWindow.show());
 
