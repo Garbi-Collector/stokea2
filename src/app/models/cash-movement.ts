@@ -1,4 +1,4 @@
-export type CashMovementType = 'IN' | 'OUT';
+export type CashMovementType = 'IN' | 'OUT' | 'SALE';
 
 export interface CashMovement {
   id?: number;

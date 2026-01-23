@@ -61,8 +61,10 @@ contextBridge.exposeInMainWorld('api', {
       ipcRenderer.invoke('cash-movements:create', movement),
     getBySession: (sessionId) =>
       ipcRenderer.invoke('cash-movements:getBySession', sessionId),
-    updateCurrentAmount: (sessionId, delta) =>
-      ipcRenderer.invoke('cash-session:updateCurrentAmount', sessionId, delta),
+    getById: (id) =>
+      ipcRenderer.invoke('cash-movements:getById', id),
+    update: (id, movement) =>
+      ipcRenderer.invoke('cash-movements:update', { id, movement }),
   },
 
   /* =======================
@@ -71,6 +73,12 @@ contextBridge.exposeInMainWorld('api', {
   sales: {
     create: (sale) =>
       ipcRenderer.invoke('sale:create', sale),
+    getById: (id) =>
+      ipcRenderer.invoke('sale:getById', id),
+    getAll: () =>
+      ipcRenderer.invoke('sale:getAll'),
+    update: (id, sale) =>
+      ipcRenderer.invoke('sale:update', { id, sale }),
   },
 
   /* =======================
@@ -79,6 +87,12 @@ contextBridge.exposeInMainWorld('api', {
   saleItems: {
     create: (item) =>
       ipcRenderer.invoke('sale-items:create', item),
+    getById: (id) =>
+      ipcRenderer.invoke('sale-items:getById', id),
+    getBySale: (saleId) =>
+      ipcRenderer.invoke('sale-items:getBySale', saleId),
+    update: (id, item) =>
+      ipcRenderer.invoke('sale-items:update', { id, item }),
   },
 
     /* =======================

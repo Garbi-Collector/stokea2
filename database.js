@@ -63,10 +63,10 @@ db.serialize(() => {
   db.run(`
     CREATE TABLE IF NOT EXISTS sales (
                                        id INTEGER PRIMARY KEY AUTOINCREMENT,
-                                       cash_session_id INTEGER NOT NULL,
+                                       cash_movement_id INTEGER,
                                        total REAL NOT NULL,
                                        created_at TEXT DEFAULT CURRENT_TIMESTAMP,
-                                       FOREIGN KEY (cash_session_id) REFERENCES cash_session(id)
+                                       FOREIGN KEY (cash_movement_id) REFERENCES cash_movements(id)
       )
   `);
 
