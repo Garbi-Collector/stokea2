@@ -1,6 +1,6 @@
 [
   {
-    "id": 1,
+    "id": 51,
     "name": "Coca Cola 500ml",
     "description": "Gaseosa sabor cola 500ml",
     "brand": "Coca Cola",
@@ -8,10 +8,10 @@
     "wholesale_price": 120,
     "profit_percentage": 30,
     "sale_price": 156,
-    "created_at": "2026-01-21 01:06:54"
+    "created_at": "2026-01-24 02:05:48"
   },
   {
-    "id": 2,
+    "id": 52,
     "name": "Pepsi 500ml",
     "description": "Gaseosa sabor cola 500ml",
     "brand": "Pepsi",
@@ -19,10 +19,10 @@
     "wholesale_price": 115,
     "profit_percentage": 30,
     "sale_price": 150,
-    "created_at": "2026-01-21 01:06:54"
+    "created_at": "2026-01-24 02:05:48"
   },
   {
-    "id": 3,
+    "id": 53,
     "name": "Coca Cola Zero 1L",
     "description": "Gaseosa sin azúcar 1 litro",
     "brand": "Coca Cola",
@@ -30,10 +30,10 @@
     "wholesale_price": 180,
     "profit_percentage": 25,
     "sale_price": 225,
-    "created_at": "2026-01-21 01:06:54"
+    "created_at": "2026-01-24 02:05:48"
   },
   {
-    "id": 4,
+    "id": 54,
     "name": "Pepsi Black 1L",
     "description": "Gaseosa sin azúcar 1 litro",
     "brand": "Pepsi",
@@ -41,10 +41,10 @@
     "wholesale_price": 175,
     "profit_percentage": 25,
     "sale_price": 219,
-    "created_at": "2026-01-21 01:06:54"
+    "created_at": "2026-01-24 02:05:48"
   },
   {
-    "id": 5,
+    "id": 55,
     "name": "Sprite 500ml",
     "description": "Gaseosa lima limón",
     "brand": "Sprite",
@@ -52,10 +52,10 @@
     "wholesale_price": 118,
     "profit_percentage": 30,
     "sale_price": 153,
-    "created_at": "2026-01-21 01:06:54"
+    "created_at": "2026-01-24 02:05:48"
   },
   {
-    "id": 6,
+    "id": 56,
     "name": "Fanta Naranja 500ml",
     "description": "Gaseosa sabor naranja",
     "brand": "Fanta",
@@ -63,10 +63,10 @@
     "wholesale_price": 118,
     "profit_percentage": 30,
     "sale_price": 153,
-    "created_at": "2026-01-21 01:06:54"
+    "created_at": "2026-01-24 02:05:48"
   },
   {
-    "id": 7,
+    "id": 57,
     "name": "Agua Mineral 1.5L",
     "description": "Agua sin gas 1.5L",
     "brand": "Villavicencio",
@@ -74,10 +74,10 @@
     "wholesale_price": 90,
     "profit_percentage": 40,
     "sale_price": 126,
-    "created_at": "2026-01-21 01:06:54"
+    "created_at": "2026-01-24 02:05:48"
   },
   {
-    "id": 8,
+    "id": 58,
     "name": "Agua con Gas 1.5L",
     "description": "Agua con gas 1.5L",
     "brand": "Villavicencio",
@@ -85,10 +85,10 @@
     "wholesale_price": 95,
     "profit_percentage": 40,
     "sale_price": 133,
-    "created_at": "2026-01-21 01:06:54"
+    "created_at": "2026-01-24 02:05:48"
   },
   {
-    "id": 9,
+    "id": 59,
     "name": "Cerveza Lata 473ml",
     "description": "Cerveza rubia lata",
     "brand": "Quilmes",
@@ -96,10 +96,10 @@
     "wholesale_price": 220,
     "profit_percentage": 35,
     "sale_price": 297,
-    "created_at": "2026-01-21 01:06:54"
+    "created_at": "2026-01-24 02:05:48"
   },
   {
-    "id": 10,
+    "id": 60,
     "name": "Cerveza Botella 1L",
     "description": "Cerveza rubia botella",
     "brand": "Quilmes",
@@ -107,10 +107,10 @@
     "wholesale_price": 350,
     "profit_percentage": 30,
     "sale_price": 455,
-    "created_at": "2026-01-21 01:06:54"
+    "created_at": "2026-01-24 02:05:48"
   },
   {
-    "id": 11,
+    "id": 61,
     "name": "Cigarrillos Marlboro Box",
     "description": "Paquete cigarrillos",
     "brand": "Marlboro",
@@ -118,10 +118,10 @@
     "wholesale_price": 600,
     "profit_percentage": 20,
     "sale_price": 720,
-    "created_at": "2026-01-21 01:06:54"
+    "created_at": "2026-01-24 02:05:48"
   },
   {
-    "id": 12,
+    "id": 62,
     "name": "Cigarrillos Camel",
     "description": "Paquete cigarrillos",
     "brand": "Camel",
@@ -129,10 +129,10 @@
     "wholesale_price": 580,
     "profit_percentage": 20,
     "sale_price": 696,
-    "created_at": "2026-01-21 01:06:54"
+    "created_at": "2026-01-24 02:05:48"
   },
   {
-    "id": 13,
+    "id": 63,
     "name": "Encendedor Clásico",
     "description": "Encendedor a gas",
     "brand": "Bic",
@@ -140,10 +140,10 @@
     "wholesale_price": 90,
     "profit_percentage": 50,
     "sale_price": 135,
-    "created_at": "2026-01-21 01:06:54"
+    "created_at": "2026-01-24 02:05:48"
   },
   {
-    "id": 14,
+    "id": 64,
     "name": "Encendedor XL",
     "description": "Encendedor grande",
     "brand": "Bic",
@@ -151,10 +151,10 @@
     "wholesale_price": 140,
     "profit_percentage": 45,
     "sale_price": 203,
-    "created_at": "2026-01-21 01:06:54"
+    "created_at": "2026-01-24 02:05:48"
   },
   {
-    "id": 15,
+    "id": 65,
     "name": "Auriculares In Ear",
     "description": "Auriculares con cable",
     "brand": "Sony",
@@ -162,10 +162,10 @@
     "wholesale_price": 1200,
     "profit_percentage": 35,
     "sale_price": 1620,
-    "created_at": "2026-01-21 01:06:54"
+    "created_at": "2026-01-24 02:05:48"
   },
   {
-    "id": 16,
+    "id": 66,
     "name": "Auriculares Bluetooth",
     "description": "Auriculares inalámbricos",
     "brand": "JBL",
@@ -173,10 +173,10 @@
     "wholesale_price": 4500,
     "profit_percentage": 30,
     "sale_price": 5850,
-    "created_at": "2026-01-21 01:06:54"
+    "created_at": "2026-01-24 02:05:48"
   },
   {
-    "id": 17,
+    "id": 67,
     "name": "Micrófono Dinámico",
     "description": "Micrófono para voz",
     "brand": "Shure",
@@ -184,10 +184,10 @@
     "wholesale_price": 12000,
     "profit_percentage": 25,
     "sale_price": 15000,
-    "created_at": "2026-01-21 01:06:54"
+    "created_at": "2026-01-24 02:05:48"
   },
   {
-    "id": 18,
+    "id": 68,
     "name": "Micrófono Condenser",
     "description": "Micrófono de estudio",
     "brand": "Behringer",
@@ -195,10 +195,10 @@
     "wholesale_price": 9800,
     "profit_percentage": 25,
     "sale_price": 12250,
-    "created_at": "2026-01-21 01:06:54"
+    "created_at": "2026-01-24 02:05:48"
   },
   {
-    "id": 19,
+    "id": 69,
     "name": "Soporte de Micrófono",
     "description": "Soporte regulable",
     "brand": "Hercules",
@@ -206,10 +206,10 @@
     "wholesale_price": 3200,
     "profit_percentage": 30,
     "sale_price": 4160,
-    "created_at": "2026-01-21 01:06:54"
+    "created_at": "2026-01-24 02:05:48"
   },
   {
-    "id": 20,
+    "id": 70,
     "name": "Guitarra Criolla",
     "description": "Guitarra acústica clásica",
     "brand": "Gracia",
@@ -217,10 +217,10 @@
     "wholesale_price": 18000,
     "profit_percentage": 30,
     "sale_price": 23400,
-    "created_at": "2026-01-21 01:06:54"
+    "created_at": "2026-01-24 02:05:48"
   },
   {
-    "id": 21,
+    "id": 71,
     "name": "Guitarra Eléctrica",
     "description": "Guitarra eléctrica estándar",
     "brand": "Fender",
@@ -228,10 +228,10 @@
     "wholesale_price": 55000,
     "profit_percentage": 25,
     "sale_price": 68750,
-    "created_at": "2026-01-21 01:06:54"
+    "created_at": "2026-01-24 02:05:48"
   },
   {
-    "id": 22,
+    "id": 72,
     "name": "Cuerdas Guitarra",
     "description": "Set cuerdas guitarra",
     "brand": "D’Addario",
@@ -239,10 +239,10 @@
     "wholesale_price": 1800,
     "profit_percentage": 40,
     "sale_price": 2520,
-    "created_at": "2026-01-21 01:06:54"
+    "created_at": "2026-01-24 02:05:48"
   },
   {
-    "id": 23,
+    "id": 73,
     "name": "Púas de Guitarra",
     "description": "Set de púas surtidas",
     "brand": "Dunlop",
@@ -250,10 +250,10 @@
     "wholesale_price": 600,
     "profit_percentage": 50,
     "sale_price": 900,
-    "created_at": "2026-01-21 01:06:54"
+    "created_at": "2026-01-24 02:05:48"
   },
   {
-    "id": 24,
+    "id": 74,
     "name": "Teclado Musical 61",
     "description": "Teléclado electrónico",
     "brand": "Yamaha",
@@ -261,10 +261,10 @@
     "wholesale_price": 42000,
     "profit_percentage": 25,
     "sale_price": 52500,
-    "created_at": "2026-01-21 01:06:54"
+    "created_at": "2026-01-24 02:05:48"
   },
   {
-    "id": 25,
+    "id": 75,
     "name": "Mouse USB",
     "description": "Mouse óptico",
     "brand": "Logitech",
@@ -272,10 +272,10 @@
     "wholesale_price": 1500,
     "profit_percentage": 40,
     "sale_price": 2100,
-    "created_at": "2026-01-21 01:06:54"
+    "created_at": "2026-01-24 02:05:48"
   },
   {
-    "id": 26,
+    "id": 76,
     "name": "Teclado USB",
     "description": "Teclado estándar",
     "brand": "Logitech",
@@ -283,10 +283,10 @@
     "wholesale_price": 2800,
     "profit_percentage": 35,
     "sale_price": 3780,
-    "created_at": "2026-01-21 01:06:54"
+    "created_at": "2026-01-24 02:05:48"
   },
   {
-    "id": 27,
+    "id": 77,
     "name": "Parlante Bluetooth",
     "description": "Parlante portátil",
     "brand": "JBL",
@@ -294,10 +294,10 @@
     "wholesale_price": 7200,
     "profit_percentage": 30,
     "sale_price": 9360,
-    "created_at": "2026-01-21 01:06:54"
+    "created_at": "2026-01-24 02:05:48"
   },
   {
-    "id": 28,
+    "id": 78,
     "name": "Cable AUX 3.5mm",
     "description": "Cable audio auxiliar",
     "brand": "Sony",
@@ -305,10 +305,10 @@
     "wholesale_price": 700,
     "profit_percentage": 45,
     "sale_price": 1015,
-    "created_at": "2026-01-21 01:06:54"
+    "created_at": "2026-01-24 02:05:48"
   },
   {
-    "id": 29,
+    "id": 79,
     "name": "Pendrive 32GB",
     "description": "Memoria USB 32GB",
     "brand": "SanDisk",
@@ -316,10 +316,10 @@
     "wholesale_price": 2200,
     "profit_percentage": 35,
     "sale_price": 2970,
-    "created_at": "2026-01-21 01:06:54"
+    "created_at": "2026-01-24 02:05:48"
   },
   {
-    "id": 30,
+    "id": 80,
     "name": "Disco Externo 1TB",
     "description": "Disco rígido portátil",
     "brand": "Western Digital",
@@ -327,10 +327,10 @@
     "wholesale_price": 18000,
     "profit_percentage": 25,
     "sale_price": 22500,
-    "created_at": "2026-01-21 01:06:54"
+    "created_at": "2026-01-24 02:05:48"
   },
   {
-    "id": 31,
+    "id": 81,
     "name": "Cuaderno A4",
     "description": "Rayado 80 hojas",
     "brand": "Rivadavia",
@@ -338,10 +338,10 @@
     "wholesale_price": 650,
     "profit_percentage": 40,
     "sale_price": 910,
-    "created_at": "2026-01-21 01:06:54"
+    "created_at": "2026-01-24 02:05:48"
   },
   {
-    "id": 32,
+    "id": 82,
     "name": "Lapicera Azul",
     "description": "Lapicera tinta azul",
     "brand": "Bic",
@@ -349,10 +349,10 @@
     "wholesale_price": 120,
     "profit_percentage": 60,
     "sale_price": 192,
-    "created_at": "2026-01-21 01:06:54"
+    "created_at": "2026-01-24 02:05:48"
   },
   {
-    "id": 33,
+    "id": 83,
     "name": "Marcador Permanente",
     "description": "Marcador negro",
     "brand": "Sharpie",
@@ -360,10 +360,10 @@
     "wholesale_price": 450,
     "profit_percentage": 45,
     "sale_price": 653,
-    "created_at": "2026-01-21 01:06:54"
+    "created_at": "2026-01-24 02:05:48"
   },
   {
-    "id": 34,
+    "id": 84,
     "name": "Resaltador Fluor",
     "description": "Resaltador amarillo",
     "brand": "Stabilo",
@@ -371,10 +371,10 @@
     "wholesale_price": 380,
     "profit_percentage": 45,
     "sale_price": 551,
-    "created_at": "2026-01-21 01:06:54"
+    "created_at": "2026-01-24 02:05:48"
   },
   {
-    "id": 35,
+    "id": 85,
     "name": "Chocolate con Leche",
     "description": "Chocolate barra 100g",
     "brand": "Milka",
@@ -382,10 +382,10 @@
     "wholesale_price": 900,
     "profit_percentage": 35,
     "sale_price": 1215,
-    "created_at": "2026-01-21 01:06:54"
+    "created_at": "2026-01-24 02:05:48"
   },
   {
-    "id": 36,
+    "id": 86,
     "name": "Galletitas Chocolate",
     "description": "Galletitas dulces",
     "brand": "Oreo",
@@ -393,10 +393,10 @@
     "wholesale_price": 750,
     "profit_percentage": 40,
     "sale_price": 1050,
-    "created_at": "2026-01-21 01:06:54"
+    "created_at": "2026-01-24 02:05:48"
   },
   {
-    "id": 37,
+    "id": 87,
     "name": "Papas Fritas",
     "description": "Snack papas clásicas",
     "brand": "Lays",
@@ -404,10 +404,10 @@
     "wholesale_price": 800,
     "profit_percentage": 40,
     "sale_price": 1120,
-    "created_at": "2026-01-21 01:06:54"
+    "created_at": "2026-01-24 02:05:48"
   },
   {
-    "id": 38,
+    "id": 88,
     "name": "Chicle Menta",
     "description": "Chicle sabor menta",
     "brand": "Topline",
@@ -415,10 +415,10 @@
     "wholesale_price": 300,
     "profit_percentage": 60,
     "sale_price": 480,
-    "created_at": "2026-01-21 01:06:54"
+    "created_at": "2026-01-24 02:05:48"
   },
   {
-    "id": 39,
+    "id": 89,
     "name": "Energizante 473ml",
     "description": "Bebida energética",
     "brand": "Monster",
@@ -426,10 +426,10 @@
     "wholesale_price": 950,
     "profit_percentage": 35,
     "sale_price": 1283,
-    "created_at": "2026-01-21 01:06:54"
+    "created_at": "2026-01-24 02:05:48"
   },
   {
-    "id": 40,
+    "id": 90,
     "name": "Energizante 250ml",
     "description": "Bebida energética",
     "brand": "Red Bull",
@@ -437,10 +437,10 @@
     "wholesale_price": 900,
     "profit_percentage": 35,
     "sale_price": 1215,
-    "created_at": "2026-01-21 01:06:54"
+    "created_at": "2026-01-24 02:05:48"
   },
   {
-    "id": 41,
+    "id": 91,
     "name": "Café Instantáneo",
     "description": "Frasco café 100g",
     "brand": "Nescafé",
@@ -448,10 +448,10 @@
     "wholesale_price": 2100,
     "profit_percentage": 30,
     "sale_price": 2730,
-    "created_at": "2026-01-21 01:06:54"
+    "created_at": "2026-01-24 02:05:48"
   },
   {
-    "id": 42,
+    "id": 92,
     "name": "Azúcar 1kg",
     "description": "Azúcar refinada",
     "brand": "Ledesma",
@@ -459,10 +459,10 @@
     "wholesale_price": 650,
     "profit_percentage": 35,
     "sale_price": 878,
-    "created_at": "2026-01-21 01:06:54"
+    "created_at": "2026-01-24 02:05:48"
   },
   {
-    "id": 43,
+    "id": 93,
     "name": "Yerba Mate 1kg",
     "description": "Yerba mate tradicional",
     "brand": "Taragüi",
@@ -470,10 +470,10 @@
     "wholesale_price": 1400,
     "profit_percentage": 30,
     "sale_price": 1820,
-    "created_at": "2026-01-21 01:06:54"
+    "created_at": "2026-01-24 02:05:48"
   },
   {
-    "id": 44,
+    "id": 94,
     "name": "Termo 1L",
     "description": "Termo acero inoxidable",
     "brand": "Stanley",
@@ -481,10 +481,10 @@
     "wholesale_price": 22000,
     "profit_percentage": 25,
     "sale_price": 27500,
-    "created_at": "2026-01-21 01:06:54"
+    "created_at": "2026-01-24 02:05:48"
   },
   {
-    "id": 45,
+    "id": 95,
     "name": "Mate de Acero",
     "description": "Mate térmico",
     "brand": "Stanley",
@@ -492,10 +492,10 @@
     "wholesale_price": 8500,
     "profit_percentage": 30,
     "sale_price": 11050,
-    "created_at": "2026-01-21 01:06:54"
+    "created_at": "2026-01-24 02:05:48"
   },
   {
-    "id": 46,
+    "id": 96,
     "name": "Bolso Mochila",
     "description": "Mochila urbana",
     "brand": "Nike",
@@ -503,10 +503,10 @@
     "wholesale_price": 18000,
     "profit_percentage": 30,
     "sale_price": 23400,
-    "created_at": "2026-01-21 01:06:54"
+    "created_at": "2026-01-24 02:05:48"
   },
   {
-    "id": 47,
+    "id": 97,
     "name": "Remera Básica",
     "description": "Remera algodón",
     "brand": "Taverniti",
@@ -514,10 +514,10 @@
     "wholesale_price": 7500,
     "profit_percentage": 35,
     "sale_price": 10125,
-    "created_at": "2026-01-21 01:06:54"
+    "created_at": "2026-01-24 02:05:48"
   },
   {
-    "id": 48,
+    "id": 98,
     "name": "Gorra Urbana",
     "description": "Gorra con visera",
     "brand": "Adidas",
@@ -525,10 +525,10 @@
     "wholesale_price": 6200,
     "profit_percentage": 35,
     "sale_price": 8370,
-    "created_at": "2026-01-21 01:06:54"
+    "created_at": "2026-01-24 02:05:48"
   },
   {
-    "id": 49,
+    "id": 99,
     "name": "Llavero Metálico",
     "description": "Llavero simple metálico",
     "brand": "Genérico",
@@ -536,10 +536,10 @@
     "wholesale_price": 400,
     "profit_percentage": 60,
     "sale_price": 640,
-    "created_at": "2026-01-21 01:06:54"
+    "created_at": "2026-01-24 02:05:48"
   },
   {
-    "id": 50,
+    "id": 100,
     "name": "Sticker Pack",
     "description": "Set stickers variados",
     "brand": "Genérico",
@@ -547,6 +547,6 @@
     "wholesale_price": 350,
     "profit_percentage": 70,
     "sale_price": 595,
-    "created_at": "2026-01-21 01:06:54"
+    "created_at": "2026-01-24 02:05:48"
   }
 ]
