@@ -1,10 +1,12 @@
-{
-  "id": 1,
-  "name": "pepe2",
-  "is_first_time": 1,
-  "open_hour": 6,
-  "open_minute": 0,
-  "close_hour": 23,
-  "close_minute": 59,
-  "money_goal": 3000
-}
+[
+  {
+    "id": 1,
+    "name": "pepe",
+    "is_first_time": 0,
+    "open_hour": 0,
+    "open_minute": 0,
+    "close_hour": 23,
+    "close_minute": 59,
+    "money_goal": 1000
+  }
+]
