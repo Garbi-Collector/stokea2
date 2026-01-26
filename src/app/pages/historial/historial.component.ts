@@ -89,7 +89,7 @@ export class HistorialComponent implements OnInit {
       const allMovements: MovementWithSession[] = [];
 
       for (const session of sessions) {
-        const movements = await this.movementsService.getBySession(session.id!).toPromise();
+        const movements = await this.movementsService.getBySession(session.id!);
         movements?.forEach(m => {
           allMovements.push({ ...m, session });
         });

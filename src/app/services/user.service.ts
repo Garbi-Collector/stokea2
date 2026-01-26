@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { User } from "../models/user";
 
@@ -9,7 +9,7 @@ import { User } from "../models/user";
 export class UserService {
   private initialized = false;
   private mockData$ = new BehaviorSubject<User | null>(null);
-  private mockInitialized = false;
+  private mockInitPromise: Promise<void> | null = null;
 
   constructor(private http: HttpClient) {}
 
@@ -17,12 +17,18 @@ export class UserService {
     return !!(window as any).api?.user;
   }
 
-  private initMock() {
-    if (this.mockInitialized) return;
-    this.http.get<User>('assets/mock/user_config.json').subscribe(data => {
+  private async initMock(): Promise<void> {
+    // Si ya se está inicializando o ya está inicializado, esperar/retornar
+    if (this.mockInitPromise) return this.mockInitPromise;
+
+    this.mockInitPromise = (async () => {
+      const data = await firstValueFrom(
+        this.http.get<User>('assets/mock/user_config.json')
+      );
       this.mockData$.next(data);
-      this.mockInitialized = true;
-    });
+    })();
+
+    return this.mockInitPromise;
   }
 
   private async ensureInit(): Promise<void> {
@@ -31,7 +37,7 @@ export class UserService {
       await window.api.user.init('Usuario');
       this.initialized = true;
     } else {
-      this.initMock();
+      await this.initMock();
     }
   }
 

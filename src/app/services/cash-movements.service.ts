@@ -1,12 +1,12 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, map, Observable, of , from} from "rxjs";
+import { BehaviorSubject, firstValueFrom } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 
 @Injectable({ providedIn: 'root' })
 export class CashMovementsService {
 
   private mockData$ = new BehaviorSubject<any[]>([]);
-  private initialized = false;
+  private initPromise: Promise<void> | null = null;
 
   constructor(private http: HttpClient) {}
 
@@ -14,65 +14,66 @@ export class CashMovementsService {
     return !!(window as any).api?.cashMovements;
   }
 
-  private initMock() {
-    if (this.initialized) return;
-    this.http
-      .get<any[]>('assets/mock/cash_movements.json')
-      .subscribe(data => {
-        this.mockData$.next(data);
-        this.initialized = true;
-      });
+  private async initMock(): Promise<void> {
+    // Si ya se está inicializando o ya está inicializado, esperar/retornar
+    if (this.initPromise) return this.initPromise;
+
+    this.initPromise = (async () => {
+      const data = await firstValueFrom(
+        this.http.get<any[]>('assets/mock/cash_movements.json')
+      );
+      this.mockData$.next(data);
+    })();
+
+    return this.initPromise;
   }
 
-  create(movement: any): Observable<any> {
+  async create(movement: any): Promise<any> {
     if (this.hasBackend()) {
-      return from(window.api.cashMovements.create(movement));
+      return window.api.cashMovements.create(movement);
     }
 
-    this.initMock();
+    // MOCK MODE
+    await this.initMock();
     const current = this.mockData$.value;
     const newMovement = { ...movement, id: Date.now() };
     this.mockData$.next([...current, newMovement]);
-    return of(newMovement);
+    return newMovement;
   }
 
-
-  getBySession(sessionId: number): Observable<any[]> {
+  async getBySession(sessionId: number): Promise<any[]> {
     if (this.hasBackend()) {
-      return from(window.api.cashMovements.getBySession(sessionId));
+      return window.api.cashMovements.getBySession(sessionId);
     }
 
-    this.initMock();
-    return this.mockData$.asObservable().pipe(
-      map(data => data.filter(m => m.sessionId === sessionId))
-    );
+    // MOCK MODE
+    await this.initMock();
+    return this.mockData$.value.filter(m => m.sessionId === sessionId);
   }
 
-
-  getById(id: number): Observable<any | null> {
+  async getById(id: number): Promise<any | null> {
     if (this.hasBackend()) {
-      return from(window.api.cashMovements.getById(id));
+      return window.api.cashMovements.getById(id);
     }
 
-    this.initMock();
-    const found = this.mockData$.value.find(m => m.id === id) || null;
-    return of(found);
+    // MOCK MODE
+    await this.initMock();
+    return this.mockData$.value.find(m => m.id === id) || null;
   }
 
-
-  update(id: number, movement: any): Observable<{ changes: number }> {
+  async update(id: number, movement: any): Promise<{ changes: number }> {
     if (this.hasBackend()) {
-      return from(window.api.cashMovements.update(id, movement));
+      return window.api.cashMovements.update(id, movement);
     }
 
-    this.initMock();
+    // MOCK MODE
+    await this.initMock();
     const current = this.mockData$.value;
     const updated = current.map(m =>
       m.id === id ? { ...m, ...movement } : m
     );
     this.mockData$.next(updated);
 
-    return of({ changes: 1 });
+    return { changes: 1 };
   }
-
 }

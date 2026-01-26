@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, firstValueFrom } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Product } from "../models/product";
 
@@ -7,7 +7,7 @@ import { Product } from "../models/product";
 export class ProductsService {
   private mockData$ = new BehaviorSubject<Product[]>([]);
   private mockStock$ = new BehaviorSubject<any[]>([]);
-  private initialized = false;
+  private initPromise: Promise<void> | null = null;
 
   constructor(private http: HttpClient) {}
 
@@ -15,34 +15,38 @@ export class ProductsService {
     return !!(window as any).api?.products;
   }
 
-  private initMock() {
-    if (this.initialized) return;
+  private async initMock(): Promise<void> {
+    // Si ya se está inicializando o ya está inicializado, esperar/retornar
+    if (this.initPromise) return this.initPromise;
 
-    this.http.get<Product[]>('assets/mock/products.json').subscribe(data => {
-      this.mockData$.next(data);
-    });
+    this.initPromise = (async () => {
+      const [products, stock] = await Promise.all([
+        firstValueFrom(this.http.get<Product[]>('assets/mock/products.json')),
+        firstValueFrom(this.http.get<any[]>('assets/mock/stock.json'))
+      ]);
 
-    this.http.get<any[]>('assets/mock/stock.json').subscribe(data => {
-      this.mockStock$.next(data);
-      this.initialized = true;
-    });
+      this.mockData$.next(products);
+      this.mockStock$.next(stock);
+    })();
+
+    return this.initPromise;
   }
 
-  getAll(): Promise<Product[]> {
+  async getAll(): Promise<Product[]> {
     if (this.hasBackend()) {
       return window.api.products.getAll();
     }
-    // MOCK MODE
-    this.initMock();
-    return Promise.resolve(this.mockData$.value);
+    // MOCK MODE - esperar a que se carguen los datos
+    await this.initMock();
+    return this.mockData$.value;
   }
 
-  getAllWithStock(): Promise<(Product & { quantity: number })[]> {
+  async getAllWithStock(): Promise<(Product & { quantity: number })[]> {
     if (this.hasBackend()) {
       return window.api.products.getAllWithStock();
     }
-    // MOCK MODE
-    this.initMock();
+    // MOCK MODE - esperar a que se carguen los datos
+    await this.initMock();
     const products = this.mockData$.value;
     const stock = this.mockStock$.value;
 
@@ -54,81 +58,81 @@ export class ProductsService {
       };
     });
 
-    return Promise.resolve(productsWithStock);
+    return productsWithStock;
   }
 
-  getById(id: number): Promise<Product | null> {
+  async getById(id: number): Promise<Product | null> {
     if (this.hasBackend()) {
       return window.api.products.getById(id);
     }
     // MOCK MODE
-    this.initMock();
+    await this.initMock();
     const product = this.mockData$.value.find(p => p.id === id) || null;
-    return Promise.resolve(product);
+    return product;
   }
 
-  create(product: any): Promise<{ id: number }> {
+  async create(product: any): Promise<{ id: number }> {
     if (this.hasBackend()) {
       return window.api.products.create(product);
     }
     // MOCK MODE
-    this.initMock();
+    await this.initMock();
     const current = this.mockData$.value;
     const newProduct = {
       ...product,
       id: Date.now()
     };
     this.mockData$.next([...current, newProduct]);
-    return Promise.resolve({ id: newProduct.id });
+    return { id: newProduct.id };
   }
 
-  createMany(products: Product[]): Promise<{ inserted: number }> {
+  async createMany(products: Product[]): Promise<{ inserted: number }> {
     if (this.hasBackend()) {
       return window.api.products.createMany(products);
     }
     // MOCK MODE
-    this.initMock();
+    await this.initMock();
     const current = this.mockData$.value;
     const newProducts = products.map((p, i) => ({
       ...p,
       id: Date.now() + i
     }));
     this.mockData$.next([...current, ...newProducts]);
-    return Promise.resolve({ inserted: newProducts.length });
+    return { inserted: newProducts.length };
   }
 
-  update(id: number, product: any): Promise<{ changes: number }> {
+  async update(id: number, product: any): Promise<{ changes: number }> {
     if (this.hasBackend()) {
       return window.api.products.update(id, product);
     }
     // MOCK MODE
-    this.initMock();
+    await this.initMock();
     const current = this.mockData$.value;
     const updated = current.map(p =>
       p.id === id ? { ...p, ...product, id } : p
     );
     this.mockData$.next(updated);
-    return Promise.resolve({ changes: 1 });
+    return { changes: 1 };
   }
 
-  delete(id: number): Promise<{ deleted: number }> {
+  async delete(id: number): Promise<{ deleted: number }> {
     if (this.hasBackend()) {
       return window.api.products.delete(id);
     }
     // MOCK MODE
-    this.initMock();
+    await this.initMock();
     const current = this.mockData$.value;
     const filtered = current.filter(p => p.id !== id);
     this.mockData$.next(filtered);
-    return Promise.resolve({ deleted: 1 });
+    return { deleted: 1 };
   }
 
-  count(): Promise<number> {
+  async count(): Promise<number> {
     if (this.hasBackend()) {
       return window.api.products.count();
     }
     // MOCK MODE
-    this.initMock();
-    return Promise.resolve(this.mockData$.value.length);
+    await this.initMock();
+    return this.mockData$.value.length;
   }
 }

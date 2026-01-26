@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({ providedIn: 'root' })
 export class SalesService {
   private mockData$ = new BehaviorSubject<any[]>([]);
-  private initialized = false;
+  private initPromise: Promise<void> | null = null;
 
   constructor(private http: HttpClient) {}
 
@@ -13,52 +13,61 @@ export class SalesService {
     return !!(window as any).api?.sales;
   }
 
-  private initMock() {
-    if (this.initialized) return;
-    this.http.get<any[]>('assets/mock/sales.json').subscribe(data => {
+  private async initMock(): Promise<void> {
+    // Si ya se está inicializando o ya está inicializado, esperar/retornar
+    if (this.initPromise) return this.initPromise;
+
+    this.initPromise = (async () => {
+      const data = await firstValueFrom(
+        this.http.get<any[]>('assets/mock/sales.json')
+      );
       this.mockData$.next(data);
-      this.initialized = true;
-    });
+    })();
+
+    return this.initPromise;
   }
 
-  create(sale: any): Promise<{ id: number }> {
+  async create(sale: any): Promise<{ id: number }> {
     if (this.hasBackend()) {
       return window.api.sales.create(sale);
     }
-    this.initMock();
+    // MOCK MODE
+    await this.initMock();
     const current = this.mockData$.value;
     const newSale = { ...sale, id: Date.now() };
     this.mockData$.next([...current, newSale]);
-    return Promise.resolve({ id: newSale.id });
+    return { id: newSale.id };
   }
 
-  getById(id: number): Promise<any | null> {
+  async getById(id: number): Promise<any | null> {
     if (this.hasBackend()) {
       return window.api.sales.getById(id);
     }
-    this.initMock();
-    const found = this.mockData$.value.find(s => s.id === id) || null;
-    return Promise.resolve(found);
+    // MOCK MODE
+    await this.initMock();
+    return this.mockData$.value.find(s => s.id === id) || null;
   }
 
-  getAll(): Promise<any[]> {
+  async getAll(): Promise<any[]> {
     if (this.hasBackend()) {
       return window.api.sales.getAll();
     }
-    this.initMock();
-    return Promise.resolve(this.mockData$.value);
+    // MOCK MODE
+    await this.initMock();
+    return this.mockData$.value;
   }
 
-  update(id: number, sale: any): Promise<{ changes: number }> {
+  async update(id: number, sale: any): Promise<{ changes: number }> {
     if (this.hasBackend()) {
       return window.api.sales.update(id, sale);
     }
-    this.initMock();
+    // MOCK MODE
+    await this.initMock();
     const current = this.mockData$.value;
     const updated = current.map(s =>
       s.id === id ? { ...s, ...sale } : s
     );
     this.mockData$.next(updated);
-    return Promise.resolve({ changes: 1 });
+    return { changes: 1 };
   }
 }

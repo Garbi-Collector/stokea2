@@ -276,14 +276,12 @@ export class VentaComponent implements OnInit {
 
     try {
       // 1. Crear movimiento de caja primero (INGRESO)
-      const cashMovement = await firstValueFrom(
-        this.cashMovementsService.create({
-          cash_session_id: this.currentSession.id,
-          type: 'SALE',
-          amount: this.cartTotal,
-          description: this.generateMovementDescription()
-        })
-      );
+      const cashMovement = await this.cashMovementsService.create({
+        cash_session_id: this.currentSession.id,
+        type: 'SALE',
+        amount: this.cartTotal,
+        description: this.generateMovementDescription()
+      });
 
 
       // Validar que se creó el movimiento

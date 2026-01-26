@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, map, Observable, of } from "rxjs";
+import { BehaviorSubject, firstValueFrom } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { CashSession } from "../models/cash-session";
 import { CalendarService } from "./calendar.service";
@@ -7,7 +7,7 @@ import { CalendarService } from "./calendar.service";
 @Injectable({ providedIn: 'root' })
 export class CashSessionService {
   private mockData$ = new BehaviorSubject<CashSession[]>([]);
-  private initialized = false;
+  private initPromise: Promise<void> | null = null;
 
   constructor(
     private calendarService: CalendarService,
@@ -18,22 +18,26 @@ export class CashSessionService {
     return !!(window as any).api?.cashSession;
   }
 
-  private initMock() {
-    if (this.initialized) return;
-    this.http
-      .get<CashSession[]>('assets/mock/cash_session.json')
-      .subscribe(data => {
-        this.mockData$.next(data);
-        this.initialized = true;
-      });
+  private async initMock(): Promise<void> {
+    // Si ya se está inicializando o ya está inicializado, esperar/retornar
+    if (this.initPromise) return this.initPromise;
+
+    this.initPromise = (async () => {
+      const data = await firstValueFrom(
+        this.http.get<CashSession[]>('assets/mock/cash_session.json')
+      );
+      this.mockData$.next(data);
+    })();
+
+    return this.initPromise;
   }
 
-  openCashsession(startAmount: number): Promise<{ id: number }> {
+  async openCashsession(startAmount: number): Promise<{ id: number }> {
     if (this.hasBackend()) {
       return window.api.cashSession.open(startAmount);
     }
     // MOCK MODE
-    this.initMock();
+    await this.initMock();
     const current = this.mockData$.value;
     const newSession: CashSession = {
       id: Date.now(),
@@ -43,35 +47,34 @@ export class CashSessionService {
       closed_at: null
     };
     this.mockData$.next([...current, newSession]);
-    return Promise.resolve({ id: newSession.id! });
+    return { id: newSession.id! };
   }
 
-  getOpen(): Promise<CashSession | null> {
+  async getOpen(): Promise<CashSession | null> {
     if (this.hasBackend()) {
       return window.api.cashSession.getOpen();
     }
     // MOCK MODE
-    this.initMock();
+    await this.initMock();
     const current = this.mockData$.value;
-    const open = current.find(s => s.closed_at === null) || null;
-    return Promise.resolve(open);
+    return current.find(s => s.closed_at === null) || null;
   }
 
-  getAll(): Promise<CashSession[]> {
+  async getAll(): Promise<CashSession[]> {
     if (this.hasBackend()) {
       return window.api.cashSession.getAll();
     }
     // MOCK MODE
-    this.initMock();
-    return Promise.resolve(this.mockData$.value);
+    await this.initMock();
+    return this.mockData$.value;
   }
 
-  closeCashSession(id: number, amount: number): Promise<{ closed: number }> {
+  async closeCashSession(id: number, amount: number): Promise<{ closed: number }> {
     if (this.hasBackend()) {
       return window.api.cashSession.close(id, amount);
     }
     // MOCK MODE
-    this.initMock();
+    await this.initMock();
     const current = this.mockData$.value;
     const updated = current.map(s =>
       s.id === id
@@ -79,15 +82,15 @@ export class CashSessionService {
         : s
     );
     this.mockData$.next(updated);
-    return Promise.resolve({ closed: 1 });
+    return { closed: 1 };
   }
 
-  closeAllCashSessions(amount: number): Promise<{ closed: number }> {
+  async closeAllCashSessions(amount: number): Promise<{ closed: number }> {
     if (this.hasBackend()) {
       return window.api.cashSession.closeAll(amount);
     }
     // MOCK MODE
-    this.initMock();
+    await this.initMock();
     const current = this.mockData$.value;
     let closedCount = 0;
     const updated = current.map(s => {
@@ -98,15 +101,15 @@ export class CashSessionService {
       return s;
     });
     this.mockData$.next(updated);
-    return Promise.resolve({ closed: closedCount });
+    return { closed: closedCount };
   }
 
-  updateCurrentAmount(sessionId: number, delta: number): Promise<{ updated: number }> {
+  async updateCurrentAmount(sessionId: number, delta: number): Promise<{ updated: number }> {
     if (this.hasBackend()) {
       return window.api.cashSession.updateCurrentAmount(sessionId, delta);
     }
     // MOCK MODE
-    this.initMock();
+    await this.initMock();
     const current = this.mockData$.value;
     const updated = current.map(s =>
       s.id === sessionId
@@ -114,7 +117,7 @@ export class CashSessionService {
         : s
     );
     this.mockData$.next(updated);
-    return Promise.resolve({ updated: 1 });
+    return { updated: 1 };
   }
 
   /**
